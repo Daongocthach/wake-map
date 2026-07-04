@@ -1,13 +1,13 @@
 import { useTranslation } from 'react-i18next';
-import { ScreenContainer } from '@/common/components/ScreenContainer';
+import { View } from 'react-native';
 import { Text } from '@/common/components/Text';
 
-export default function WakeMapScreen() {
+export default function SearchHeader() {
   const { t } = useTranslation();
 
   return (
-    <ScreenContainer>
+    <View>
       <Text variant="h1">{t('wakemap.title')}</Text>
-    </ScreenContainer>
+    </View>
   );
 }
