@@ -1,0 +1,7 @@
+{
+  "ios": {
+    "NSLocationWhenInUseUsageDescription": "Cho phép WakeMap truy cập vị trí của bạn để theo dõi khoảng cách tới điểm đến.",
+    "NSLocationAlwaysAndWhenInUseUsageDescription": "Cho phép WakeMap theo dõi vị trí ngầm và đánh thức bạn khi đến nơi kể cả khi ứng dụng đã đóng.",
+    "NSLocationAlwaysUsageDescription": "Cho phép WakeMap theo dõi vị trí ngầm và đánh thức bạn khi đến nơi kể cả khi ứng dụng đã đóng."
+  }
+}

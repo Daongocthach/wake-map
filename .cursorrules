@@ -1,0 +1,47 @@
+# Cursor Rules - React Native Expo Template
+
+Use `AGENTS.md` and `CONVENTIONS.md` as the source of truth. `docs/AI-GUIDE.md` and `docs/COMPONENTS.md` provide examples and API references.
+
+## Stack
+
+- React Native 0.83.2 + Expo SDK 55
+- expo-router with typed routes
+- TypeScript 5.9 strict
+- react-native-unistyles 3.x
+- @tanstack/react-query
+- Zustand
+- Supabase with graceful degradation when unconfigured
+- Axios API client in `@/services/api`
+- react-i18next with English, Vietnamese, Simplified Chinese, and Traditional Chinese
+- react-native-mmkv
+- react-hook-form + zod/v4
+- ESLint 9 flat config + Prettier
+
+## Package Manager and Validation
+
+- Use `yarn` only.
+- `yarn validate` runs `type-check`, `lint`, `format:check`, and `i18n:check`.
+- Run `yarn test` when touching runtime behavior.
+
+## Mandatory Rules
+
+- Use `StyleSheet` from `react-native-unistyles`; never from `react-native`.
+- Use the theme callback form: `StyleSheet.create((theme) => ({}))`.
+- Never use inline styles, color literals, or hardcoded spacing values.
+- Use project components from `@/common/components` when an equivalent exists.
+- Use `useTranslation` for every user-facing string and update all locale files (`en.json`, `vi.json`, `zh-CN.json`, `zh-TW.json`).
+- Auth lives in `useAuthStore`; never use React Context for auth.
+- Server state belongs in React Query; client state belongs in Zustand with selectors.
+- API calls go through `@/services/api`.
+- Forms use `react-hook-form` with `zod/v4`.
+- No `any`, no `@ts-ignore`, no `@ts-nocheck`, no bare `@ts-expect-error`, no `eslint-disable`.
+- Never use `git commit --no-verify` or `git push --no-verify`.
+
+## Repo Facts
+
+- `app/` contains `(auth)` and `(main)` route groups.
+- `app/_layout.tsx` wires `GestureHandlerRootView`, `ErrorBoundary`, `QueryProvider`, `AppAlertProvider`, `AppBottomSheetProvider`, `CameraProvider`, auth init, and `Toast`.
+- `src/common/components/index.ts` exports the public shared component set.
+- `src/theme/index.ts` builds `theme.colors.*` and `theme.fonts.size.*`.
+- `src/theme/metrics.ts` exports `rf`, `hs`, `vs`, `spacing`, `spacingV`, `fontSize`, `borderRadius`, and `iconSize`.
+- `src/providers/index.ts` exports `QueryProvider`, `useAuthStore`, `useAuthInit`, `AppBottomSheetProvider`, `useAppBottomSheet`, `AppAlertProvider`, and `useAppAlert`.

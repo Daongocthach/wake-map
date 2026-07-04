@@ -1,0 +1,44 @@
+# heat-treatment
+
+React Native Expo app for heat treatment operations.
+
+Core routes:
+- `app/(auth)/login.tsx`
+- `app/(main)/(tabs)/index.tsx`
+- `app/(main)/(tabs)/batches.tsx`
+- `app/(main)/(tabs)/devices.tsx`
+- `app/(main)/(tabs)/alerts.tsx`
+- `app/(main)/batches/create.tsx`
+- `app/(main)/batches/[id].tsx`
+- `app/(main)/devices/create.tsx`
+- `app/(main)/devices/[id].tsx`
+- `app/(main)/alerts/[id].tsx`
+- `app/(main)/account.tsx`
+- `app/(main)/settings.tsx`
+- `app/(main)/alert-settings.tsx`
+
+Tech stack:
+- React Native 0.83.6 + Expo SDK 55
+- TypeScript 5.9 strict
+- expo-router
+- react-native-unistyles
+- @tanstack/react-query
+- Zustand
+- Axios
+- react-i18next with EN / VI / zh-CN / zh-TW
+- react-native-mmkv
+- react-hook-form + zod/v4
+
+Important conventions:
+- Use `useTranslation()` for visible text.
+- Use `StyleSheet.create((theme) => ...)` from `react-native-unistyles`.
+- Use `@/services/api` for HTTP calls.
+- Use `useAuthStore` for auth state.
+- Use `yarn validate` before merging.
+- Use `yarn sync:version` when release version changes.
+
+Versioning:
+- `app.config.ts` is the source of truth.
+- `package.json` mirrors app version.
+- `src/lib/constants/app-version.ts` exposes runtime version constants.
+

@@ -1,0 +1,38 @@
+{
+  "android": {
+    "latestVersion": "1.0.0",
+    "minVersion": "1.0.0",
+    "url": "https://apifinetags.finepro.net/mobile-app/android/heattreatment/heattreatment-v1.0.0.apk",
+    "releaseNotes": {
+      "vi": "- Phiên bản đầu tiên",
+      "en": "- Initial release",
+      "zh-CN": "- 初始版本",
+      "zh-TW": "- 初始版本"
+    }
+  },
+  "ios": {
+    "latestVersion": "1.0.0",
+    "minVersion": "1.0.0",
+    "url": "",
+    "releaseNotes": {
+      "vi": "- Phiên bản đầu tiên",
+      "en": "- Initial release",
+      "zh-CN": "- 初始版本",
+      "zh-TW": "- 初始版本"
+    }
+  },
+  "maintenance": false,
+  "history": [
+    {
+      "version": "1.0.0",
+      "date": "2026-06-30",
+      "url": "https://apifinetags.finepro.net/mobile-app/android/heattreatment/heattreatment-v1.0.0.apk",
+      "releaseNotes": {
+        "vi": "- Phiên bản đầu tiên",
+        "en": "- Initial release",
+        "zh-CN": "- 初始版本",
+        "zh-TW": "- 初始版本"
+      }
+    }
+  ]
+}

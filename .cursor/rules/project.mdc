@@ -1,0 +1,29 @@
+---
+description: React Native Expo Template - Project Rules
+alwaysApply: true
+---
+
+# Project Rules
+
+Use `AGENTS.md` and `CONVENTIONS.md` as the source of truth. Keep examples aligned with the actual source tree.
+
+## Core Rules
+
+- Use `yarn` only.
+- `yarn validate` runs `type-check`, `lint`, `format:check`, and `i18n:check`.
+- Use `StyleSheet` from `react-native-unistyles`.
+- Never use inline styles, color literals, or hardcoded spacing.
+- Use project components from `@/common/components`.
+- Translate every user-facing string and update all locale files (`en.json`, `vi.json`, `zh-CN.json`, `zh-TW.json`).
+- Auth is handled only by `useAuthStore`.
+- Use React Query for server state and Zustand selectors for client state.
+- Use `@/services/api` for HTTP requests.
+- Use `react-hook-form` with `zod/v4`.
+- No `any`, no suppression comments, and no `--no-verify`.
+
+## Repo Facts
+
+- `app/` has `(auth)` and `(main)` route groups.
+- `app/_layout.tsx` wires gesture handling, error boundary, query provider, alert provider, bottom sheet provider, camera provider, auth init, and toast.
+- `src/common/components/index.ts` is the public shared-component barrel.
+- `src/providers/index.ts` exports `QueryProvider`, `useAuthStore`, `useAuthInit`, `AppBottomSheetProvider`, `useAppBottomSheet`, `AppAlertProvider`, and `useAppAlert`.

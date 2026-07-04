@@ -1,0 +1,38 @@
+# Windsurf Rules - React Native Expo Template
+
+Follow `AGENTS.md` and `CONVENTIONS.md`. When they conflict, prefer `CONVENTIONS.md` for code style and `AGENTS.md` for agent workflow.
+
+## Stack
+
+- React Native 0.83.2 + Expo SDK 55
+- expo-router with typed routes
+- TypeScript 5.9 strict
+- react-native-unistyles 3.x
+- @tanstack/react-query
+- Zustand
+- Supabase with graceful degradation
+- Axios client in `@/services/api`
+- react-i18next with English, Vietnamese, Simplified Chinese, and Traditional Chinese
+- react-native-mmkv
+- react-hook-form + zod/v4
+
+## Must Follow
+
+- Use `yarn` only.
+- `yarn validate` runs `type-check`, `lint`, `format:check`, and `i18n:check`.
+- Use `StyleSheet` from `react-native-unistyles`.
+- Never use inline styles, color literals, or hardcoded spacing.
+- Use project components from `@/common/components`.
+- Translate every user-facing string with `useTranslation` and update all locale files (`en.json`, `vi.json`, `zh-CN.json`, `zh-TW.json`).
+- Auth state lives only in `useAuthStore`.
+- Server state goes through React Query; client state goes through Zustand selectors.
+- API calls go through `@/services/api`.
+- Forms use `react-hook-form` + `zod/v4`.
+- No `any`, no suppression comments, no `--no-verify`.
+
+## Repo Facts
+
+- `app/` contains `(auth)` and `(main)` route groups.
+- `app/_layout.tsx` wires gesture handling, error boundary, query provider, alert provider, bottom sheet provider, camera provider, auth init, and toast.
+- `src/common/components/index.ts` is the public barrel for shared UI components.
+- `src/theme/index.ts` exposes semantic theme tokens, and `src/theme/metrics.ts` exposes `rf`, `hs`, `vs`, `spacing`, `spacingV`, `fontSize`, `borderRadius`, and `iconSize`.

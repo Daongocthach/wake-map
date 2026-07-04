@@ -1,0 +1,779 @@
+{
+  "common": {
+    "loading": "Đang tải...",
+    "cancel": "Hủy",
+    "clear": "Xóa",
+    "save": "Lưu",
+    "delete": "Xóa",
+    "confirm": "Xác nhận",
+    "retry": "Thử lại",
+    "search": "Tìm kiếm",
+    "selectDate": "Chọn ngày",
+    "close": "Đóng",
+    "edit": "Chỉnh sửa",
+    "ok": "OK",
+    "success": "Thành công",
+    "time": "Thời gian",
+    "hours": "Giờ",
+    "minutes": "Phút",
+    "seconds": "Giây",
+    "today": "Hôm nay",
+    "actions": "Hành động",
+    "temperatureUnit": "°C",
+    "weightUnit": "kg"
+  },
+  "wakemap": {
+    "title": "Màn hình WakeMap",
+    "searchPlaceholder": "Bạn muốn đi đâu?",
+    "distanceLabel": "Khoảng cách",
+    "etaLabel": "Thời gian",
+    "radiusLabel": "Bán kính báo thức",
+    "modeLabel": "Chế độ thông báo",
+    "start": "BẮT ĐẦU",
+    "dismiss": "TẮT BÁO THỨC",
+    "timeRemaining": "Còn khoảng",
+    "minutes": "{{count}} phút",
+    "minutesLabel": "phút",
+    "meters": "{{count}} m",
+    "kilometers": "{{count}} km",
+    "calculating": "Đang tính...",
+    "arrived": "ĐÃ ĐẾN NƠI!",
+    "arrivedSubtitle": "Bạn đã đi vào bán kính báo thức của {{name}}",
+    "modes": {
+      "sound": "Âm thanh 🔊",
+      "vibrate": "Rung 📳",
+      "flash": "Flash 🔦"
+    },
+    "defaultPlaces": {
+      "home": "Nhà",
+      "work": "Cơ quan",
+      "school": "Trường học"
+    },
+    "mapPin": "Ghim bản đồ",
+    "placePrefix": "Địa điểm",
+    "addBtn": "Thêm +",
+    "bgServiceTitle": "WakeMap Đang Canh Đường",
+    "bgServiceBody": "Đang theo dõi vị trí của bạn tới {{name}}"
+  },
+  "update": {
+    "title": "Cần cập nhật",
+    "message": "Cần có phiên bản mới để tiếp tục. Phiên bản hiện tại: {{currentVersion}}. Phiên bản mới nhất: {{latestVersion}}.",
+    "releaseNotes": "Ghi chú phát hành",
+    "action": "Cập nhật ngay"
+  },
+  "validation": {
+    "required": "Trường này là bắt buộc",
+    "temperatureRange": "Nhiệt độ phải nằm giữa giới hạn thấp và cao."
+  },
+  "tabs": {
+    "dashboard": "Tổng quan",
+    "devices": "Devices",
+    "deviceManagement": "Quản lý thiết bị",
+    "deviceDetails": "Chi tiết thiết bị",
+    "alerts": "Cảnh báo",
+    "batches": "Quản lý mẻ",
+    "batchDetails": "Chi tiết mẻ"
+  },
+  "language": {
+    "label": "Ngôn ngữ",
+    "english": "English",
+    "vietnamese": "Tiếng Việt",
+    "taiwanese": "中文（繁體)",
+    "chinese": "中文（简体)"
+  },
+  "header": {
+    "back": "Quay lại",
+    "brandName": "Finepro",
+    "menu": "Menu"
+  },
+  "auth": {
+    "login": {
+      "title": "Đăng nhập",
+      "subtitle": "Đăng nhập tài khoản của bạn để sử dụng ứng dụng.",
+      "usernameLabel": "Tên đăng nhập",
+      "usernamePlaceholder": "Nhập tên đăng nhập",
+      "passwordLabel": "Mật khẩu",
+      "passwordPlaceholder": "Nhập mật khẩu",
+      "submit": "Đăng nhập",
+      "registerPrompt": "Chưa có tài khoản?",
+      "registerAction": "Đăng ký ngay",
+      "apiConfig": "Cấu hình API"
+    },
+    "register": {
+      "title": "Tạo tài khoản",
+      "subtitle": "Đăng ký một tài khoản mới để truy cập ứng dụng.",
+      "submit": "Tạo tài khoản",
+      "success": "Tạo tài khoản thành công"
+    }
+  },
+  "account": {
+    "fields": {
+      "role": "Vai trò",
+      "username": "Tên đăng nhập",
+      "firstName": "Tên",
+      "lastName": "Họ",
+      "status": "Trạng thái"
+    },
+    "placeholders": {
+      "role": "Nhập vai trò",
+      "username": "Nhập tên đăng nhập",
+      "firstName": "Nhập tên",
+      "lastName": "Nhập họ"
+    },
+    "actions": {
+      "reset": "Đặt lại"
+    }
+  },
+  "dashboard": {
+    "scrollTopBtn": "Cuộn lên đầu",
+    "devices": {
+      "title": "Danh sách thiết bị"
+    },
+    "overview": {
+      "batchToday": "Hôm nay",
+      "batch7Days": "7 ngày",
+      "batchMonth": "Tháng",
+      "machineOperating": "MÁY HOẠT ĐỘNG",
+      "machineSummaryLabel": "Tổng quan máy",
+      "machineUnit": "máy",
+      "machineAlertLabel": "Cảnh báo",
+      "batchMetrics": "Mẻ đã sản xuất"
+    },
+    "charts": {
+      "yieldTitle": "SẢN LƯỢNG",
+      "yieldSubtitle": "Mẻ theo 7 ngày gần nhất",
+      "deviceTitle": "THIẾT BỊ",
+      "deviceSubtitle": "Hiệu năng của thiết bị"
+    },
+    "machines": {
+      "materialLabel": "Vật liệu",
+      "methodLabel": "Phương pháp",
+      "mainTemperatureLabel": "Nhiệt chính",
+      "overTemperatureLabel": "Quá nhiệt",
+      "coolingWaterTemperatureLabel": "Nước làm mát",
+      "viewAll": "Xem máy",
+      "alertLabel": "Cảnh báo {{count}}",
+      "connected": "Đã kết nối",
+      "disconnected": "Đã ngắt kết nối"
+    },
+    "alertsSection": {
+      "viewAll": "Xem tất cả"
+    },
+    "metrics": {
+      "alerts": "Cảnh báo"
+    }
+  },
+  "devices": {
+    "status": {
+      "all": "Tất cả",
+      "running": "Đang chạy",
+      "maintenance": "Bảo trì",
+      "stop": "Dừng",
+      "unknown": "Không rõ"
+    },
+    "deviceStatus": {
+      "stop": "Stop",
+      "running": "Running",
+      "maintenance": "Maintenance"
+    },
+    "detail": {
+      "errorTitle": "Không thể tải thiết bị",
+      "errorMessage": "Vui lòng thử lại yêu cầu.",
+      "tabs": {
+        "overview": "Tổng quan",
+        "history": "Lịch sử"
+      },
+      "overview": {
+        "deviceInfoTitle": "THÔNG TIN THIẾT BỊ",
+        "currentBatchTitle": "BATCH ĐANG CHẠY",
+        "batchId": "Mã batch",
+        "batchCode": "Mã Lệnh",
+        "batchMaterial": "Vật Liệu",
+        "batchStatus": "Trạng Thái Mẻ",
+        "systemTemperatureTitle": "NHIỆT ĐỘ HỆ THỐNG",
+        "mainTemperature": "Nhiệt độ chính",
+        "overTemperature": "Nhiệt độ giới hạn",
+        "coolingWaterTemperature": "Nước làm mát",
+        "alertTitle": "CẢNH BÁO HỆ THỐNG",
+        "alertCountSuffix": "cảnh báo hiện tại",
+        "idLabelValue": "#{{id}}"
+      },
+      "history": {
+        "title": "Lịch sử mẻ",
+        "subtitle": "Hiển thị {{count}} bản ghi",
+        "startedAt": "Bắt đầu lúc",
+        "avgTemperature": "Nhiệt độ TB"
+      },
+      "deleteTitle": "Xoá thiết bị",
+      "deleteMessage": "Thao tác này không thể hoàn tác.",
+      "fields": {
+        "id": "ID",
+        "name": "Name",
+        "code": "Code",
+        "status": "Status"
+      }
+    }
+  },
+  "devicesList": {
+    "searchLabel": "Tìm kiếm thiết bị",
+    "searchPlaceholder": "Tìm kiếm theo tên, mã hoặc ID",
+    "filterStatus": "Trạng thái",
+    "createBtn": "Tạo thiết bị",
+    "deviceCode": "Mã: {{code}}",
+    "allMachines": "Tất cả máy",
+    "scrollTopBtn": "Cuộn lên đầu",
+    "createdAt": "Ngày tạo",
+    "modifiedAt": "Ngày cập nhật"
+  },
+  "devicesCreate": {
+    "title": "Tạo thiết bị",
+    "editTitle": "Chỉnh sửa thiết bị",
+    "deviceNameLabel": "Tên thiết bị",
+    "deviceNamePlaceholder": "Nhập tên thiết bị",
+    "deviceCodeLabel": "Mã thiết bị",
+    "deviceCodePlaceholder": "Nhập mã thiết bị",
+    "deviceStatusLabel": "Trạng thái thiết bị",
+    "deviceStatusPlaceholder": "Chọn trạng thái thiết bị",
+    "imageLabel": "Ảnh thiết bị",
+    "imageHint": "Tải ảnh hoặc logo cho thiết bị.",
+    "imageAction": "Chọn ảnh",
+    "imageChange": "Đổi ảnh",
+    "imageRemove": "Xóa ảnh",
+    "imagePreviewHint": "Chạm vào ảnh để phóng to.",
+    "imagePreviewLabel": "Xem trước ảnh thiết bị",
+    "createBtn": "Tạo thiết bị",
+    "editBtn": "Cập nhật thiết bị"
+  },
+  "alerts": {
+    "status": {
+      "processing": "Đang xử lý"
+    },
+    "actions": {
+      "markUnrepairable": "Không sửa được",
+      "markFixed": "Đã sửa",
+      "updateStatus": "Cập nhật trạng thái",
+      "updateStatusAgainMessage": "Bạn muốn cập nhật lại trạng thái không?",
+      "updateStatusToInProgressMessage": "Bạn muốn cập nhật trạng thái sang đang làm không?",
+      "updateStatusTransitionMessage": "Bạn muốn chuyển trạng thái từ {{from}} sang {{to}} không?",
+      "selectStatusTitle": "Chọn trạng thái",
+      "selectStatusMessage": "Chọn trạng thái cho cảnh báo này."
+    },
+    "filterDevice": "Thiết bị",
+    "filterDevicePlaceholder": "Chọn thiết bị",
+    "filterAll": "Tất cả thiết bị",
+    "scrollTopBtn": "Cuộn lên đầu",
+    "filters": {
+      "alertTypes": "Loại cảnh báo",
+      "statusGroup": "Trạng thái",
+      "timeFrom": "Từ ngày",
+      "timeTo": "Đến ngày",
+      "all": "Tất cả"
+    },
+    "fields": {
+      "temperature": "NHIỆT ĐỘ",
+      "batchCode": "Mã mẻ",
+      "timeLabel": "Thời gian: {{time}}",
+      "statusLabel": "Trạng thái:",
+      "statusTransitionLabel": "Trạng thái thay đổi",
+      "statusTransitionFrom": "Từ: {{status}}",
+      "statusTransitionTo": "Sang: {{status}}",
+      "alertTypeLabel": "Loại cảnh báo:",
+      "note": "Ghi chú"
+    },
+    "details": {
+      "title": "Chi tiết cảnh báo",
+      "basicInformation": "Thông tin cơ bản",
+      "alertIdLabel": "Mã cảnh báo",
+      "deviceLabel": "Thiết bị",
+      "statusLabel": "Trạng thái",
+      "batchCodeLabel": "Mã mẻ",
+      "currentTemperatureLabel": "Nhiệt độ hiện tại",
+      "lowTemperatureLabel": "Ngưỡng dưới",
+      "highTemperatureLabel": "Ngưỡng trên",
+      "technicalNotesLabel": "Ghi chú kỹ thuật",
+      "recordedAtLabel": "Thời gian ghi nhận",
+      "historyUsernameLabel": "Người vận hành",
+      "alertTypeLabel": "Loại cảnh báo",
+      "historyTemperatureLabel": "Nhiệt độ",
+      "historyNotesLabel": "Ghi chú",
+      "timeline": {
+        "title": "Dòng thời gian",
+        "empty": "Chưa có lịch sử nào."
+      },
+      "chartTitle": "Xu hướng nhiệt độ",
+      "chartEmpty": "Chưa có dữ liệu biểu đồ",
+      "chartPoints": "{{count}} điểm"
+    }
+  },
+  "settings": {
+    "title": "Cài đặt",
+    "appearance": "Giao diện",
+    "darkMode": "Chế độ tối",
+    "version": "Phiên bản",
+    "privacy": "Chính sách bảo mật",
+    "terms": "Điều khoản dịch vụ",
+    "connection": {
+      "title": "Đường dẫn kết nối",
+      "subtitle": "Đổi Base URL API, socket realtime và URL cập nhật Android.",
+      "current": "Hiện tại"
+    },
+    "apiUrl": {
+      "title": "Base URL API",
+      "subtitle": "Chạm để đổi địa chỉ API.",
+      "current": "Hiện tại: {{url}}",
+      "inputLabel": "Base URL",
+      "inputPlaceholder": "https://api.example.com",
+      "helper": "Phải bắt đầu bằng http:// hoặc https://",
+      "save": "Lưu URL",
+      "reset": "Đặt lại mặc định",
+      "saved": "Đã cập nhật Base URL API.",
+      "resetSuccess": "Đã đặt lại Base URL API về mặc định.",
+      "invalidUrl": "Vui lòng nhập URL hợp lệ.",
+      "saveFailed": "Không thể lưu Base URL API."
+    },
+    "socketUrl": {
+      "title": "Socket URL",
+      "subtitle": "Chạm để đổi kết nối realtime.",
+      "current": "Hiện tại: {{url}}",
+      "inputLabel": "Socket URL",
+      "inputPlaceholder": "ws://socket.example.com",
+      "helper": "Phải bắt đầu bằng ws:// hoặc wss://",
+      "save": "Lưu URL",
+      "reset": "Đặt lại mặc định",
+      "saved": "Đã cập nhật Socket URL.",
+      "resetSuccess": "Đã đặt lại Socket URL về mặc định.",
+      "invalidUrl": "Vui lòng nhập Socket URL hợp lệ.",
+      "saveFailed": "Không thể lưu Socket URL."
+    },
+    "versionJsonUrl": {
+      "title": "URL cập nhật Android",
+      "subtitle": "Chạm để đổi liên kết cập nhật ứng dụng Android.",
+      "current": "Hiện tại: {{url}}",
+      "inputLabel": "URL cập nhật",
+      "inputPlaceholder": "https://example.com/android.apk",
+      "helper": "Phải là một URL hợp lệ.",
+      "save": "Lưu URL",
+      "reset": "Đặt lại mặc định",
+      "saved": "Đã cập nhật URL Android.",
+      "resetSuccess": "Đã đặt lại URL Android về mặc định.",
+      "invalidUrl": "Vui lòng nhập URL Android hợp lệ.",
+      "saveFailed": "Không thể lưu URL Android."
+    },
+    "sections": {
+      "connection": "Kết nối",
+      "support": "Hỗ trợ"
+    },
+    "support": {
+      "helpCenter": "Trung tâm trợ giúp",
+      "helpCenterSubtitle": "Câu hỏi thường gặp & hướng dẫn",
+      "feedback": "Gửi phản hồi",
+      "feedbackSubtitle": "Giúp chúng tôi cải thiện",
+      "termsSubtitle": "Đọc điều khoản và điều kiện sử dụng",
+      "privacySubtitle": "Tìm hiểu cách bảo mật thông tin của bạn",
+      "versionSubtitle": "Bản dựng ứng dụng hiện tại"
+    },
+    "danger": {
+      "logout": "Đăng xuất",
+      "logoutSubtitle": "Đăng xuất khỏi tài khoản của bạn"
+    }
+  },
+  "contact": {
+    "title": "Gửi phản hồi",
+    "form": {
+      "senderNameLabel": "Tên của bạn",
+      "senderNamePlaceholder": "Nhập tên của bạn",
+      "feedbackLabel": "Nội dung phản hồi",
+      "feedbackPlaceholder": "Mô tả lỗi, ý tưởng hoặc yêu cầu",
+      "feedbackMax": "Nội dung phản hồi không được vượt quá 1000 ký tự.",
+      "submit": "Gửi phản hồi",
+      "successMessage": "Cảm ơn bạn. Phản hồi của bạn đã được gửi."
+    }
+  },
+  "helps": {
+    "title": "Trung tâm trợ giúp",
+    "faq": {
+      "itemLabel": "Câu hỏi {{index}}",
+      "items": {
+        "login": {
+          "question": "Làm sao để đăng nhập vào ứng dụng?",
+          "answer": "Hãy dùng tài khoản do quản trị viên cấp. Nếu đăng nhập không thành công, hãy kiểm tra tên đăng nhập, mật khẩu và kết nối mạng."
+        },
+        "dashboard": {
+          "question": "Bảng điều khiển hiển thị gì?",
+          "answer": "Bảng điều khiển tóm tắt nhanh hoạt động máy, trạng thái lô, cảnh báo và các chỉ số vận hành khác."
+        },
+        "batches": {
+          "question": "Làm sao để xem chi tiết một lô?",
+          "answer": "Mở màn Hàng loạt, chọn một thẻ lô và xem các phần tổng quan, lịch sử và dữ liệu nhiệt độ."
+        },
+        "devices": {
+          "question": "Làm sao để kiểm tra một thiết bị?",
+          "answer": "Mở màn Thiết bị, tìm hoặc chọn thiết bị rồi xem trạng thái hiện tại, lô liên quan và lịch sử."
+        },
+        "alerts": {
+          "question": "Vì sao tôi thấy cảnh báo?",
+          "answer": "Cảnh báo xuất hiện khi thiết bị hoặc lô vượt ngưỡng cấu hình hoặc cần đội vận hành xử lý."
+        },
+        "profile": {
+          "question": "Tôi có thể cập nhật thông tin hồ sơ không?",
+          "answer": "Bạn có thể xem tên và thông tin tài khoản trong Cài đặt. Việc chỉnh sửa phụ thuộc vào quyền được cấu hình cho tài khoản."
+        },
+        "theme": {
+          "question": "Làm sao để bật chế độ tối?",
+          "answer": "Vào Cài đặt và bật công tắc chế độ tối trong phần Giao diện. Ứng dụng sẽ cập nhật ngay."
+        },
+        "language": {
+          "question": "Làm sao để đổi ngôn ngữ?",
+          "answer": "Dùng bộ chọn ngôn ngữ ở header để chuyển giữa các ngôn ngữ được hỗ trợ."
+        },
+        "support": {
+          "question": "Làm sao để liên hệ hỗ trợ?",
+          "answer": "Dùng Gửi phản hồi cho lỗi và ý tưởng, hoặc mở các trang hỗ trợ để xem trợ giúp, điều khoản, quyền riêng tư và phiên bản."
+        }
+      }
+    }
+  },
+  "terms": {
+    "title": "Điều khoản dịch vụ",
+    "sections": {
+      "acceptance": {
+        "title": "Chấp nhận điều khoản",
+        "body": "Việc sử dụng ứng dụng này đồng nghĩa với việc bạn đồng ý với các điều khoản áp dụng cho truy cập, sử dụng và hoạt động tài khoản."
+      },
+      "usage": {
+        "title": "Sử dụng cho phép",
+        "body": "Giữ an toàn tài khoản, tuân thủ chính sách công ty và chỉ sử dụng ứng dụng cho công việc được cho phép."
+      }
+    }
+  },
+  "privacy": {
+    "title": "Chính sách bảo mật",
+    "sections": {
+      "collection": {
+        "title": "1. Thu thập dữ liệu",
+        "body": "Chúng tôi thu thập thông tin cần thiết để vận hành ứng dụng, hỗ trợ tài khoản và đảm bảo quy trình chính xác."
+      },
+      "usage": {
+        "title": "2. Cách chúng tôi sử dụng dữ liệu",
+        "body": "Dữ liệu của bạn được dùng cho xác thực, số liệu bảng điều khiển, theo dõi lô, cảnh báo và cải thiện dịch vụ."
+      },
+      "sharing": {
+        "title": "3. Chia sẻ dữ liệu",
+        "body": "Chúng tôi không bán dữ liệu của bạn. Quyền truy cập chỉ giới hạn cho người dùng được ủy quyền, quản trị viên và nhà cung cấp dịch vụ liên quan đến việc vận hành ứng dụng."
+      },
+      "retention": {
+        "title": "4. Lưu giữ dữ liệu",
+        "body": "Hồ sơ vận hành chỉ được lưu giữ trong thời gian cần thiết cho sản xuất, kiểm toán, tuân thủ hoặc xử lý sự cố."
+      },
+      "security": {
+        "title": "5. Bảo mật",
+        "body": "Chúng tôi áp dụng kiểm soát truy cập và các biện pháp bảo vệ vận hành để ngăn chặn truy cập trái phép hoặc lạm dụng thông tin."
+      },
+      "rights": {
+        "title": "6. Quyền của bạn",
+        "body": "Tùy theo hệ thống triển khai, bạn có thể yêu cầu truy cập, chỉnh sửa, xuất hoặc xóa một số thông tin cá nhân nhất định."
+      },
+      "cookies": {
+        "title": "7. Cookie và lưu trữ",
+        "body": "Ứng dụng dùng lưu trữ cục bộ để giữ các tùy chọn như ngôn ngữ, giao diện và trạng thái đăng nhập trên thiết bị."
+      },
+      "children": {
+        "title": "8. Trẻ vị thành niên",
+        "body": "Ứng dụng này dành cho sử dụng trong công việc và không được thiết kế cho trẻ em dưới độ tuổi theo quy định pháp luật áp dụng."
+      },
+      "transfer": {
+        "title": "9. Chuyển dữ liệu quốc tế",
+        "body": "Nếu dữ liệu được xử lý qua nhiều khu vực, chúng tôi áp dụng các biện pháp bảo vệ vận hành và kiểm soát hợp đồng khi cần thiết."
+      },
+      "contact": {
+        "title": "10. Liên hệ",
+        "body": "Với các câu hỏi hoặc yêu cầu về bảo mật, vui lòng dùng các kênh hỗ trợ và phản hồi do đội triển khai cung cấp."
+      }
+    }
+  },
+  "versions": {
+    "title": "Phiên bản",
+    "currentVersion": "Phiên bản hiện tại",
+    "latestVersion": "Phiên bản mới nhất",
+    "currentVersionValue": "Phiên bản {{version}}",
+    "patchTitle": "Bản vá",
+    "patchValue": "Bản vá {{patch}}",
+    "history": "Lịch sử phiên bản",
+    "versionValue": "v{{version}}",
+    "openReleaseLink": "Mở liên kết phiên bản"
+  },
+  "network": {
+    "offline": "Có vẻ bạn đang ngoại tuyến",
+    "offlineMessage": "Một số tính năng có thể không hoạt động cho đến khi kết nối được khôi phục.",
+    "online": "Đã trực tuyến lại",
+    "onlineMessage": "Kết nối của bạn đã được khôi phục."
+  },
+  "notFound": {
+    "title": "Không tìm thấy",
+    "message": "Màn hình này không tồn tại.",
+    "goHome": "Về màn hình chính"
+  },
+  "errors": {
+    "title": "Lỗi",
+    "generic": "Đã có lỗi xảy ra. Vui lòng thử lại.",
+    "codeLabel": "Mã lỗi"
+  },
+  "alertsList": {
+    "severity": {
+      "critical": "Nghiêm trọng",
+      "unknown": "Không xác định",
+      "upperLimit": "Vượt ngưỡng trên",
+      "lowerLimit": "Vượt ngưỡng dưới"
+    },
+    "status": {
+      "pending": "Đang chờ",
+      "inProgress": "Đang xử lý",
+      "fixed": "Đã sửa",
+      "unrepairable": "Không sửa được",
+      "unknown": "Không xác định"
+    }
+  },
+  "batchesList": {
+    "filterAll": "Tất cả máy",
+    "filterDevice": "Máy",
+    "filterDevicePlaceholder": "Chọn thiết bị",
+    "filterStatus": "Trạng thái",
+    "filterStartDate": "Từ ngày",
+    "filterEndDate": "Đến ngày",
+    "searchLabel": "Tìm kiếm mẻ",
+    "batchName": "Mẻ hàng",
+    "workOrderLabel": "Công đơn",
+    "workOrderPlaceholder": "Tìm kiếm theo công đơn",
+    "status": {
+      "all": "Tất cả",
+      "running": "Đang chạy",
+      "holding": "Đang giữ nhiệt",
+      "completed": "Hoàn thành",
+      "waiting": "Đang chờ",
+      "unknown": "Không xác định",
+      "error": "Lỗi"
+    },
+    "createBtn": "Tạo mẻ mới",
+    "scrollTopBtn": "Cuộn lên đầu",
+    "searchPlaceholder": "Tìm theo mẻ, khách hàng",
+    "avgTemp": "Nhiệt độ TB",
+    "reachedTime": "Giờ đạt nhiệt",
+    "timeStart": "Giờ bắt đầu",
+    "timeEnd": "Giờ kết thúc",
+    "createAt": "Ngày tạo",
+    "device": "Thiết bị",
+    "currentTemp": "Nhiệt độ HT"
+  },
+  "batchesCreate": {
+    "title": "Tạo mẻ mới",
+    "selectDevice": "Chọn lò xử lý",
+    "selectDevicePlaceholder": "Chọn máy/lò nung",
+    "batchNumber": "Số mẻ (Tự động)",
+    "material": "Vật liệu",
+    "selectMaterialPlaceholder": "Chọn vật liệu",
+    "workOrder": "Công đơn",
+    "workOrderPlaceholder": "WO-20240522",
+    "specs": "Thông số kỹ thuật",
+    "specsPlaceholder": "Nhập thông số kỹ thuật",
+    "deliveryDate": "Ngày giao",
+    "deliveryDatePlaceholder": "Chọn ngày giao",
+    "lotNo": "Số lô",
+    "lotNoPlaceholder": "LOT-001",
+    "weight": "Khối lượng",
+    "weightPlaceholder": "1250",
+    "customer": "Khách hàng *",
+    "customerPlaceholder": "Nhập khách hàng",
+    "note": "Ghi chú",
+    "notePlaceholder": "Nhập ghi chú...",
+    "recipe": "Phương pháp",
+    "selectMethodPlaceholder": "Chọn phương pháp",
+    "companyName": "Công ty",
+    "companyNamePlaceholder": "Nhập tên công ty",
+    "hardnessStandard": "Tiêu chuẩn độ cứng",
+    "hardnessStandardPlaceholder": "Nhập tiêu chuẩn độ cứng",
+    "actualHardness": "Độ cứng thực tế",
+    "actualHardnessPlaceholder": "Nhập độ cứng thực tế",
+    "formCode": "Biểu mẫu",
+    "formCodePlaceholder": "Nhập mã biểu mẫu",
+    "timeEnd": "Thời gian kết thúc",
+    "timeEndPlaceholder": "Chọn ngày giờ kết thúc",
+    "temperature": "Nhiệt độ cài đặt",
+    "lowTemperature": "Giới hạn nhiệt thấp",
+    "highTemperature": "Giới hạn nhiệt cao",
+    "timeHold": "Thời gian giữ nhiệt",
+    "stdTemp": "Nhiệt độ cài đặt",
+    "stdLowTemp": "Giới hạn nhiệt thấp",
+    "stdHighTemp": "Giới hạn nhiệt cao",
+    "stdHoldTime": "Thời gian giữ nhiệt",
+    "createBtn": "Tạo mẻ hàng",
+    "editBtn": "Cập nhật mẻ",
+    "alertConfirmSuccessMsg": "Mẻ hàng đã được khởi tạo thành công.",
+    "alertConfirmEditSuccessMsg": "Mẻ hàng đã được cập nhật thành công.",
+    "resetDialog": {
+      "title": "Đặt lại biểu mẫu",
+      "message": "Bạn có chắc muốn xóa toàn bộ trường thông tin của mẻ hàng không? Thao tác này không thể hoàn tác.",
+      "action": "Đặt lại"
+    }
+  },
+  "batchesDetail": {
+    "tabOverview": "Tổng quan",
+    "basicInformation": "Thông tin cơ bản",
+    "detailInformation": "Thông tin chi tiết",
+    "device": "Máy",
+    "material": "Vật liệu",
+    "quantity": "Số lượng phôi",
+    "customer": "Khách hàng",
+    "batchCode": "Mẻ hàng",
+    "workOrder": "Công đơn",
+    "specs": "Thông số kỹ thuật",
+    "method": "Phương pháp",
+    "standard": "Tiêu chuẩn",
+    "deliveryDate": "Ngày giao",
+    "lotNo": "Số lô",
+    "companyName": "Công ty",
+    "weight": "Khối lượng",
+    "waterTemp": "Nhiệt độ nước",
+    "holdDuration": "Thời gian giữ nhiệt",
+    "hardnessStandard": "Tiêu chuẩn độ cứng",
+    "actualHardness": "Độ cứng thực tế",
+    "note": "Ghi chú",
+    "status": "Trạng thái",
+    "createdAt": "Ngày tạo",
+    "modifiedAt": "Ngày cập nhật",
+    "username": "Người vận hành",
+    "recipe": "Biểu mẫu",
+    "timeline": "Dòng thời gian",
+    "timeReached": "Thời điểm đạt nhiệt",
+    "runTime": "Thời gian chạy",
+    "chartTitle": "Biểu đồ nhiệt độ",
+    "chartConfigTitle": "Cấu hình nhiệt độ",
+    "targetTemperature": "Nhiệt độ cài đặt",
+    "highTemperature": "Giới hạn nhiệt cao",
+    "lowTemperature": "Giới hạn nhiệt thấp",
+    "alertStartTitle": "Bắt đầu mẻ",
+    "alertStartMsg": "Mẻ hàng sẽ được chuyển từ chờ sang đang chạy và ghi nhận thời gian bắt đầu. Bạn có muốn tiếp tục không?",
+    "alertStartSuccess": "Đã bắt đầu mẻ",
+    "alertStartSuccessMsg": "Mẻ hàng đã được chuyển sang trạng thái đang chạy.",
+    "alertExportTitle": "Xuất báo cáo kỹ thuật",
+    "alertExportMsg": "Hệ thống đang khởi tạo file PDF báo cáo biểu đồ nhiệt và chi tiết mẻ hàng. Bạn có muốn tải về không?",
+    "alertExportSuccess": "Thành công",
+    "alertExportSuccessMsg": "Báo cáo kỹ thuật của mẻ hàng đã được lưu về thiết bị.",
+    "deleteConfirmTitle": "Xóa mẻ hàng",
+    "deleteConfirmMsg": "Bạn có chắc chắn muốn xóa mẻ hàng này không? Thao tác này không thể hoàn tác.",
+    "deleteSuccessTitle": "Thành công",
+    "deleteSuccessMsg": "Đã xóa mẻ hàng thành công.",
+    "deleteBatchA11y": "Xóa mẻ hàng",
+    "editBtn": "Chỉnh sửa",
+    "startBtn": "Bắt đầu mẻ",
+    "tabProductLines": "Dòng sản phẩm",
+    "hours": "giờ",
+    "minutes": "phút"
+  },
+  "productLines": {
+    "managementTitle": "Quản lý dòng sản phẩm",
+    "addProductLine": "Thêm dòng sản phẩm",
+    "editProductLine": "Chỉnh sửa dòng sản phẩm",
+    "productType": "Tên sản phẩm",
+    "productTypePlaceholder": "Nhập tên sản phẩm",
+    "castLotNo": "Số mẻ đúc",
+    "castLotNoPlaceholder": "Nhập số mẻ đúc",
+    "quantity": "Số lượng phôi",
+    "quantityPlaceholder": "Nhập số lượng",
+    "weight": "Khối lượng",
+    "weightPlaceholder": "Nhập khối lượng",
+    "purchaseOrderNo": "Số đơn hàng",
+    "purchaseOrderNoPlaceholder": "Nhập số đơn hàng",
+    "notePlaceholder": "Nhập ghi chú (tùy chọn)",
+    "empty": "Không có dòng sản phẩm nào",
+    "emptyMsg": "Vui lòng nhấn nút cộng để thêm mới.",
+    "deleteConfirmTitle": "Xóa dòng sản phẩm",
+    "deleteConfirmMsg": "Bạn có chắc chắn muốn xóa dòng sản phẩm này không?"
+  },
+  "users": {
+    "title": "Quản lý người dùng",
+    "drawerTitle": "Quản lý người dùng",
+    "drawerSubtitle": "Danh sách & phân quyền",
+    "searchPlaceholder": "Tìm kiếm người dùng...",
+    "columns": {
+      "username": "ID",
+      "name": "Tên",
+      "role": "Vai trò",
+      "status": "Trạng thái",
+      "actions": "Hành động"
+    },
+    "roles": {
+      "admin": "Quản trị viên",
+      "operator": "Vận hành",
+      "viewer": "Người xem"
+    },
+    "status": {
+      "active": "Hoạt động",
+      "inactive": "Vô hiệu"
+    },
+    "actions": {
+      "edit": "Chỉnh sửa",
+      "activate": "Kích hoạt người dùng",
+      "changePassword": "Đổi mật khẩu"
+    },
+    "create": {
+      "title": "Thêm người dùng",
+      "editTitle": "Chỉnh sửa",
+      "password": "Mật khẩu",
+      "passwordPlaceholder": "Nhập mật khẩu",
+      "submit": "Tạo người dùng",
+      "editBtn": "Cập nhật",
+      "fabLabel": "Thêm người dùng",
+      "success": "Tạo người dùng thành công"
+    },
+    "changePassword": {
+      "title": "Đổi mật khẩu",
+      "placeholder": "Nhập mật khẩu mới",
+      "submit": "Cập nhật mật khẩu"
+    },
+    "empty": "Không tìm thấy người dùng",
+    "messages": {
+      "activateSuccess": "Kích hoạt người dùng thành công",
+      "passwordChanged": "Đổi mật khẩu thành công",
+      "updateSuccess": "Cập nhật người dùng thành công"
+    }
+  },
+  "customers": {
+    "title": "Khách hàng",
+    "searchPlaceholder": "Tìm kiếm khách hàng...",
+    "createBtn": "Thêm khách hàng",
+    "empty": "Không tìm thấy khách hàng nào",
+    "scrollTopBtn": "Cuộn lên đầu",
+    "createdAt": "Ngày tạo",
+    "modifiedAt": "Ngày sửa",
+    "detail": {
+      "title": "Chi tiết khách hàng",
+      "deleteTitle": "Xoá khách hàng",
+      "deleteMessage": "Bạn có chắc chắn muốn xoá khách hàng này? Thao tác này không thể hoàn tác.",
+      "fields": {
+        "id": "Mã ID",
+        "name": "Tên khách hàng"
+      }
+    },
+    "form": {
+      "createTitle": "Thêm khách hàng",
+      "editTitle": "Chỉnh sửa khách hàng",
+      "nameLabel": "Tên khách hàng",
+      "namePlaceholder": "Nhập tên khách hàng",
+      "createBtn": "Thêm khách hàng",
+      "editBtn": "Cập nhật khách hàng",
+      "createSuccess": "Thêm khách hàng thành công",
+      "editSuccess": "Cập nhật khách hàng thành công",
+      "deleteSuccess": "Xoá khách hàng thành công"
+    }
+  },
+  "drawer": {
+    "account": "Tài khoản",
+    "accountSubtitle": "Thông tin cá nhân & bảo mật",
+    "settings": "Cài đặt chung",
+    "settingsSubtitle": "Giao diện & cấu hình kết nối",
+    "customersSubtitle": "Quản lý thông tin khách hàng",
+    "logout": "Đăng xuất",
+    "loggingOut": "Đang đăng xuất...",
+    "logoutConfirmMessage": "Bạn có chắc muốn đăng xuất không? Bạn sẽ cần đăng nhập lại để tiếp tục."
+  }
+}

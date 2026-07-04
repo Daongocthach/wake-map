@@ -1,0 +1,779 @@
+{
+  "common": {
+    "loading": "載入中...",
+    "cancel": "取消",
+    "clear": "清除",
+    "save": "儲存",
+    "delete": "刪除",
+    "confirm": "確認",
+    "retry": "重試",
+    "search": "搜尋",
+    "selectDate": "選擇日期",
+    "close": "關閉",
+    "edit": "編輯",
+    "ok": "確定",
+    "success": "成功",
+    "time": "時間",
+    "hours": "小時",
+    "minutes": "分鐘",
+    "seconds": "秒",
+    "today": "今天",
+    "actions": "操作",
+    "temperatureUnit": "°C",
+    "weightUnit": "kg"
+  },
+  "wakemap": {
+    "title": "WakeMap 畫面",
+    "searchPlaceholder": "你想去哪裡？",
+    "distanceLabel": "距離",
+    "etaLabel": "時間",
+    "radiusLabel": "警報半徑",
+    "modeLabel": "通知模式",
+    "start": "開始",
+    "dismiss": "關閉警報",
+    "timeRemaining": "大約還有",
+    "minutes": "{{count}} 分鐘",
+    "minutesLabel": "分鐘",
+    "meters": "{{count}} 米",
+    "kilometers": "{{count}} 公里",
+    "calculating": "正在計算...",
+    "arrived": "已到達！",
+    "arrivedSubtitle": "您已進入 {{name}} 的警報半徑",
+    "modes": {
+      "sound": "聲音 🔊",
+      "vibrate": "震動 📳",
+      "flash": "閃光燈 🔦"
+    },
+    "defaultPlaces": {
+      "home": "家",
+      "work": "公司",
+      "school": "學校"
+    },
+    "mapPin": "地圖標記",
+    "placePrefix": "地點",
+    "addBtn": "添加 +",
+    "bgServiceTitle": "WakeMap 正在追蹤",
+    "bgServiceBody": "正在監控您前往 {{name}} 的位置"
+  },
+  "update": {
+    "title": "需要更新",
+    "message": "需要新版本才能繼續使用。目前版本：{{currentVersion}}。最新版本：{{latestVersion}}。",
+    "releaseNotes": "更新說明",
+    "action": "立即更新"
+  },
+  "validation": {
+    "required": "此欄位為必填",
+    "temperatureRange": "溫度必須介於上下限之間。"
+  },
+  "tabs": {
+    "dashboard": "總覽",
+    "devices": "Devices",
+    "deviceManagement": "設備管理",
+    "deviceDetails": "設備詳情",
+    "alerts": "警報",
+    "batches": "批次管理",
+    "batchDetails": "批次詳情"
+  },
+  "language": {
+    "label": "語言",
+    "english": "English",
+    "vietnamese": "Tiếng Việt",
+    "taiwanese": "中文（繁體)",
+    "chinese": "中文（简体)"
+  },
+  "header": {
+    "back": "返回",
+    "brandName": "Finepro",
+    "menu": "選單"
+  },
+  "auth": {
+    "login": {
+      "title": "登入",
+      "subtitle": "使用模擬管理員帳號進入應用主流程。",
+      "usernameLabel": "使用者名稱",
+      "usernamePlaceholder": "請輸入使用者名稱",
+      "passwordLabel": "密碼",
+      "passwordPlaceholder": "請輸入密碼",
+      "submit": "登入",
+      "registerPrompt": "還沒有帳號？",
+      "registerAction": "立即註冊",
+      "apiConfig": "API 設定"
+    },
+    "register": {
+      "title": "建立帳戶",
+      "subtitle": "註冊一個新帳戶以存取應用程式。",
+      "submit": "建立帳戶",
+      "success": "帳戶建立成功"
+    }
+  },
+  "account": {
+    "fields": {
+      "role": "角色",
+      "username": "用戶名",
+      "firstName": "名",
+      "lastName": "姓",
+      "status": "狀態"
+    },
+    "placeholders": {
+      "role": "請輸入角色",
+      "username": "請輸入用戶名",
+      "firstName": "請輸入名字",
+      "lastName": "請輸入姓氏"
+    },
+    "actions": {
+      "reset": "重設"
+    }
+  },
+  "dashboard": {
+    "scrollTopBtn": "回到頂部",
+    "devices": {
+      "title": "設備列表"
+    },
+    "overview": {
+      "batchToday": "今天",
+      "batch7Days": "7天",
+      "batchMonth": "本月",
+      "machineOperating": "運行設備",
+      "machineSummaryLabel": "設備總覽",
+      "machineUnit": "台設備",
+      "machineAlertLabel": "警報",
+      "batchMetrics": "批次概覽"
+    },
+    "charts": {
+      "yieldTitle": "產量",
+      "yieldSubtitle": "近7天批次",
+      "deviceTitle": "設備",
+      "deviceSubtitle": "設備效能"
+    },
+    "machines": {
+      "materialLabel": "材料",
+      "methodLabel": "方法",
+      "mainTemperatureLabel": "主溫度",
+      "overTemperatureLabel": "超溫",
+      "coolingWaterTemperatureLabel": "冷卻水",
+      "viewAll": "查看設備",
+      "alertLabel": "警報 {{count}}",
+      "connected": "已連線",
+      "disconnected": "已中斷連線"
+    },
+    "alertsSection": {
+      "viewAll": "查看全部"
+    },
+    "metrics": {
+      "alerts": "警報"
+    }
+  },
+  "devices": {
+    "status": {
+      "all": "全部",
+      "running": "運行中",
+      "maintenance": "維護",
+      "stop": "停止",
+      "unknown": "未知"
+    },
+    "deviceStatus": {
+      "stop": "Stop",
+      "running": "Running",
+      "maintenance": "Maintenance"
+    },
+    "detail": {
+      "errorTitle": "無法載入設備",
+      "errorMessage": "請重試請求。",
+      "tabs": {
+        "overview": "概覽",
+        "history": "歷史"
+      },
+      "overview": {
+        "deviceInfoTitle": "設備資訊",
+        "currentBatchTitle": "運行批次",
+        "batchId": "批次 ID",
+        "batchCode": "工單號",
+        "batchMaterial": "材料",
+        "batchStatus": "批次狀態",
+        "systemTemperatureTitle": "系統溫度",
+        "mainTemperature": "主溫度",
+        "overTemperature": "上限溫度",
+        "coolingWaterTemperature": "冷卻水",
+        "alertTitle": "系統警報",
+        "alertCountSuffix": "個目前警報",
+        "idLabelValue": "#{{id}}"
+      },
+      "history": {
+        "title": "批次歷史",
+        "subtitle": "共顯示 {{count}} 筆記錄",
+        "startedAt": "開始時間",
+        "avgTemperature": "平均溫度"
+      },
+      "deleteTitle": "刪除設備",
+      "deleteMessage": "此操作無法復原。",
+      "fields": {
+        "id": "ID",
+        "name": "Name",
+        "code": "Code",
+        "status": "Status"
+      }
+    }
+  },
+  "devicesList": {
+    "searchLabel": "搜尋設備",
+    "searchPlaceholder": "依名稱、編號或 ID 搜尋",
+    "filterStatus": "狀態",
+    "createBtn": "新增設備",
+    "deviceCode": "編號：{{code}}",
+    "allMachines": "所有設備",
+    "scrollTopBtn": "回到頂部",
+    "createdAt": "建立時間",
+    "modifiedAt": "更新時間"
+  },
+  "devicesCreate": {
+    "title": "新增設備",
+    "editTitle": "編輯設備",
+    "deviceNameLabel": "設備名稱",
+    "deviceNamePlaceholder": "輸入設備名稱",
+    "deviceCodeLabel": "設備編號",
+    "deviceCodePlaceholder": "輸入設備編號",
+    "deviceStatusLabel": "設備狀態",
+    "deviceStatusPlaceholder": "選擇設備狀態",
+    "imageLabel": "設備圖片",
+    "imageHint": "為設備上傳圖片或 Logo。",
+    "imageAction": "選擇圖片",
+    "imageChange": "更換圖片",
+    "imageRemove": "移除圖片",
+    "imagePreviewHint": "點擊預覽可放大檢視。",
+    "imagePreviewLabel": "設備圖片預覽",
+    "createBtn": "新增設備",
+    "editBtn": "更新設備"
+  },
+  "alerts": {
+    "status": {
+      "processing": "處理中"
+    },
+    "actions": {
+      "markUnrepairable": "無法修復",
+      "markFixed": "已修復",
+      "updateStatus": "更新狀態",
+      "updateStatusAgainMessage": "您想再次更新狀態嗎？",
+      "updateStatusToInProgressMessage": "您想將狀態更新為進行中嗎？",
+      "updateStatusTransitionMessage": "您想將狀態從{{from}}變更為{{to}}嗎？",
+      "selectStatusTitle": "選擇狀態",
+      "selectStatusMessage": "請選擇此警報的下一個狀態。"
+    },
+    "filterDevice": "設備",
+    "filterDevicePlaceholder": "選擇設備",
+    "filterAll": "所有設備",
+    "scrollTopBtn": "回到頂部",
+    "filters": {
+      "alertTypes": "警報類型",
+      "statusGroup": "狀態",
+      "timeFrom": "開始日期",
+      "timeTo": "結束日期",
+      "all": "全部"
+    },
+    "fields": {
+      "temperature": "溫度",
+      "batchCode": "批次號",
+      "timeLabel": "時間: {{time}}",
+      "statusLabel": "狀態:",
+      "statusTransitionLabel": "狀態變更",
+      "statusTransitionFrom": "從：{{status}}",
+      "statusTransitionTo": "到：{{status}}",
+      "alertTypeLabel": "類型：",
+      "note": "備註"
+    },
+    "details": {
+      "title": "警報詳情",
+      "basicInformation": "基本資訊",
+      "alertIdLabel": "警報編號",
+      "deviceLabel": "設備",
+      "statusLabel": "狀態",
+      "batchCodeLabel": "批次號",
+      "currentTemperatureLabel": "目前溫度",
+      "lowTemperatureLabel": "下限",
+      "highTemperatureLabel": "上限",
+      "technicalNotesLabel": "技術備註",
+      "recordedAtLabel": "記錄時間",
+      "historyUsernameLabel": "使用者名稱",
+      "alertTypeLabel": "警報類型",
+      "historyTemperatureLabel": "溫度",
+      "historyNotesLabel": "備註",
+      "timeline": {
+        "title": "時間軸",
+        "empty": "尚無歷史紀錄。"
+      },
+      "chartTitle": "溫度趨勢",
+      "chartEmpty": "尚無圖表資料",
+      "chartPoints": "{{count}} 個點"
+    }
+  },
+  "settings": {
+    "title": "設定",
+    "appearance": "外觀",
+    "darkMode": "深色模式",
+    "version": "版本",
+    "privacy": "隱私權政策",
+    "terms": "服務條款",
+    "connection": {
+      "title": "連線位址",
+      "subtitle": "修改 API 基礎位址、即時 Socket 與 Android 更新位址。",
+      "current": "目前"
+    },
+    "apiUrl": {
+      "title": "API 基礎位址",
+      "subtitle": "點擊即可更改 API 端點。",
+      "current": "目前：{{url}}",
+      "inputLabel": "基礎位址",
+      "inputPlaceholder": "https://api.example.com",
+      "helper": "必須以 http:// 或 https:// 開頭",
+      "save": "儲存 URL",
+      "reset": "重設為預設值",
+      "saved": "API 基礎位址已更新。",
+      "resetSuccess": "API 基礎位址已恢復為預設值。",
+      "invalidUrl": "請輸入有效的 URL。",
+      "saveFailed": "無法儲存 API 基礎位址。"
+    },
+    "socketUrl": {
+      "title": "Socket 位址",
+      "subtitle": "點擊即可更改即時連線。",
+      "current": "目前：{{url}}",
+      "inputLabel": "Socket 位址",
+      "inputPlaceholder": "ws://socket.example.com",
+      "helper": "必須以 ws:// 或 wss:// 開頭",
+      "save": "儲存 URL",
+      "reset": "重設為預設值",
+      "saved": "Socket 位址已更新。",
+      "resetSuccess": "Socket 位址已恢復為預設值。",
+      "invalidUrl": "請輸入有效的 Socket 位址。",
+      "saveFailed": "無法儲存 Socket 位址。"
+    },
+    "versionJsonUrl": {
+      "title": "Android 更新位址",
+      "subtitle": "點擊即可更改 Android 應用程式更新連結。",
+      "current": "目前：{{url}}",
+      "inputLabel": "更新位址",
+      "inputPlaceholder": "https://example.com/android.apk",
+      "helper": "必須是有效的 URL。",
+      "save": "儲存 URL",
+      "reset": "重設為預設值",
+      "saved": "Android 更新位址已更新。",
+      "resetSuccess": "Android 更新位址已恢復為預設值。",
+      "invalidUrl": "請輸入有效的 Android 更新位址。",
+      "saveFailed": "無法儲存 Android 更新位址。"
+    },
+    "sections": {
+      "connection": "連線",
+      "support": "支援"
+    },
+    "support": {
+      "helpCenter": "幫助中心",
+      "helpCenterSubtitle": "常見問題與指南",
+      "feedback": "送出回饋",
+      "feedbackSubtitle": "幫助我們改進",
+      "termsSubtitle": "閱讀我們的條款和條件",
+      "privacySubtitle": "瞭解我們如何保護您的隱私",
+      "versionSubtitle": "目前應用程式版本"
+    },
+    "danger": {
+      "logout": "登出",
+      "logoutSubtitle": "登出目前帳戶"
+    }
+  },
+  "contact": {
+    "title": "送出回饋",
+    "form": {
+      "senderNameLabel": "你的姓名",
+      "senderNamePlaceholder": "輸入你的姓名",
+      "feedbackLabel": "回饋內容",
+      "feedbackPlaceholder": "描述問題、想法或需求",
+      "feedbackMax": "回饋內容不得超過 1000 個字元。",
+      "submit": "送出回饋",
+      "successMessage": "謝謝，你的回饋已提交。"
+    }
+  },
+  "helps": {
+    "title": "幫助中心",
+    "faq": {
+      "itemLabel": "問題 {{index}}",
+      "items": {
+        "login": {
+          "question": "如何登入應用程式？",
+          "answer": "請使用管理員提供的帳號登入。如果失敗，請確認使用者名稱、密碼與網路連線。"
+        },
+        "dashboard": {
+          "question": "儀表板顯示什麼？",
+          "answer": "儀表板會快速彙總設備活動、批次狀態、警示與其他營運指標。"
+        },
+        "batches": {
+          "question": "如何查看批次詳細資料？",
+          "answer": "開啟批次頁面，選擇一個批次卡片，然後查看總覽、歷史與溫度資料區塊。"
+        },
+        "devices": {
+          "question": "如何檢查裝置？",
+          "answer": "開啟裝置頁面，搜尋或選擇裝置，接著查看目前狀態、關聯批次與歷史紀錄。"
+        },
+        "alerts": {
+          "question": "為什麼會出現警示？",
+          "answer": "當裝置或批次超出設定門檻，或需要營運團隊注意時，就會產生警示。"
+        },
+        "profile": {
+          "question": "我可以更新個人資料嗎？",
+          "answer": "你可以在設定中查看姓名與帳戶資訊。是否允許修改取決於為你的帳號設定的權限。"
+        },
+        "theme": {
+          "question": "如何切換到深色模式？",
+          "answer": "前往設定，在外觀區塊開啟深色模式開關，應用程式會立即更新。"
+        },
+        "language": {
+          "question": "如何更改語言？",
+          "answer": "使用頂部列中的語言選擇器即可在支援的語言之間切換。"
+        },
+        "support": {
+          "question": "如何聯絡支援？",
+          "answer": "使用送出回饋提交問題與想法，或開啟支援頁面查看幫助、條款、隱私與版本資訊。"
+        }
+      }
+    }
+  },
+  "terms": {
+    "title": "服務條款",
+    "sections": {
+      "acceptance": {
+        "title": "接受條款",
+        "body": "使用本應用程式即表示你同意遵守適用於存取、使用與帳戶活動的相關條款。"
+      },
+      "usage": {
+        "title": "允許的使用",
+        "body": "請妥善保護帳戶、遵守公司政策，並僅將應用程式用於授權工作。"
+      }
+    }
+  },
+  "privacy": {
+    "title": "隱私權政策",
+    "sections": {
+      "collection": {
+        "title": "1. 資料收集",
+        "body": "我們會收集運行應用程式、支援帳戶並維持流程準確所需的資訊。"
+      },
+      "usage": {
+        "title": "2. 資料如何使用",
+        "body": "你的資料會用於身分驗證、儀表板指標、批次追蹤、警示與服務改善。"
+      },
+      "sharing": {
+        "title": "3. 資料分享",
+        "body": "我們不會販售你的資料。存取僅限於授權使用者、管理員與參與應用程式營運的服務供應商。"
+      },
+      "retention": {
+        "title": "4. 資料保留",
+        "body": "營運紀錄僅會在生產、稽核、合規或故障排除所需的時間內保留。"
+      },
+      "security": {
+        "title": "5. 安全",
+        "body": "我們採用存取控制與營運保護措施，避免資訊遭未經授權存取或濫用。"
+      },
+      "rights": {
+        "title": "6. 你的權利",
+        "body": "依照你的部署環境，你可以請求存取、更正、匯出或刪除某些個人資訊。"
+      },
+      "cookies": {
+        "title": "7. Cookie 與本機儲存",
+        "body": "應用程式使用本機儲存來保存語言、主題與登入狀態等偏好設定。"
+      },
+      "children": {
+        "title": "8. 未成年人",
+        "body": "本應用程式用於工作情境，不適用於適用法律要求年齡以下的兒童。"
+      },
+      "transfer": {
+        "title": "9. 國際傳輸",
+        "body": "若資料跨區域處理，我們會在需要時採用營運保護與合約控制措施。"
+      },
+      "contact": {
+        "title": "10. 聯絡我們",
+        "body": "如有隱私相關問題或要求，請使用部署團隊提供的支援與回饋管道。"
+      }
+    }
+  },
+  "versions": {
+    "title": "版本",
+    "currentVersion": "目前版本",
+    "latestVersion": "最新版本",
+    "currentVersionValue": "版本 {{version}}",
+    "patchTitle": "修補",
+    "patchValue": "修補 {{patch}}",
+    "history": "版本歷史",
+    "versionValue": "v{{version}}",
+    "openReleaseLink": "開啟版本連結"
+  },
+  "network": {
+    "offline": "你目前似乎處於離線狀態",
+    "offlineMessage": "在連線恢復之前，部分功能可能無法使用。",
+    "online": "已重新連線",
+    "onlineMessage": "你的網路連線已恢復。"
+  },
+  "notFound": {
+    "title": "找不到頁面",
+    "message": "此頁面不存在。",
+    "goHome": "返回首頁"
+  },
+  "errors": {
+    "title": "錯誤",
+    "generic": "發生錯誤，請重試。",
+    "codeLabel": "錯誤碼"
+  },
+  "alertsList": {
+    "severity": {
+      "critical": "嚴重",
+      "unknown": "未知",
+      "upperLimit": "上限",
+      "lowerLimit": "下限"
+    },
+    "status": {
+      "pending": "待處理",
+      "inProgress": "進行中",
+      "fixed": "已修復",
+      "unrepairable": "無法修復",
+      "unknown": "未知"
+    }
+  },
+  "batchesList": {
+    "filterAll": "所有加熱爐",
+    "filterDevice": "設備",
+    "filterDevicePlaceholder": "選擇設備",
+    "filterStatus": "狀態",
+    "filterStartDate": "開始日期",
+    "filterEndDate": "結束日期",
+    "searchLabel": "搜尋批次",
+    "workOrderLabel": "工單",
+    "workOrderPlaceholder": "依工單搜尋",
+    "status": {
+      "all": "全部狀態",
+      "running": "運行中",
+      "holding": "保溫中",
+      "completed": "已完成",
+      "waiting": "等待中",
+      "earlyStop": "提前結束",
+      "unknown": "未知",
+      "error": "錯誤"
+    },
+    "createBtn": "新建批次",
+    "scrollTopBtn": "回到頂部",
+    "searchPlaceholder": "依批次、客戶搜尋",
+    "avgTemp": "平均溫度",
+    "reachedTime": "達溫時間",
+    "timeStart": "開始時間",
+    "timeEnd": "結束時間",
+    "createAt": "创建时间",
+    "device": "Device",
+    "currentTemp": "當前溫度"
+  },
+  "batchesCreate": {
+    "title": "新建批次",
+    "selectDevice": "選擇加熱爐",
+    "selectDevicePlaceholder": "請選擇加熱爐",
+    "batchNumber": "批次號 (自動)",
+    "material": "材料牌號",
+    "selectMaterialPlaceholder": "請選擇材料牌號",
+    "workOrder": "工單",
+    "workOrderPlaceholder": "WO-20240522",
+    "specs": "規格 / 要求",
+    "specsPlaceholder": "輸入規格...",
+    "deliveryDate": "交期",
+    "deliveryDatePlaceholder": "選擇交期",
+    "lotNo": "批號",
+    "lotNoPlaceholder": "LOT-001",
+    "weight": "重量",
+    "weightPlaceholder": "1250",
+    "customer": "客戶 *",
+    "customerPlaceholder": "請輸入客戶",
+    "note": "備註",
+    "notePlaceholder": "輸入特殊要求...",
+    "recipe": "方法",
+    "selectMethodPlaceholder": "請選擇方法",
+    "companyName": "公司名稱",
+    "companyNamePlaceholder": "請輸入公司名稱",
+    "hardnessStandard": "硬度標準",
+    "hardnessStandardPlaceholder": "請輸入硬度標準",
+    "actualHardness": "實際硬度",
+    "actualHardnessPlaceholder": "請輸入實際硬度",
+    "formCode": "表單",
+    "formCodePlaceholder": "請輸入表單編號",
+    "timeEnd": "結束時間",
+    "timeEndPlaceholder": "選擇結束日期和時間",
+    "temperature": "設定溫度",
+    "lowTemperature": "低溫限制",
+    "highTemperature": "高溫限制",
+    "timeHold": "保溫時間",
+    "stdTemp": "設定溫度",
+    "stdLowTemp": "低溫限制",
+    "stdHighTemp": "高溫限制",
+    "stdHoldTime": "保溫時間",
+    "createBtn": "創建批次",
+    "editBtn": "更新批次",
+    "alertConfirmSuccessMsg": "批次已成功創建。",
+    "alertConfirmEditSuccessMsg": "批次已成功更新。",
+    "resetDialog": {
+      "title": "重設表單",
+      "message": "您確定要清除所有批次欄位嗎？此操作無法還原。",
+      "action": "重設"
+    }
+  },
+  "batchesDetail": {
+    "tabOverview": "總覽",
+    "basicInformation": "基本資訊",
+    "detailInformation": "詳細資訊",
+    "device": "Furnace Unit",
+    "material": "材料牌號",
+    "quantity": "工件數量",
+    "customer": "客戶",
+    "batchCode": "批次號",
+    "workOrder": "工單",
+    "specs": "規格",
+    "method": "工藝",
+    "standard": "標準",
+    "deliveryDate": "交貨日期",
+    "lotNo": "批號",
+    "companyName": "公司名稱",
+    "weight": "重量",
+    "waterTemp": "水溫",
+    "holdDuration": "保溫時長",
+    "hardnessStandard": "硬度標準",
+    "actualHardness": "實際硬度",
+    "note": "備註",
+    "status": "狀態",
+    "createdAt": "建立時間",
+    "modifiedAt": "更新時間",
+    "username": "使用者名稱",
+    "recipe": "程式碼",
+    "timeline": "時間線",
+    "timeReached": "達到時間",
+    "runTime": "運行時間",
+    "chartTitle": "溫度圖表",
+    "chartConfigTitle": "溫度設定",
+    "targetTemperature": "目標溫度",
+    "highTemperature": "高溫",
+    "lowTemperature": "低溫",
+    "alertStartTitle": "開始批次",
+    "alertStartMsg": "這將把批次從等待狀態切換為運行中並記錄開始時間。是否繼續？",
+    "alertStartSuccess": "批次已開始",
+    "alertStartSuccessMsg": "此批次已標記為運行中。",
+    "alertExportTitle": "匯出報告",
+    "alertExportMsg": "正在生成包含溫度曲線圖和批次詳情的 PDF 報告。是否下載？",
+    "alertExportSuccess": "成功",
+    "alertExportSuccessMsg": "技術批次報告已儲存至設備。",
+    "deleteConfirmTitle": "刪除批次",
+    "deleteConfirmMsg": "您確定要刪除此批次嗎？此操作無法撤銷。",
+    "deleteSuccessTitle": "成功",
+    "deleteSuccessMsg": "批次已刪除。",
+    "deleteBatchA11y": "刪除批次",
+    "editBtn": "編輯",
+    "startBtn": "開始批次",
+    "tabProductLines": "產品線",
+    "hours": "小時",
+    "minutes": "分鐘"
+  },
+  "productLines": {
+    "managementTitle": "管理產品線",
+    "addProductLine": "添加產品線",
+    "editProductLine": "編輯產品線",
+    "productType": "產品名稱",
+    "productTypePlaceholder": "輸入產品名稱",
+    "castLotNo": "鑄造爐號",
+    "castLotNoPlaceholder": "輸入鑄造爐號",
+    "quantity": "工件數量",
+    "quantityPlaceholder": "輸入數量",
+    "weight": "重量",
+    "weightPlaceholder": "輸入重量",
+    "purchaseOrderNo": "採購訂單號",
+    "purchaseOrderNoPlaceholder": "輸入採購訂單號",
+    "notePlaceholder": "輸入備註（選填）",
+    "empty": "無產品線",
+    "emptyMsg": "請點擊加號按鈕添加。",
+    "deleteConfirmTitle": "刪除產品線",
+    "deleteConfirmMsg": "您確定要刪除此產品線嗎？"
+  },
+  "users": {
+    "title": "用戶管理",
+    "drawerTitle": "用戶管理",
+    "drawerSubtitle": "用戶列表與權限分配",
+    "searchPlaceholder": "搜尋用戶...",
+    "columns": {
+      "username": "ID",
+      "name": "姓名",
+      "role": "角色",
+      "status": "狀態",
+      "actions": "操作"
+    },
+    "roles": {
+      "admin": "管理員",
+      "operator": "操作員",
+      "viewer": "觀察員"
+    },
+    "status": {
+      "active": "已啟用",
+      "inactive": "未啟用"
+    },
+    "actions": {
+      "edit": "編輯",
+      "activate": "啟用用戶",
+      "changePassword": "變更密碼"
+    },
+    "create": {
+      "title": "新增用戶",
+      "editTitle": "編輯用戶",
+      "password": "密碼",
+      "passwordPlaceholder": "輸入密碼",
+      "submit": "建立用戶",
+      "editBtn": "更新用戶",
+      "fabLabel": "新增用戶",
+      "success": "用戶建立成功"
+    },
+    "changePassword": {
+      "title": "變更密碼",
+      "placeholder": "輸入新密碼",
+      "submit": "更新密碼"
+    },
+    "empty": "未找到用戶",
+    "messages": {
+      "activateSuccess": "用戶啟用成功",
+      "passwordChanged": "密碼變更成功",
+      "updateSuccess": "用戶更新成功"
+    }
+  },
+  "customers": {
+    "title": "客戶管理",
+    "searchPlaceholder": "搜尋客戶...",
+    "createBtn": "建立客戶",
+    "empty": "未找到客戶",
+    "scrollTopBtn": "返回頂部",
+    "createdAt": "建立時間",
+    "modifiedAt": "修改時間",
+    "detail": {
+      "title": "客戶詳情",
+      "deleteTitle": "刪除客戶",
+      "deleteMessage": "您確定要刪除此客戶嗎？此操作無法撤銷。",
+      "fields": {
+        "id": "ID",
+        "name": "客戶名稱"
+      }
+    },
+    "form": {
+      "createTitle": "建立客戶",
+      "editTitle": "編輯客戶",
+      "nameLabel": "客戶名稱",
+      "namePlaceholder": "請輸入客戶名稱",
+      "createBtn": "建立客戶",
+      "editBtn": "更新客戶",
+      "createSuccess": "客戶建立成功",
+      "editSuccess": "客戶更新成功",
+      "deleteSuccess": "客戶刪除成功"
+    }
+  },
+  "drawer": {
+    "account": "帳戶",
+    "accountSubtitle": "個人資料與安全資訊",
+    "settings": "通用設定",
+    "settingsSubtitle": "界面與連線配置",
+    "customersSubtitle": "管理客戶資料與詳情",
+    "logout": "登出",
+    "loggingOut": "正在登出...",
+    "logoutConfirmMessage": "你確定要登出嗎？你需要重新登入才能繼續。"
+  }
+}
