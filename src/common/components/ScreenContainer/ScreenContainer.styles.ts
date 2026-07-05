@@ -10,7 +10,6 @@ export const styles = StyleSheet.create((theme, rt) => ({
     backgroundColor: 'transparent',
   },
   padded: {
-    paddingTop: theme.metrics.spacingV.p12,
     paddingHorizontal: {
       xs: theme.metrics.spacing.p12,
       sm: theme.metrics.spacing.p16,

@@ -5,8 +5,9 @@ import { useEffect } from 'react';
 import { View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
-import { StyleSheet } from 'react-native-unistyles';
+import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 import InterBold from '../assets/fonts/Inter-Bold.ttf';
 import InterMedium from '../assets/fonts/Inter-Medium.ttf';
 import InterRegular from '../assets/fonts/Inter-Regular.ttf';
@@ -17,12 +18,14 @@ import { AppAlertProvider, AppBottomSheetProvider } from '@/providers';
 SplashScreen.preventAutoHideAsync();
 
 function RootNavigator() {
+  const { theme } = useUnistyles();
   return (
     <Stack
       screenOptions={{
         headerShown: false,
-        contentStyle: { backgroundColor: 'transparent' },
+        contentStyle: { backgroundColor: theme.colors.background.app },
       }}
+      initialRouteName="index"
     >
       <Stack.Screen name="index" />
     </Stack>
@@ -58,15 +61,17 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView style={styles.rootView}>
-      <ErrorBoundary>
-        <KeyboardProvider>
-          <AppAlertProvider>
-            <AppBottomSheetProvider>
-              <AppContent />
-            </AppBottomSheetProvider>
-          </AppAlertProvider>
-        </KeyboardProvider>
-      </ErrorBoundary>
+      <SafeAreaProvider>
+        <ErrorBoundary>
+          <KeyboardProvider>
+            <AppAlertProvider>
+              <AppBottomSheetProvider>
+                <AppContent />
+              </AppBottomSheetProvider>
+            </AppAlertProvider>
+          </KeyboardProvider>
+        </ErrorBoundary>
+      </SafeAreaProvider>
     </GestureHandlerRootView>
   );
 }
