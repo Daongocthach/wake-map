@@ -1,7 +1,0 @@
-{
-  "ios": {
-    "NSLocationWhenInUseUsageDescription": "Allow WakeMap to access your location to track distance to your destination.",
-    "NSLocationAlwaysAndWhenInUseUsageDescription": "Allow WakeMap to track location in the background and wake you up when you arrive, even when the app is closed.",
-    "NSLocationAlwaysUsageDescription": "Allow WakeMap to track location in the background and wake you up when you arrive, even when the app is closed."
-  }
-}

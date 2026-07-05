@@ -1,7 +1,0 @@
-{
-  "ios": {
-    "NSLocationWhenInUseUsageDescription": "允许 WakeMap 访问您的位置以跟踪到目的地的距离。",
-    "NSLocationAlwaysAndWhenInUseUsageDescription": "允许 WakeMap 在后台跟踪位置，并在您到达时唤醒您，即使应用已关闭。",
-    "NSLocationAlwaysUsageDescription": "允许 WakeMap 在后台跟踪位置，并在您到达时唤醒您，即使应用已关闭。"
-  }
-}
