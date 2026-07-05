@@ -1,1 +1,0 @@
-export { AppSwipeBack } from './AppSwipeBack';

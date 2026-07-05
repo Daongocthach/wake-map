@@ -73,7 +73,6 @@ export { TextArea } from './TextArea';
 export type { TextAreaProps } from './TextArea';
 
 // Layout
-export { AppSwipeBack } from './AppSwipeBack';
 export { Divider } from './Divider';
 
 export type { DividerProps } from './Divider';

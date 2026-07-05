@@ -6,7 +6,7 @@ export default function WakeMapScreen() {
   const { t } = useTranslation();
 
   return (
-    <ScreenContainer>
+    <ScreenContainer edges={['top']}>
       <Text variant="h1">{t('wakemap.title')}</Text>
     </ScreenContainer>
   );

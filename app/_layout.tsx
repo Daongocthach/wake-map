@@ -11,7 +11,6 @@ import InterBold from '../assets/fonts/Inter-Bold.ttf';
 import InterMedium from '../assets/fonts/Inter-Medium.ttf';
 import InterRegular from '../assets/fonts/Inter-Regular.ttf';
 import InterSemiBold from '../assets/fonts/Inter-SemiBold.ttf';
-import { AppSwipeBack } from '@/common/components';
 import { ErrorBoundary } from '@/common/components/ErrorBoundary';
 import { AppAlertProvider, AppBottomSheetProvider } from '@/providers';
 
@@ -34,7 +33,6 @@ function AppContent() {
   return (
     <View style={styles.appContainer}>
       <RootNavigator />
-      <AppSwipeBack />
       <Toast />
     </View>
   );

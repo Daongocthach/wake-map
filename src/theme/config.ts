@@ -57,8 +57,8 @@ export const THEME_METADATA: Record<
 > = {
   default: {
     name: 'Default',
-    description: 'Modern indigo theme',
-    baseColor: '#6366F1',
+    description: 'Blue-cyan theme',
+    baseColor: '#2173F1',
   },
 };
 
