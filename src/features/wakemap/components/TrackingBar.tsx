@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import { Text } from '@/common/components/Text';
 
-export default function SearchHeader() {
+export const TrackingBar = () => {
   const { t } = useTranslation();
 
   return (
@@ -10,4 +10,4 @@ export default function SearchHeader() {
       <Text variant="h1">{t('wakemap.title')}</Text>
     </View>
   );
-}
+};

@@ -1,23 +1,42 @@
-import { useTranslation } from 'react-i18next';
+import React from 'react';
+import { View } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 import { ScreenContainer } from '@/common/components/ScreenContainer';
-import { Text } from '@/common/components/Text';
+import { MapCanvas, SearchHeader, TrackingBar, ConfigSheet } from '@/features/wakemap/components';
 
 export default function WakeMapScreen() {
-  const { t } = useTranslation();
-
   return (
-    <ScreenContainer edges={['top']}>
-      <Text variant="h1" style={styles.text}>
-        {t('wakemap.title')}
-      </Text>
+    <ScreenContainer padded={false} edges={['top']}>
+      <View style={styles.container}>
+        <View style={styles.mapWrapper}>
+          <MapCanvas />
+        </View>
+
+        <SearchHeader />
+
+        <View style={styles.bottomContainer}>
+          <TrackingBar />
+          <ConfigSheet />
+        </View>
+      </View>
     </ScreenContainer>
   );
 }
 
-export const styles = StyleSheet.create((theme) => ({
-  text: {
-    color: theme.colors.brand.primary,
-    fontSize: theme.metrics.fontSize.lg,
+const styles = StyleSheet.create((theme) => ({
+  container: {
+    flex: 1,
+    backgroundColor: theme.colors.background.app,
+  },
+  mapWrapper: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  bottomContainer: {
+    position: 'absolute',
+    bottom: theme.metrics.spacingV.p16,
+    left: theme.metrics.spacing.p16,
+    right: theme.metrics.spacing.p16,
+    gap: theme.metrics.spacingV.p12,
+    zIndex: 5,
   },
 }));
