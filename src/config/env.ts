@@ -4,6 +4,7 @@ interface EnvConfig {
   apiBaseUrl: string;
   socketUrl: string;
   versionJsonUrl: string;
+  googleMapApiKey: string;
   appEnv: 'development' | 'staging' | 'production';
   isDev: boolean;
   isProd: boolean;
@@ -30,6 +31,7 @@ export const env: EnvConfig = {
     'EXPO_PUBLIC_VERSION_JSON_URL',
     'https://apifinetags.finepro.net/mobile-app/android/heattreatment/version.json'
   ),
+  googleMapApiKey: getEnvVar('EXPO_PUBLIC_GOOGLE_MAP_API_KEY'),
   appEnv: getAppEnv(),
   get isDev() {
     return this.appEnv === 'development';
@@ -46,6 +48,7 @@ export function validateEnv(): string[] {
     ['EXPO_PUBLIC_API_BASE_URL', env.apiBaseUrl],
     ['EXPO_PUBLIC_SOCKET_URL', env.socketUrl],
     ['EXPO_PUBLIC_VERSION_JSON_URL', env.versionJsonUrl],
+    ['EXPO_PUBLIC_GOOGLE_MAP_API_KEY', env.googleMapApiKey],
   ] as const;
 
   requiredEnvVars.forEach(([key, value]) => {

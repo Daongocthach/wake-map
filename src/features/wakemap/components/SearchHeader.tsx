@@ -1,4 +1,4 @@
-import { ArrowUpRight, MapPin, Search } from 'lucide-react-native';
+import { ArrowUpRight, History, MapPin, Search } from 'lucide-react-native';
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
@@ -11,6 +11,47 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 import { Icon } from '@/common/components/Icon';
 import { IconButton } from '@/common/components/IconButton';
 import { Text } from '@/common/components/Text';
+import { env } from '@/config/env';
+
+interface SearchRowData extends GooglePlaceData {
+  isPredefinedPlace?: boolean;
+}
+
+const MOCK_SAVED_PLACES = [
+  {
+    description: 'Nhà - Quận 1',
+    geometry: {
+      location: {
+        lat: 10.7781,
+        lng: 106.6996,
+        latitude: 10.7781,
+        longitude: 106.6996,
+      },
+    },
+  },
+  {
+    description: 'Công ty - Quận 7',
+    geometry: {
+      location: {
+        lat: 10.7378,
+        lng: 106.7218,
+        latitude: 10.7378,
+        longitude: 106.7218,
+      },
+    },
+  },
+  {
+    description: 'Quán cà phê - Thảo Điền',
+    geometry: {
+      location: {
+        lat: 10.8032,
+        lng: 106.7358,
+        latitude: 10.8032,
+        longitude: 106.7358,
+      },
+    },
+  },
+];
 
 export default function SearchHeader() {
   const { theme } = useUnistyles();
@@ -21,9 +62,10 @@ export default function SearchHeader() {
     ref.current?.blur();
   };
 
-  const renderCustomRow = (rowData: GooglePlaceData) => {
+  const renderCustomRow = (rowData: SearchRowData) => {
     const title = rowData.description || rowData.structured_formatting?.main_text || '';
     const subtitle = rowData.structured_formatting?.secondary_text || t('wakemap.searchResultHint');
+    const rightIcon = rowData.isPredefinedPlace ? History : ArrowUpRight;
 
     return (
       <View style={styles.rowContainer}>
@@ -40,11 +82,10 @@ export default function SearchHeader() {
           </Text>
         </View>
 
-        <Icon icon={ArrowUpRight} size={18} variant="muted" style={styles.rightArrow} />
+        <Icon icon={rightIcon} size={18} variant="muted" style={styles.rightArrow} />
       </View>
     );
   };
-
   return (
     <View style={styles.wrapper} pointerEvents="box-none">
       <GooglePlacesAutocomplete
@@ -53,10 +94,12 @@ export default function SearchHeader() {
         minLength={2}
         debounce={250}
         fetchDetails={false}
+        predefinedPlaces={MOCK_SAVED_PLACES}
+        predefinedPlacesAlwaysVisible
         keepResultsAfterBlur
         listViewDisplayed
         query={{
-          key: 'AIzaSyClnlGSOoo3_RlgoyU48kwbFffdKHxbCRc',
+          key: env.googleMapApiKey,
           language: 'vi',
           components: 'country:vn',
         }}
