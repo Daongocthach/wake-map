@@ -1,4 +1,5 @@
 import Slider from '@react-native-community/slider';
+import type { TFunction } from 'i18next';
 import { CircleStop, Heart, Navigation2, X } from 'lucide-react-native';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -12,10 +13,21 @@ import { Text } from '@/common/components/Text';
 
 interface ConfigSheetProps {
   selectedPlace: WakeMapPlace | null;
+  isTracking: boolean;
+  routeStatus: 'idle' | 'locating' | 'loading' | 'ready' | 'failed';
+  routeErrorMessage: string | null;
+  onToggleTracking: () => void;
   onClearPlace: () => void;
 }
 
-export default function ConfigSheet({ selectedPlace, onClearPlace }: ConfigSheetProps) {
+export default function ConfigSheet({
+  selectedPlace,
+  isTracking,
+  routeStatus,
+  routeErrorMessage,
+  onToggleTracking,
+  onClearPlace,
+}: ConfigSheetProps) {
   if (!selectedPlace) {
     return null;
   }
@@ -25,6 +37,10 @@ export default function ConfigSheet({ selectedPlace, onClearPlace }: ConfigSheet
       <View style={styles.panel} pointerEvents="auto">
         <ConfigSheetContent
           place={selectedPlace}
+          isTracking={isTracking}
+          routeStatus={routeStatus}
+          routeErrorMessage={routeErrorMessage}
+          onToggleTracking={onToggleTracking}
           onClose={() => {
             onClearPlace();
           }}
@@ -34,11 +50,24 @@ export default function ConfigSheet({ selectedPlace, onClearPlace }: ConfigSheet
   );
 }
 
-function ConfigSheetContent({ place, onClose }: { place: WakeMapPlace; onClose: () => void }) {
+function ConfigSheetContent({
+  place,
+  isTracking,
+  routeStatus,
+  routeErrorMessage,
+  onToggleTracking,
+  onClose,
+}: {
+  place: WakeMapPlace;
+  isTracking: boolean;
+  routeStatus: 'idle' | 'locating' | 'loading' | 'ready' | 'failed';
+  routeErrorMessage: string | null;
+  onToggleTracking: () => void;
+  onClose: () => void;
+}) {
   const { theme } = useUnistyles();
   const { t } = useTranslation();
   const [radius, setRadius] = useState(100);
-  const [isTracking, setIsTracking] = useState(false);
 
   const distanceKm = useMemo(() => {
     const meters = haversineMeters(
@@ -130,6 +159,19 @@ function ConfigSheetContent({ place, onClose }: { place: WakeMapPlace; onClose: 
         </View>
       </View>
 
+      {isTracking ? (
+        <View style={styles.routeStatusCard}>
+          <Text variant="body" weight="medium" style={styles.routeStatusTitle}>
+            {getRouteStatusLabel(routeStatus, t)}
+          </Text>
+          {routeErrorMessage ? (
+            <Text variant="caption" style={styles.routeErrorText}>
+              {t('wakemap.configSheet.routeError', { reason: routeErrorMessage })}
+            </Text>
+          ) : null}
+        </View>
+      ) : null}
+
       <View style={styles.actionRow}>
         <Button
           title={isTracking ? t('wakemap.configSheet.stop') : t('wakemap.configSheet.start')}
@@ -139,7 +181,7 @@ function ConfigSheetContent({ place, onClose }: { place: WakeMapPlace; onClose: 
           fullWidth
           style={styles.startButton}
           onPress={() => {
-            setIsTracking((current) => !current);
+            onToggleTracking();
           }}
         />
         <Button
@@ -186,6 +228,25 @@ function haversineMeters(lat1: number, lon1: number, lat2: number, lon2: number)
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
   return earthRadius * c;
+}
+
+function getRouteStatusLabel(
+  routeStatus: 'idle' | 'locating' | 'loading' | 'ready' | 'failed',
+  t: TFunction
+): string {
+  switch (routeStatus) {
+    case 'locating':
+      return t('wakemap.configSheet.routeLocating');
+    case 'loading':
+      return t('wakemap.configSheet.routeLoading');
+    case 'ready':
+      return t('wakemap.configSheet.routeReady');
+    case 'failed':
+      return t('wakemap.configSheet.routeFailed');
+    case 'idle':
+    default:
+      return t('wakemap.configSheet.routeIdle');
+  }
 }
 
 const styles = StyleSheet.create((theme) => ({
@@ -245,6 +306,19 @@ const styles = StyleSheet.create((theme) => ({
     borderRadius: theme.metrics.borderRadius.xl,
     padding: theme.metrics.spacing.p16,
     gap: theme.metrics.spacingV.p12,
+  },
+  routeStatusCard: {
+    backgroundColor: theme.colors.background.elevated,
+    borderRadius: theme.metrics.borderRadius.xl,
+    paddingHorizontal: theme.metrics.spacing.p16,
+    paddingVertical: theme.metrics.spacingV.p12,
+    gap: theme.metrics.spacingV.p4,
+  },
+  routeStatusTitle: {
+    color: theme.colors.text.primary,
+  },
+  routeErrorText: {
+    color: theme.colors.state.error,
   },
   radiusRow: {
     gap: theme.metrics.spacingV.p8,

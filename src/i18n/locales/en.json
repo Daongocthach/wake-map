@@ -23,7 +23,20 @@
       "ring": "Chime",
       "start": "START",
       "stop": "STOP",
-      "save": "Save place"
+      "save": "Save place",
+      "routeIdle": "Ready to calculate route",
+      "routeLocating": "Getting your location...",
+      "routeLoading": "Getting route...",
+      "routeReady": "Route ready",
+      "routeFailed": "Couldn't get route",
+      "routeError": "Reason: {{reason}}",
+      "routeErrorNoPlace": "Please choose a destination first.",
+      "routeErrorMissingApiKey": "Google Maps API key is missing.",
+      "routeErrorLocationDenied": "Location permission was denied.",
+      "routeErrorLocationServicesDisabled": "Location services are turned off.",
+      "routeErrorHttp": "Google Routes API error",
+      "routeErrorEmptyPolyline": "Google Routes API returned no polyline.",
+      "routeErrorUnknown": "Unknown route error"
     }
   },
   "network": {
