@@ -72,6 +72,13 @@ const config: ExpoConfig = {
         },
       },
     ],
+    [
+      'react-native-maps',
+      {
+        androidGoogleMapsApiKey: getEnvVar('EXPO_PUBLIC_GOOGLE_MAP_API_KEY'),
+        iosGoogleMapsApiKey: getEnvVar('EXPO_PUBLIC_GOOGLE_MAP_API_KEY'),
+      },
+    ],
     'expo-router',
     [
       'expo-splash-screen',

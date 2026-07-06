@@ -5,56 +5,108 @@ import { View } from 'react-native';
 import {
   GooglePlacesAutocomplete,
   type GooglePlaceData,
+  type GooglePlaceDetail,
   type GooglePlacesAutocompleteRef,
 } from 'react-native-google-places-autocomplete';
 import { StyleSheet, useUnistyles } from 'react-native-unistyles';
+import { SAVED_PLACES } from '../constants';
+import type { WakeMapPlace } from '../types';
 import { Icon } from '@/common/components/Icon';
 import { IconButton } from '@/common/components/IconButton';
 import { Text } from '@/common/components/Text';
 import { env } from '@/config/env';
 import { vs } from '@/theme/metrics';
 
-interface SearchRowData extends GooglePlaceData {
-  isPredefinedPlace?: boolean;
+interface SearchHeaderProps {
+  onPlaceSelect?: (place: WakeMapPlace) => void;
 }
 
-const MOCK_SAVED_PLACES = [
-  {
-    description: 'Nhà - Quận 1',
-    geometry: {
-      location: {
-        lat: 10.7781,
-        lng: 106.6996,
-        latitude: 10.7781,
-        longitude: 106.6996,
-      },
-    },
-  },
-  {
-    description: 'Công ty - Quận 7',
-    geometry: {
-      location: {
-        lat: 10.7378,
-        lng: 106.7218,
-        latitude: 10.7378,
-        longitude: 106.7218,
-      },
-    },
-  },
-  {
-    description: 'Quán cà phê - Thảo Điền',
-    geometry: {
-      location: {
-        lat: 10.8032,
-        lng: 106.7358,
-        latitude: 10.8032,
-        longitude: 106.7358,
-      },
-    },
-  },
-];
+interface GeometryLocation {
+  lat: number;
+  lng: number;
+  latitude: number;
+  longitude: number;
+}
 
-export default function SearchHeader() {
+interface GooglePlaceDataWithGeometry extends GooglePlaceData {
+  geometry: {
+    location: GeometryLocation;
+  };
+}
+
+function hasGeometry(data: GooglePlaceData): data is GooglePlaceDataWithGeometry {
+  if (!('geometry' in data)) {
+    return false;
+  }
+
+  const geometry = data.geometry;
+
+  if (!geometry || typeof geometry !== 'object' || !('location' in geometry)) {
+    return false;
+  }
+
+  const location = (geometry as { location?: unknown }).location;
+
+  if (!location || typeof location !== 'object') {
+    return false;
+  }
+
+  const candidate = location as Record<string, unknown>;
+
+  return (
+    typeof candidate.lat === 'number' &&
+    typeof candidate.lng === 'number' &&
+    typeof candidate.latitude === 'number' &&
+    typeof candidate.longitude === 'number'
+  );
+}
+
+function normalizeCoordinate(location: {
+  lat?: number;
+  lng?: number;
+  latitude?: number;
+  longitude?: number;
+}): { latitude: number; longitude: number } | null {
+  const latitude = typeof location.latitude === 'number' ? location.latitude : location.lat;
+  const longitude = typeof location.longitude === 'number' ? location.longitude : location.lng;
+
+  if (typeof latitude !== 'number' || typeof longitude !== 'number') {
+    return null;
+  }
+
+  return { latitude, longitude };
+}
+
+function createWakeMapPlace(
+  data: GooglePlaceData,
+  detail: GooglePlaceDetail | null
+): WakeMapPlace | null {
+  const title = data.description || data.structured_formatting?.main_text || '';
+  const savedPlace = SAVED_PLACES.find((place) => place.title === title);
+  const subtitle = data.structured_formatting?.secondary_text || savedPlace?.subtitle || '';
+  const detailLocation = detail?.geometry.location;
+  const dataLocation = hasGeometry(data) ? data.geometry.location : null;
+  const location = detailLocation ?? dataLocation ?? savedPlace?.coordinate ?? null;
+
+  if (!title || !location) {
+    return null;
+  }
+
+  const coordinate = normalizeCoordinate(location);
+
+  if (!coordinate) {
+    return null;
+  }
+
+  return {
+    id: 'place_id' in data && data.place_id ? data.place_id : title,
+    title,
+    subtitle,
+    coordinate,
+  };
+}
+
+export default function SearchHeader({ onPlaceSelect }: SearchHeaderProps) {
   const { theme } = useUnistyles();
   const { t } = useTranslation();
   const ref = useRef<GooglePlacesAutocompleteRef | null>(null);
@@ -63,10 +115,11 @@ export default function SearchHeader() {
     ref.current?.blur();
   };
 
-  const renderCustomRow = (rowData: SearchRowData) => {
+  const renderCustomRow = (rowData: GooglePlaceData) => {
     const title = rowData.description || rowData.structured_formatting?.main_text || '';
     const subtitle = rowData.structured_formatting?.secondary_text || t('wakemap.searchResultHint');
-    const rightIcon = rowData.isPredefinedPlace ? History : ArrowUpRight;
+    const isSavedPlace = SAVED_PLACES.some((place) => place.title === title);
+    const rightIcon = isSavedPlace ? History : ArrowUpRight;
 
     return (
       <View style={styles.rowContainer}>
@@ -94,9 +147,18 @@ export default function SearchHeader() {
         placeholder={t('wakemap.searchPlaceholder')}
         minLength={2}
         debounce={250}
-        fetchDetails={false}
-        predefinedPlaces={MOCK_SAVED_PLACES}
-        predefinedPlacesAlwaysVisible
+        fetchDetails
+        predefinedPlaces={SAVED_PLACES.map((place) => ({
+          description: place.title,
+          geometry: {
+            location: {
+              lat: place.coordinate.latitude,
+              lng: place.coordinate.longitude,
+              latitude: place.coordinate.latitude,
+              longitude: place.coordinate.longitude,
+            },
+          },
+        }))}
         keepResultsAfterBlur
         listViewDisplayed
         query={{
@@ -104,7 +166,13 @@ export default function SearchHeader() {
           language: 'vi',
           components: 'country:vn',
         }}
-        onPress={() => {
+        onPress={(data, detail) => {
+          const place = createWakeMapPlace(data, detail);
+
+          if (place) {
+            onPlaceSelect?.(place);
+          }
+
           ref.current?.blur();
         }}
         textInputProps={{
@@ -142,6 +210,7 @@ export default function SearchHeader() {
 const styles = StyleSheet.create((theme) => ({
   wrapper: {
     position: 'absolute',
+    top: theme.metrics.spacingV.p12,
     left: theme.metrics.spacing.p16,
     right: theme.metrics.spacing.p16,
     zIndex: 20,
