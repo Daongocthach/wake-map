@@ -1,4 +1,4 @@
-import { ArrowUpRight, Coffee, Search } from 'lucide-react-native';
+import { ArrowUpRight, MapPin, Search } from 'lucide-react-native';
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
@@ -28,7 +28,7 @@ export default function SearchHeader() {
     return (
       <View style={styles.rowContainer}>
         <View style={styles.iconCircle}>
-          <Icon icon={Coffee} size={16} color={theme.colors.brand.primary} />
+          <Icon icon={MapPin} size={16} color={theme.colors.brand.primary} />
         </View>
 
         <View style={styles.textContainer}>
@@ -97,7 +97,6 @@ export default function SearchHeader() {
 const styles = StyleSheet.create((theme) => ({
   wrapper: {
     position: 'absolute',
-    top: theme.metrics.spacingV.p16,
     left: theme.metrics.spacing.p16,
     right: theme.metrics.spacing.p16,
     zIndex: 20,
