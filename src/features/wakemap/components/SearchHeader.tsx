@@ -12,6 +12,7 @@ import { Icon } from '@/common/components/Icon';
 import { IconButton } from '@/common/components/IconButton';
 import { Text } from '@/common/components/Text';
 import { env } from '@/config/env';
+import { vs } from '@/theme/metrics';
 
 interface SearchRowData extends GooglePlaceData {
   isPredefinedPlace?: boolean;
@@ -116,6 +117,7 @@ export default function SearchHeader() {
         renderLeftButton={() => (
           <IconButton
             icon={Search}
+            size="sm"
             accessibilityLabel={t('common.search')}
             onPress={handleBack}
             style={styles.backButton}
@@ -159,14 +161,14 @@ const styles = StyleSheet.create((theme) => ({
   textInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    minHeight: theme.metrics.spacingV.p56,
+    height: theme.metrics.spacingV.p48,
     borderBottomWidth: 0,
     backgroundColor: 'transparent',
     paddingHorizontal: theme.metrics.spacing.p8,
   },
   textInput: {
     flex: 1,
-    minHeight: theme.metrics.spacingV.p40,
+    height: theme.metrics.spacingV.p48,
     color: theme.colors.text.primary,
     fontSize: theme.metrics.fontSize.md,
     fontFamily: theme.fonts.regular,
@@ -178,6 +180,7 @@ const styles = StyleSheet.create((theme) => ({
   },
   backButton: {
     marginRight: theme.metrics.spacing.p4,
+    alignSelf: 'center',
   },
   listView: {
     backgroundColor: theme.colors.background.surface,
@@ -185,12 +188,13 @@ const styles = StyleSheet.create((theme) => ({
     borderColor: theme.colors.border.subtle,
     borderBottomLeftRadius: theme.metrics.borderRadius.lg,
     borderBottomRightRadius: theme.metrics.borderRadius.lg,
-    maxHeight: theme.metrics.spacingV.p224,
+    maxHeight: vs(480),
   },
   row: {
     backgroundColor: theme.colors.background.surface,
     paddingVertical: theme.metrics.spacingV.p12,
     paddingHorizontal: theme.metrics.spacing.p16,
+    height: 'auto',
   },
   separator: {
     height: StyleSheet.hairlineWidth,
@@ -206,9 +210,9 @@ const styles = StyleSheet.create((theme) => ({
   },
   rowContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '100%',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    flex: 1,
   },
   iconCircle: {
     width: theme.metrics.spacing.p36,
@@ -221,16 +225,21 @@ const styles = StyleSheet.create((theme) => ({
   },
   textContainer: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
+    minWidth: 0,
+    marginRight: theme.metrics.spacing.p12,
   },
   rowTitle: {
     color: theme.colors.text.primary,
     marginBottom: theme.metrics.spacingV.p4,
+    flex: 1,
   },
   rowSubtitle: {
     color: theme.colors.text.secondary,
+    flex: 1,
   },
   rightArrow: {
     marginLeft: theme.metrics.spacing.p8,
+    alignSelf: 'center',
   },
 }));
