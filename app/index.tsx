@@ -39,6 +39,7 @@ export default function WakeMapScreen() {
           <GoogleMap
             selectedPlace={selectedPlace}
             isTracking={isTracking}
+            onPlaceSelect={setSelectedPlace}
             onRouteStatusChange={handleRouteStatusChange}
           />
         </View>

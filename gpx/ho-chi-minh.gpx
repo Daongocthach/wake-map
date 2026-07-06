@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="wake-map">
+  <wpt lat="10.776889" lon="106.700806">
+    <name>Ho Chi Minh City Center</name>
+  </wpt>
+  <rte>
+    <name>Ho Chi Minh Route</name>
+    <rtept lat="10.776889" lon="106.700806">
+      <name>District 1 Start</name>
+    </rtept>
+    <rtept lat="10.778240" lon="106.705780">
+      <name>Ben Thanh Area</name>
+    </rtept>
+    <rtept lat="10.782920" lon="106.707520">
+      <name>Nguyen Hue</name>
+    </rtept>
+    <rtept lat="10.788120" lon="106.712180">
+      <name>Saigon River Edge</name>
+    </rtept>
+    <rtept lat="10.794250" lon="106.721120">
+      <name>District 3</name>
+    </rtept>
+  </rte>
+</gpx>

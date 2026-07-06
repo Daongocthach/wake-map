@@ -13,6 +13,7 @@ import { env } from '@/config/env';
 interface GoogleMapProps {
   selectedPlace?: WakeMapPlace | null;
   isTracking: boolean;
+  onPlaceSelect: (place: WakeMapPlace) => void;
   onRouteStatusChange?: (status: RouteStatus, errorMessage?: string | null) => void;
 }
 
@@ -30,6 +31,7 @@ interface ComputeRouteResponse {
 export default function GoogleMap({
   selectedPlace,
   isTracking,
+  onPlaceSelect,
   onRouteStatusChange,
 }: GoogleMapProps) {
   const { t } = useTranslation();
@@ -41,6 +43,23 @@ export default function GoogleMap({
   const isSavedPlace = selectedPlace
     ? SAVED_PLACES.some((place) => place.title === selectedPlace.title)
     : false;
+
+  const handlePlaceMarkerPress = (place: WakeMapPlace) => {
+    if (selectedPlace?.id === place.id) {
+      mapRef.current?.animateToRegion(
+        {
+          latitude: place.coordinate.latitude,
+          longitude: place.coordinate.longitude,
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
+        },
+        300
+      );
+      return;
+    }
+
+    onPlaceSelect(place);
+  };
 
   useEffect(() => {
     if (!selectedPlace) {
@@ -315,6 +334,9 @@ export default function GoogleMap({
             title={place.title}
             description={place.subtitle}
             pinColor={theme.colors.brand.primary}
+            onPress={() => {
+              handlePlaceMarkerPress(place);
+            }}
           />
         ))}
 
@@ -324,6 +346,9 @@ export default function GoogleMap({
             title={selectedPlace.title}
             description={selectedPlace.subtitle}
             pinColor={theme.colors.state.error}
+            onPress={() => {
+              handlePlaceMarkerPress(selectedPlace);
+            }}
           />
         ) : null}
 
@@ -485,7 +510,7 @@ const styles = StyleSheet.create((theme) => ({
   },
   currentLocationButton: {
     position: 'absolute',
-    top: theme.metrics.spacingV.p96,
+    top: '45%',
     right: theme.metrics.spacing.p16,
     zIndex: 15,
     elevation: 15,
