@@ -24,7 +24,8 @@
   },
   "wakemap": {
     "title": "Màn hình WakeMap",
-    "searchPlaceholder": "Bạn muốn đi đâu?",
+    "searchPlaceholder": "Tìm kiếm địa điểm, quán cà phê...",
+    "searchResultHint": "Chạm để xem chi tiết",
     "distanceLabel": "Khoảng cách",
     "etaLabel": "Thời gian",
     "radiusLabel": "Bán kính báo thức",

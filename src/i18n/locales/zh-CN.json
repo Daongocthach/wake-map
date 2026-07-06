@@ -24,7 +24,8 @@
   },
   "wakemap": {
     "title": "WakeMap 屏幕",
-    "searchPlaceholder": "你想去哪里？",
+    "searchPlaceholder": "搜索地点、咖啡馆...",
+    "searchResultHint": "轻触查看详情",
     "distanceLabel": "距离",
     "etaLabel": "时间",
     "radiusLabel": "警报半径",

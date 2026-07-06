@@ -2,14 +2,14 @@ import React from 'react';
 import { View } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 import { ScreenContainer } from '@/common/components/ScreenContainer';
-import { MapCanvas, SearchHeader, TrackingBar, ConfigSheet } from '@/features/wakemap/components';
+import { SearchHeader, TrackingBar, ConfigSheet, GoogleMap } from '@/features/wakemap/components';
 
 export default function WakeMapScreen() {
   return (
     <ScreenContainer padded={false} edges={['top']}>
       <View style={styles.container}>
         <View style={styles.mapWrapper}>
-          <MapCanvas />
+          <GoogleMap />
         </View>
 
         <SearchHeader />

@@ -1,110 +1,79 @@
-import { Search, Coffee, ArrowUpRight } from 'lucide-react-native';
-import React, { useEffect, useRef, useState } from 'react';
+import { ArrowUpRight, Coffee, Search } from 'lucide-react-native';
+import { useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import {
   GooglePlacesAutocomplete,
-  type GooglePlacesAutocompleteRef,
   type GooglePlaceData,
+  type GooglePlacesAutocompleteRef,
 } from 'react-native-google-places-autocomplete';
-import { useUnistyles, StyleSheet } from 'react-native-unistyles';
+import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 import { Icon } from '@/common/components/Icon';
 import { IconButton } from '@/common/components/IconButton';
 import { Text } from '@/common/components/Text';
 
-interface CustomPlace {
-  description: string;
-  geometry: {
-    location: {
-      lat: number;
-      lng: number;
-      latitude: number;
-      longitude: number;
-    };
-  };
-  distance: string;
-  detail: string;
-}
-
-const PREDEFINED_PLACES: CustomPlace[] = [
-  {
-    description: 'Cà phê Aha',
-    geometry: {
-      location: {
-        lat: 21.0285,
-        lng: 105.8542,
-        latitude: 21.0285,
-        longitude: 105.8542,
-      },
-    },
-    distance: '0.5 km',
-    detail: 'Open until 10 PM',
-  },
-];
-
 export default function SearchHeader() {
   const { theme } = useUnistyles();
+  const { t } = useTranslation();
   const ref = useRef<GooglePlacesAutocompleteRef | null>(null);
-  const [searchText, setSearchText] = useState('');
-
-  useEffect(() => {
-    ref.current?.setAddressText('Cà phê');
-    setSearchText('Cà phê');
-  }, []);
 
   const handleBack = () => {
     ref.current?.blur();
   };
 
   const renderCustomRow = (rowData: GooglePlaceData) => {
-    const customData = rowData as unknown as CustomPlace;
-    const title = customData.description || '';
-    const distance = customData.distance || '0.5 km';
-    const detail = customData.detail || 'Open until 10 PM';
+    const title = rowData.description || rowData.structured_formatting?.main_text || '';
+    const subtitle = rowData.structured_formatting?.secondary_text || t('wakemap.searchResultHint');
 
     return (
       <View style={styles.rowContainer}>
         <View style={styles.iconCircle}>
           <Icon icon={Coffee} size={16} color={theme.colors.brand.primary} />
         </View>
+
         <View style={styles.textContainer}>
           <Text variant="bodySmall" weight="bold" style={styles.rowTitle}>
             {title}
           </Text>
           <Text variant="caption" style={styles.rowSubtitle}>
-            {distance} • {detail}
+            {subtitle}
           </Text>
         </View>
+
         <Icon icon={ArrowUpRight} size={18} variant="muted" style={styles.rightArrow} />
       </View>
     );
   };
 
   return (
-    <View style={styles.wrapper}>
+    <View style={styles.wrapper} pointerEvents="box-none">
       <GooglePlacesAutocomplete
         ref={ref}
-        placeholder="Tìm kiếm..."
+        placeholder={t('wakemap.searchPlaceholder')}
         minLength={2}
+        debounce={250}
         fetchDetails={false}
-        onPress={() => {}}
+        keepResultsAfterBlur
+        listViewDisplayed
         query={{
-          key: '',
+          key: 'AIzaSyClnlGSOoo3_RlgoyU48kwbFffdKHxbCRc',
           language: 'vi',
-          types: 'establishment',
+          components: 'country:vn',
         }}
-        predefinedPlaces={PREDEFINED_PLACES}
-        predefinedPlacesAlwaysVisible={true}
+        onPress={() => {
+          ref.current?.blur();
+        }}
         textInputProps={{
           placeholderTextColor: theme.colors.text.muted,
-          value: searchText,
-          onChangeText: setSearchText,
-          autoFocus: false,
+          autoCorrect: false,
+          autoCapitalize: 'none',
           returnKeyType: 'search',
+          clearButtonMode: 'while-editing',
         }}
         renderLeftButton={() => (
           <IconButton
             icon={Search}
-            accessibilityLabel="Search"
+            accessibilityLabel={t('common.search')}
             onPress={handleBack}
             style={styles.backButton}
           />
@@ -118,6 +87,7 @@ export default function SearchHeader() {
           row: styles.row,
           separator: styles.separator,
           description: styles.description,
+          poweredContainer: styles.poweredContainer,
         }}
       />
     </View>
@@ -127,9 +97,11 @@ export default function SearchHeader() {
 const styles = StyleSheet.create((theme) => ({
   wrapper: {
     position: 'absolute',
+    top: theme.metrics.spacingV.p16,
     left: theme.metrics.spacing.p16,
     right: theme.metrics.spacing.p16,
-    zIndex: 10,
+    zIndex: 20,
+    elevation: 20,
   },
   autocompleteContainer: {
     flex: 0,
@@ -139,20 +111,20 @@ const styles = StyleSheet.create((theme) => ({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.12,
     shadowRadius: 12,
-    elevation: 6,
-    overflow: 'hidden',
+    elevation: 8,
+    overflow: 'visible',
   },
   textInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: theme.metrics.spacingV.p56,
+    minHeight: theme.metrics.spacingV.p56,
     borderBottomWidth: 0,
     backgroundColor: 'transparent',
     paddingHorizontal: theme.metrics.spacing.p8,
   },
   textInput: {
     flex: 1,
-    height: theme.metrics.spacing.p40,
+    minHeight: theme.metrics.spacingV.p40,
     color: theme.colors.text.primary,
     fontSize: theme.metrics.fontSize.md,
     fontFamily: theme.fonts.regular,
@@ -160,29 +132,23 @@ const styles = StyleSheet.create((theme) => ({
     paddingHorizontal: theme.metrics.spacing.p8,
     paddingVertical: 0,
     margin: 0,
-    marginTop: 0,
-    marginBottom: 0,
-    marginLeft: 0,
-    marginRight: 0,
-    alignSelf: 'center',
     textAlignVertical: 'center',
   },
   backButton: {
     marginRight: theme.metrics.spacing.p4,
   },
-  clearButton: {
-    marginLeft: theme.metrics.spacing.p4,
-  },
   listView: {
     backgroundColor: theme.colors.background.surface,
     borderTopWidth: StyleSheet.hairlineWidth,
     borderColor: theme.colors.border.subtle,
+    borderBottomLeftRadius: theme.metrics.borderRadius.lg,
+    borderBottomRightRadius: theme.metrics.borderRadius.lg,
+    maxHeight: theme.metrics.spacingV.p224,
   },
   row: {
     backgroundColor: theme.colors.background.surface,
     paddingVertical: theme.metrics.spacingV.p12,
     paddingHorizontal: theme.metrics.spacing.p16,
-    height: 'auto',
   },
   separator: {
     height: StyleSheet.hairlineWidth,
@@ -190,6 +156,11 @@ const styles = StyleSheet.create((theme) => ({
   },
   description: {
     display: 'none',
+  },
+  poweredContainer: {
+    backgroundColor: theme.colors.background.surface,
+    borderBottomLeftRadius: theme.metrics.borderRadius.lg,
+    borderBottomRightRadius: theme.metrics.borderRadius.lg,
   },
   rowContainer: {
     flexDirection: 'row',

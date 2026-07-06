@@ -24,7 +24,8 @@
   },
   "wakemap": {
     "title": "WakeMap 畫面",
-    "searchPlaceholder": "你想去哪裡？",
+    "searchPlaceholder": "搜尋地點、咖啡廳...",
+    "searchResultHint": "點擊查看詳情",
     "distanceLabel": "距離",
     "etaLabel": "時間",
     "radiusLabel": "警報半徑",

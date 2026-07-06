@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import { Text } from '@/common/components/Text';
 
-export default function MapCanvas() {
+export default function GoogleMap() {
   const { t } = useTranslation();
 
   return (
