@@ -91,7 +91,8 @@
     "placePrefix": "Địa điểm",
     "addBtn": "Thêm +",
     "bgServiceTitle": "WakeMap Đang Canh Đường",
-    "bgServiceBody": "Đang theo dõi vị trí của bạn tới {{name}}"
+    "bgServiceBody": "Đang theo dõi vị trí của bạn tới {{name}}",
+    "permissionBackgroundDenied": "Cần cấp quyền vị trí chạy ngầm ('Luôn luôn') để báo thức khi tắt màn hình. Vui lòng bật trong Cài đặt."
   },
   "update": {
     "title": "Cần cập nhật",

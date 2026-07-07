@@ -96,6 +96,14 @@ export function useLocationPermission(options: UseLocationPermissionOptions = {}
     return syncPermission(() => Location.requestForegroundPermissionsAsync());
   }, [syncPermission]);
 
+  const checkBackgroundPermission = useCallback(() => {
+    return syncPermission(() => Location.getBackgroundPermissionsAsync());
+  }, [syncPermission]);
+
+  const requestBackgroundPermission = useCallback(() => {
+    return syncPermission(() => Location.requestBackgroundPermissionsAsync());
+  }, [syncPermission]);
+
   useEffect(() => {
     return () => {
       isMountedRef.current = false;
@@ -118,5 +126,7 @@ export function useLocationPermission(options: UseLocationPermissionOptions = {}
     ...permission,
     checkPermission,
     requestPermission,
+    checkBackgroundPermission,
+    requestBackgroundPermission,
   };
 }

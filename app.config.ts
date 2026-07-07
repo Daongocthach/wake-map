@@ -97,6 +97,14 @@ const config: ExpoConfig = {
     'expo-image',
     'expo-system-ui',
     [
+      'expo-location',
+      {
+        isIosBackgroundLocationEnabled: true,
+        isAndroidBackgroundLocationEnabled: true,
+        isAndroidForegroundServiceEnabled: true,
+      },
+    ],
+    [
       'expo-build-properties',
       {
         android: {

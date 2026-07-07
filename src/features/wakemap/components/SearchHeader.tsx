@@ -112,7 +112,7 @@ function createWakeMapPlace(
     savedPlaces.find((place) => place.title === title) ||
     recentPlaces.find((place) => place.title === title);
   const subtitle = data.structured_formatting?.secondary_text || savedPlace?.subtitle || '';
-  const detailLocation = detail?.geometry.location;
+  const detailLocation = detail?.location ?? detail?.geometry.location;
   const dataLocation = hasGeometry(data) ? data.geometry.location : null;
   const location = detailLocation ?? dataLocation ?? savedPlace?.coordinate ?? null;
 
@@ -325,6 +325,7 @@ export default function SearchHeader({
             onPlaceSelect?.(place);
           }
 
+          setSearchText('');
           ref.current?.blur();
         }}
         textInputProps={{

@@ -91,7 +91,8 @@
     "placePrefix": "地點",
     "addBtn": "添加 +",
     "bgServiceTitle": "WakeMap 正在追蹤",
-    "bgServiceBody": "正在監控您前往 {{name}} 的位置"
+    "bgServiceBody": "正在監控您前往 {{name}} 的位置",
+    "permissionBackgroundDenied": "需要後台定位權限（「始終」）以在螢幕關閉時觸發警報。請在設定中啟用。"
   },
   "update": {
     "title": "需要更新",

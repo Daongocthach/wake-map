@@ -1,5 +1,4 @@
 import { useCallback, useMemo } from 'react';
-import { SAVED_PLACES } from '../constants';
 import type { WakeMapPlace } from '../types';
 import { useStorage } from '@/utils/storage';
 import { STORAGE_KEYS } from '@/utils/storage/constants';
@@ -11,7 +10,7 @@ export function useSavedPlaces() {
     loading,
     error,
   } = useStorage<WakeMapPlace[]>(STORAGE_KEYS.wakemap.savedPlaces, {
-    defaultValue: SAVED_PLACES,
+    defaultValue: [],
     initializeWithDefault: true,
   });
 

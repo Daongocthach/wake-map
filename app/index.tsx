@@ -1,22 +1,43 @@
+import { BellRing } from 'lucide-react-native';
 import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { View } from 'react-native';
-import { StyleSheet } from 'react-native-unistyles';
+import { Modal, View } from 'react-native';
+import { StyleSheet, useUnistyles } from 'react-native-unistyles';
+import { Button } from '@/common/components/Button';
 import { ScreenContainer } from '@/common/components/ScreenContainer';
+import { Text } from '@/common/components/Text';
 import { SearchHeader, ConfigSheet, GoogleMap } from '@/features/wakemap/components';
 import { useSavedPlaces, useRecentPlaces } from '@/features/wakemap/hooks';
-import type { WakeMapCoordinate, WakeMapPlace } from '@/features/wakemap/types';
+import {
+  startProximityTracking,
+  stopProximityTracking,
+  dismissProximityAlarm,
+} from '@/features/wakemap/services';
+import { useTrackingStore } from '@/features/wakemap/stores/trackingStore';
+import type { WakeMapPlace } from '@/features/wakemap/types';
+import { haversineMeters } from '@/features/wakemap/utils';
+import { useLocationPermission } from '@/hooks';
 import { useAppAlert } from '@/providers';
 
 type RouteStatus = 'idle' | 'locating' | 'loading' | 'ready' | 'failed';
 
 export default function WakeMapScreen() {
   const { t } = useTranslation();
+  const { theme } = useUnistyles();
   const appAlert = useAppAlert();
-  const [selectedPlace, setSelectedPlace] = useState<WakeMapPlace | null>(null);
-  const [isTracking, setIsTracking] = useState(false);
-  const [radius, setRadius] = useState(100);
-  const [currentLocation, setCurrentLocation] = useState<WakeMapCoordinate | null>(null);
+  const { requestBackgroundPermission } = useLocationPermission({ checkOnMount: false });
+
+  // Zustand Selectors
+  const isTracking = useTrackingStore((s) => s.isTracking);
+  const selectedPlace = useTrackingStore((s) => s.selectedPlace);
+  const radius = useTrackingStore((s) => s.radius);
+  const currentLocation = useTrackingStore((s) => s.currentLocation);
+  const isAlarming = useTrackingStore((s) => s.isAlarming);
+  const setRadius = useTrackingStore((s) => s.setRadius);
+  const setSelectedPlace = useTrackingStore((s) => s.setSelectedPlace);
+  const setCurrentLocation = useTrackingStore((s) => s.setCurrentLocation);
+
+  // Local UI States
   const [routeStatus, setRouteStatus] = useState<RouteStatus>('idle');
   const [routeErrorMessage, setRouteErrorMessage] = useState<string | null>(null);
   const [isConfigSheetVisible, setIsConfigSheetVisible] = useState(false);
@@ -29,7 +50,7 @@ export default function WakeMapScreen() {
       setSelectedPlace(place);
       addRecent(place);
     },
-    [addRecent]
+    [addRecent, setSelectedPlace]
   );
 
   const handleToggleSave = useCallback(() => {
@@ -38,9 +59,9 @@ export default function WakeMapScreen() {
     }
   }, [selectedPlace, toggleSave]);
 
-  const handleToggleTracking = useCallback(() => {
+  const handleToggleTracking = useCallback(async () => {
     if (isTracking) {
-      setIsTracking(false);
+      await stopProximityTracking();
       return;
     }
 
@@ -66,8 +87,27 @@ export default function WakeMapScreen() {
       return;
     }
 
-    setIsTracking(true);
-  }, [appAlert, currentLocation, isTracking, selectedPlace, t]);
+    // 1. Request background location permission ("Always")
+    const bgPermission = await requestBackgroundPermission();
+    if (!bgPermission.granted) {
+      appAlert.alert(t('wakemap.startErrorTitle'), t('wakemap.permissionBackgroundDenied'));
+      return;
+    }
+
+    // 2. Start background tracking
+    const success = await startProximityTracking(selectedPlace, radius);
+    if (!success) {
+      appAlert.alert(t('wakemap.startErrorTitle'), t('wakemap.configSheet.routeErrorUnknown'));
+    }
+  }, [
+    appAlert,
+    currentLocation,
+    isTracking,
+    selectedPlace,
+    radius,
+    requestBackgroundPermission,
+    t,
+  ]);
 
   const handleRouteStatusChange = useCallback(
     (status: RouteStatus, errorMessage: string | null = null) => {
@@ -77,12 +117,16 @@ export default function WakeMapScreen() {
     []
   );
 
-  const handleClearPlace = useCallback(() => {
-    setIsTracking(false);
+  const handleClearPlace = useCallback(async () => {
+    await stopProximityTracking();
     setRadius(100);
     setRouteStatus('idle');
     setRouteErrorMessage(null);
     setSelectedPlace(null);
+  }, [setRadius, setSelectedPlace]);
+
+  const handleDismissAlarm = useCallback(async () => {
+    await dismissProximityAlarm();
   }, []);
 
   return (
@@ -128,22 +172,38 @@ export default function WakeMapScreen() {
             onVisibilityChange={setIsConfigSheetVisible}
           />
         </View>
+
+        {/* Fullscreen Alarm Overlay */}
+        <Modal
+          visible={isAlarming}
+          transparent
+          animationType="fade"
+          onRequestClose={handleDismissAlarm}
+        >
+          <View style={styles.alarmOverlay}>
+            <View style={styles.alarmCard}>
+              <View style={styles.alarmIconContainer}>
+                <BellRing size={48} color={theme.colors.state.error} />
+              </View>
+              <Text variant="h1" weight="bold" style={styles.alarmTitle}>
+                {t('wakemap.arrived')}
+              </Text>
+              <Text variant="body" style={styles.alarmSubtitle}>
+                {t('wakemap.arrivedSubtitle', { name: selectedPlace?.title ?? '' })}
+              </Text>
+              <Button
+                title={t('wakemap.dismiss')}
+                variant="primary"
+                fullWidth
+                style={styles.dismissButton}
+                onPress={handleDismissAlarm}
+              />
+            </View>
+          </View>
+        </Modal>
       </View>
     </ScreenContainer>
   );
-}
-
-function haversineMeters(lat1: number, lon1: number, lat2: number, lon2: number): number {
-  const earthRadius = 6371000;
-  const toRadians = (value: number) => (value * Math.PI) / 180;
-  const dLat = toRadians(lat2 - lat1);
-  const dLon = toRadians(lon2 - lon1);
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-  return earthRadius * c;
 }
 
 const styles = StyleSheet.create((theme) => ({
@@ -164,5 +224,47 @@ const styles = StyleSheet.create((theme) => ({
     ...StyleSheet.absoluteFillObject,
     zIndex: 10,
     elevation: 10,
+  },
+  alarmOverlay: {
+    flex: 1,
+    backgroundColor: theme.colors.overlay.modal,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: theme.metrics.spacing.p24,
+  },
+  alarmCard: {
+    width: '100%',
+    backgroundColor: theme.colors.background.surface,
+    borderRadius: theme.metrics.borderRadius.xl,
+    padding: theme.metrics.spacing.p24,
+    alignItems: 'center',
+    gap: theme.metrics.spacingV.p16,
+    shadowColor: theme.colors.overlay.shadow,
+    shadowOpacity: 0.3,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 10,
+  },
+  alarmIconContainer: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: theme.colors.state.errorBg,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: theme.metrics.spacingV.p8,
+  },
+  alarmTitle: {
+    color: theme.colors.state.error,
+    textAlign: 'center',
+  },
+  alarmSubtitle: {
+    color: theme.colors.text.primary,
+    textAlign: 'center',
+    marginBottom: theme.metrics.spacingV.p8,
+  },
+  dismissButton: {
+    backgroundColor: theme.colors.state.error,
+    borderRadius: theme.metrics.borderRadius.full,
   },
 }));

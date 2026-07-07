@@ -18,16 +18,13 @@ export function useRecentPlaces() {
 
   const addRecent = useCallback(
     (place: WakeMapPlace) => {
-      // Deduplicate: filter out the place if it already exists
       const filtered = recentPlaces.filter((p) => p.id !== place.id);
 
-      // Create new recent place with visitedAt timestamp
       const newRecent: RecentPlace = {
         ...place,
         visitedAt: Date.now(),
       };
 
-      // Add to front and limit to 3 items
       const updated = [newRecent, ...filtered].slice(0, 3);
 
       setRecentPlacesRaw(updated);
