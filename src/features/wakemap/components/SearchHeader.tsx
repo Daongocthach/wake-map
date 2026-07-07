@@ -321,12 +321,16 @@ export default function SearchHeader({
 
           const place = createWakeMapPlace(data, detail, savedPlaces, recentPlaces);
 
+          // Blur BEFORE calling onPlaceSelect to prevent the component from
+          // re-mounting mid-interaction. onPlaceSelect triggers addRecent which
+          // changes recentPlaces → predefinedPlacesKey → key prop → unmount/remount loop.
+          setSearchText('');
+          ref.current?.blur();
+          Keyboard.dismiss();
+
           if (place) {
             onPlaceSelect?.(place);
           }
-
-          setSearchText('');
-          ref.current?.blur();
         }}
         textInputProps={{
           placeholderTextColor: theme.colors.text.muted,

@@ -48,7 +48,11 @@ export default function WakeMapScreen() {
   const handlePlaceSelect = useCallback(
     (place: WakeMapPlace) => {
       setSelectedPlace(place);
-      addRecent(place);
+      // Defer addRecent to the next frame so SearchHeader can stabilize
+      // after blur before recentPlaces (and its predefinedPlacesKey) changes.
+      requestAnimationFrame(() => {
+        addRecent(place);
+      });
     },
     [addRecent, setSelectedPlace]
   );

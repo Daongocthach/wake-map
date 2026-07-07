@@ -15,7 +15,7 @@ function readPackageVersion() {
 function main() {
   const version = readPackageVersion();
   const releaseDir = path.resolve(process.cwd(), 'app/build/outputs/apk/release');
-  const destinationPath = path.join(releaseDir, `heattreatment-v${version}.apk`);
+  const destinationPath = path.join(releaseDir, `wakemap-v${version}.apk`);
   const apkFiles = fs
     .readdirSync(releaseDir)
     .filter((file) => file.endsWith('.apk'))
