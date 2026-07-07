@@ -1,6 +1,6 @@
 import * as Location from 'expo-location';
 import { LocateFixed } from 'lucide-react-native';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Platform, View } from 'react-native';
 import MapView, { Circle, Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
@@ -44,6 +44,8 @@ export default function GoogleMap({
   const { requestPermission } = useLocationPermission({ checkOnMount: false });
   const mapRef = useRef<MapView | null>(null);
   const [isLocating, setIsLocating] = useState(false);
+  const isLocatingRef = useRef(false);
+  const hasLoadedInitialLocationRef = useRef(false);
   const [currentLocation, setCurrentLocation] = useState<WakeMapCoordinate | null>(null);
   const [routeCoordinates, setRouteCoordinates] = useState<WakeMapCoordinate[]>([]);
   const isSavedPlace = selectedPlace
@@ -83,64 +85,65 @@ export default function GoogleMap({
     );
   }, [selectedPlace]);
 
-  useEffect(() => {
-    if (!isTracking) {
-      setRouteCoordinates([]);
-      onRouteStatusChange?.('idle');
-      return;
-    }
+  const updateCurrentLocation = useCallback(
+    async (showStatus = false) => {
+      if (isLocatingRef.current) {
+        return;
+      }
 
-    let isActive = true;
-    setCurrentLocation(null);
-
-    const run = async () => {
+      isLocatingRef.current = true;
       setIsLocating(true);
-      onRouteStatusChange?.('locating');
+
+      if (showStatus) {
+        onRouteStatusChange?.('locating');
+      }
 
       try {
-        const result = await requestCurrentLocation(requestPermission);
+        const nextCurrentLocation = await requestCurrentLocation(requestPermission);
 
-        if (!isActive) {
-          return;
-        }
+        if (!nextCurrentLocation.location) {
+          if (showStatus) {
+            let errorMessage = t('wakemap.configSheet.routeErrorUnknown');
 
-        if (!result.location) {
-          let errorMessage = t('wakemap.configSheet.routeErrorUnknown');
+            if (nextCurrentLocation.error === 'permissionDenied') {
+              errorMessage = t('wakemap.configSheet.routeErrorLocationDenied');
+            } else if (nextCurrentLocation.error === 'servicesDisabled') {
+              errorMessage = t('wakemap.configSheet.routeErrorLocationServicesDisabled');
+            }
 
-          if (result.error === 'permissionDenied') {
-            errorMessage = t('wakemap.configSheet.routeErrorLocationDenied');
-          } else if (result.error === 'servicesDisabled') {
-            errorMessage = t('wakemap.configSheet.routeErrorLocationServicesDisabled');
+            onRouteStatusChange?.('failed', errorMessage);
           }
 
-          onRouteStatusChange?.('failed', errorMessage);
           return;
         }
 
-        setCurrentLocation(result.location);
-        onCurrentLocationChange(result.location);
+        setCurrentLocation(nextCurrentLocation.location);
+        onCurrentLocationChange(nextCurrentLocation.location);
 
         mapRef.current?.animateToRegion(
           {
-            ...result.location,
+            ...nextCurrentLocation.location,
             latitudeDelta: 0.02,
             longitudeDelta: 0.02,
           },
           350
         );
       } finally {
-        if (isActive) {
-          setIsLocating(false);
-        }
+        isLocatingRef.current = false;
+        setIsLocating(false);
       }
-    };
+    },
+    [onCurrentLocationChange, onRouteStatusChange, requestPermission, t]
+  );
 
-    void run();
+  useEffect(() => {
+    if (hasLoadedInitialLocationRef.current) {
+      return;
+    }
 
-    return () => {
-      isActive = false;
-    };
-  }, [isTracking, onCurrentLocationChange, onRouteStatusChange, requestPermission, t]);
+    hasLoadedInitialLocationRef.current = true;
+    void updateCurrentLocation();
+  }, [updateCurrentLocation]);
 
   useEffect(() => {
     onCurrentLocationChange(currentLocation);
@@ -212,17 +215,19 @@ export default function GoogleMap({
             console.error('Routes API error', response.status, responseText);
           }
 
-          if (isActive) {
-            setRouteCoordinates([]);
-            onRouteStatusChange?.(
-              'failed',
-              formatRouteHttpError(
-                response.status,
-                responseText,
-                t('wakemap.configSheet.routeErrorHttp')
-              )
-            );
+          if (!isActive) {
+            return;
           }
+
+          setRouteCoordinates([]);
+          onRouteStatusChange?.(
+            'failed',
+            formatRouteHttpError(
+              response.status,
+              responseText,
+              t('wakemap.configSheet.routeErrorHttp')
+            )
+          );
 
           return;
         }
@@ -239,92 +244,61 @@ export default function GoogleMap({
         const encodedPolyline = preferredRoute?.polyline?.encodedPolyline;
 
         if (!encodedPolyline) {
-          if (isActive) {
-            setRouteCoordinates([]);
-            onRouteStatusChange?.('failed', t('wakemap.configSheet.routeErrorEmptyPolyline'));
+          if (!isActive) {
+            return;
           }
+
+          setRouteCoordinates([]);
+          onRouteStatusChange?.('failed', t('wakemap.configSheet.routeErrorEmptyPolyline'));
+
           return;
         }
 
         const decodedRoute = decodePolyline(encodedPolyline);
 
-        if (isActive) {
-          setRouteCoordinates(decodedRoute);
-          onRouteStatusChange?.('ready');
+        if (!isActive) {
+          return;
+        }
 
-          if (decodedRoute.length > 1) {
-            mapRef.current?.fitToCoordinates(decodedRoute, {
-              edgePadding: {
-                top: 120,
-                right: 80,
-                bottom: 260,
-                left: 80,
-              },
-              animated: true,
-            });
-          }
+        setRouteCoordinates(decodedRoute);
+        onRouteStatusChange?.('ready');
+
+        if (decodedRoute.length > 1) {
+          mapRef.current?.fitToCoordinates(decodedRoute, {
+            edgePadding: {
+              top: 120,
+              right: 80,
+              bottom: 260,
+              left: 80,
+            },
+            animated: true,
+          });
         }
       } catch (error) {
         if (__DEV__) {
           console.error('Failed to load route', error);
         }
 
-        if (isActive) {
-          setRouteCoordinates([]);
-          onRouteStatusChange?.(
-            'failed',
-            error instanceof Error ? error.message : t('wakemap.configSheet.routeErrorUnknown')
-          );
+        if (!isActive) {
+          return;
         }
+
+        setRouteCoordinates([]);
+        onRouteStatusChange?.(
+          'failed',
+          error instanceof Error ? error.message : t('wakemap.configSheet.routeErrorUnknown')
+        );
       }
     }
 
     void loadRoute();
-
     return () => {
       isActive = false;
     };
   }, [currentLocation, isTracking, onRouteStatusChange, selectedPlace, t]);
 
   const handleLocateCurrentPosition = async () => {
-    if (isLocating) {
-      return;
-    }
-
-    setIsLocating(true);
-    onRouteStatusChange?.('locating');
-    setCurrentLocation(null);
-
-    try {
-      const nextCurrentLocation = await requestCurrentLocation(requestPermission);
-
-      if (!nextCurrentLocation.location) {
-        let errorMessage = t('wakemap.configSheet.routeErrorUnknown');
-
-        if (nextCurrentLocation.error === 'permissionDenied') {
-          errorMessage = t('wakemap.configSheet.routeErrorLocationDenied');
-        } else if (nextCurrentLocation.error === 'servicesDisabled') {
-          errorMessage = t('wakemap.configSheet.routeErrorLocationServicesDisabled');
-        }
-
-        onRouteStatusChange?.('failed', errorMessage);
-        return;
-      }
-
-      setCurrentLocation(nextCurrentLocation.location);
-      onCurrentLocationChange(nextCurrentLocation.location);
-
-      mapRef.current?.animateToRegion(
-        {
-          ...nextCurrentLocation.location,
-          latitudeDelta: 0.02,
-          longitudeDelta: 0.02,
-        },
-        350
-      );
-    } finally {
-      setIsLocating(false);
-    }
+    await updateCurrentLocation(true);
   };
 
   return (

@@ -13,6 +13,7 @@ import InterMedium from '../assets/fonts/Inter-Medium.ttf';
 import InterRegular from '../assets/fonts/Inter-Regular.ttf';
 import InterSemiBold from '../assets/fonts/Inter-SemiBold.ttf';
 import { ErrorBoundary } from '@/common/components/ErrorBoundary';
+import { useLocationPermission } from '@/hooks';
 import { AppAlertProvider, AppBottomSheetProvider } from '@/providers';
 
 SplashScreen.preventAutoHideAsync();
@@ -33,6 +34,8 @@ function RootNavigator() {
 }
 
 function AppContent() {
+  useLocationPermission();
+
   return (
     <View style={styles.appContainer}>
       <RootNavigator />
