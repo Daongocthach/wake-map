@@ -146,6 +146,7 @@ export default function SearchHeader({
   const ref = useRef<GooglePlacesAutocompleteRef | null>(null);
   const [searchText, setSearchText] = useState('');
   const [isFocused, setIsFocused] = useState(false);
+  const shouldShowSearchResults = isFocused;
 
   const handleBack = () => {
     ref.current?.blur();
@@ -301,11 +302,11 @@ export default function SearchHeader({
         key={predefinedPlacesKey}
         ref={ref}
         placeholder={t('wakemap.searchPlaceholder')}
-        minLength={2}
+        minLength={shouldShowSearchResults ? 2 : Number.MAX_SAFE_INTEGER}
         debounce={250}
         fetchDetails
-        predefinedPlaces={predefinedPlaces}
-        listViewDisplayed
+        predefinedPlaces={shouldShowSearchResults ? predefinedPlaces : []}
+        listViewDisplayed={shouldShowSearchResults}
         query={{
           key: env.googleMapApiKey,
           language: 'vi',
