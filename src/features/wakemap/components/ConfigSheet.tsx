@@ -1,7 +1,7 @@
 import Slider from '@react-native-community/slider';
 import type { TFunction } from 'i18next';
 import { CircleStop, Heart, Navigation2, X } from 'lucide-react-native';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -21,6 +21,7 @@ interface ConfigSheetProps {
   routeErrorMessage: string | null;
   onToggleTracking: () => void;
   onClearPlace: () => void;
+  onVisibilityChange?: (isVisible: boolean) => void;
 }
 
 export default function ConfigSheet({
@@ -32,14 +33,21 @@ export default function ConfigSheet({
   routeErrorMessage,
   onToggleTracking,
   onClearPlace,
+  onVisibilityChange,
 }: ConfigSheetProps) {
+  const { bottom } = useSafeAreaInsets();
+
+  useEffect(() => {
+    onVisibilityChange?.(Boolean(selectedPlace));
+  }, [onVisibilityChange, selectedPlace]);
+
   if (!selectedPlace) {
     return null;
   }
 
   return (
     <View style={styles.wrapper} pointerEvents="box-none">
-      <View style={styles.panel} pointerEvents="auto">
+      <View style={[styles.panel, { paddingBottom: bottom }]} pointerEvents="auto">
         <ConfigSheetContent
           place={selectedPlace}
           isTracking={isTracking}

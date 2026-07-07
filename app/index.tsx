@@ -18,6 +18,7 @@ export default function WakeMapScreen() {
   const [currentLocation, setCurrentLocation] = useState<WakeMapCoordinate | null>(null);
   const [routeStatus, setRouteStatus] = useState<RouteStatus>('idle');
   const [routeErrorMessage, setRouteErrorMessage] = useState<string | null>(null);
+  const [isConfigSheetVisible, setIsConfigSheetVisible] = useState(false);
 
   const handleToggleTracking = useCallback(() => {
     if (isTracking) {
@@ -69,7 +70,12 @@ export default function WakeMapScreen() {
   return (
     <ScreenContainer padded={false} edges={['top']}>
       <View style={styles.container}>
-        <View style={styles.mapWrapper}>
+        <View
+          style={[
+            styles.mapWrapper,
+            isConfigSheetVisible ? styles.mapWrapperCollapsed : styles.mapWrapperExpanded,
+          ]}
+        >
           <GoogleMap
             selectedPlace={selectedPlace}
             isTracking={isTracking}
@@ -91,6 +97,7 @@ export default function WakeMapScreen() {
             routeErrorMessage={routeErrorMessage}
             onToggleTracking={handleToggleTracking}
             onClearPlace={handleClearPlace}
+            onVisibilityChange={setIsConfigSheetVisible}
           />
         </View>
       </View>
@@ -118,6 +125,12 @@ const styles = StyleSheet.create((theme) => ({
   },
   mapWrapper: {
     ...StyleSheet.absoluteFillObject,
+  },
+  mapWrapperExpanded: {
+    bottom: 0,
+  },
+  mapWrapperCollapsed: {
+    bottom: theme.metrics.spacingV.p120,
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,

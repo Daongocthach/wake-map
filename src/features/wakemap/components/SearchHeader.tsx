@@ -1,7 +1,7 @@
-import { ArrowUpRight, History, MapPin, Search } from 'lucide-react-native';
-import { useRef } from 'react';
+import { ArrowUpRight, History, MapPin, Search, X } from 'lucide-react-native';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import {
   GooglePlacesAutocomplete,
   type GooglePlaceData,
@@ -110,9 +110,15 @@ export default function SearchHeader({ onPlaceSelect }: SearchHeaderProps) {
   const { theme } = useUnistyles();
   const { t } = useTranslation();
   const ref = useRef<GooglePlacesAutocompleteRef | null>(null);
+  const [searchText, setSearchText] = useState('');
 
   const handleBack = () => {
     ref.current?.blur();
+  };
+
+  const handleClear = () => {
+    ref.current?.clear();
+    setSearchText('');
   };
 
   const renderCustomRow = (rowData: GooglePlaceData) => {
@@ -181,6 +187,7 @@ export default function SearchHeader({ onPlaceSelect }: SearchHeaderProps) {
           autoCapitalize: 'none',
           returnKeyType: 'search',
           clearButtonMode: 'while-editing',
+          onChangeText: setSearchText,
         }}
         renderLeftButton={() => (
           <IconButton
@@ -191,6 +198,18 @@ export default function SearchHeader({ onPlaceSelect }: SearchHeaderProps) {
             style={styles.backButton}
           />
         )}
+        renderRightButton={() =>
+          Platform.OS === 'android' && searchText.length > 0 ? (
+            <IconButton
+              icon={X}
+              size="sm"
+              variant="ghost"
+              accessibilityLabel={t('common.clear')}
+              onPress={handleClear}
+              style={styles.clearButton}
+            />
+          ) : null
+        }
         renderRow={renderCustomRow}
         styles={{
           container: styles.autocompleteContainer,
@@ -243,12 +262,17 @@ const styles = StyleSheet.create((theme) => ({
     fontFamily: theme.fonts.regular,
     backgroundColor: 'transparent',
     paddingHorizontal: theme.metrics.spacing.p8,
+    paddingRight: Platform.OS === 'android' ? theme.metrics.spacing.p36 : theme.metrics.spacing.p8,
     paddingVertical: 0,
     margin: 0,
     textAlignVertical: 'center',
   },
   backButton: {
     marginRight: theme.metrics.spacing.p4,
+    alignSelf: 'center',
+  },
+  clearButton: {
+    marginLeft: theme.metrics.spacing.p4,
     alignSelf: 'center',
   },
   listView: {
