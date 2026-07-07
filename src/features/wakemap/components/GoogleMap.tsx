@@ -518,7 +518,7 @@ const styles = StyleSheet.create((theme) => ({
   },
   currentLocationButton: {
     position: 'absolute',
-    top: '45%',
+    top: '60%',
     right: theme.metrics.spacing.p16,
     zIndex: 15,
     elevation: 15,
