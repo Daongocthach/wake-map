@@ -27,6 +27,10 @@
     "searchPlaceholder": "Tìm kiếm địa điểm, quán cà phê...",
     "searchResultHint": "Chạm để xem chi tiết",
     "currentLocation": "Vị trí hiện tại",
+    "startErrorTitle": "Không thể bắt đầu",
+    "startErrorNoPlace": "Vui lòng chọn một địa điểm trước.",
+    "startErrorNoCurrentLocation": "Chưa sẵn sàng vị trí hiện tại. Hãy thử bấm nút định vị hoặc kiểm tra quyền vị trí.",
+    "startErrorTooClose": "Khoảng cách phải từ 100m trở lên mới được bắt đầu.",
     "configSheet": {
       "distance": "Khoảng cách: {{distance}}",
       "adjust": "Điều chỉnh phạm vi thông báo",

@@ -11,6 +11,10 @@
     "searchPlaceholder": "Search for places, cafes...",
     "searchResultHint": "Tap to see details",
     "currentLocation": "Current location",
+    "startErrorTitle": "Can't start",
+    "startErrorNoPlace": "Please choose a place first.",
+    "startErrorNoCurrentLocation": "Current location is not ready. Try the locate button or check location permission.",
+    "startErrorTooClose": "Distance must be at least 100 m before starting.",
     "configSheet": {
       "distance": "Distance: {{distance}}",
       "adjust": "Adjust notification radius",

@@ -15,6 +15,7 @@ interface GoogleMapProps {
   isTracking: boolean;
   radius: number;
   onPlaceSelect: (place: WakeMapPlace) => void;
+  onCurrentLocationChange: (location: WakeMapCoordinate | null) => void;
   onRouteStatusChange?: (status: RouteStatus, errorMessage?: string | null) => void;
 }
 
@@ -34,6 +35,7 @@ export default function GoogleMap({
   isTracking,
   radius,
   onPlaceSelect,
+  onCurrentLocationChange,
   onRouteStatusChange,
 }: GoogleMapProps) {
   const { t } = useTranslation();
@@ -82,6 +84,8 @@ export default function GoogleMap({
   useEffect(() => {
     if (!isTracking) {
       setRouteCoordinates([]);
+      setCurrentLocation(null);
+      onCurrentLocationChange(null);
       onRouteStatusChange?.('idle');
       return;
     }
@@ -114,6 +118,7 @@ export default function GoogleMap({
         }
 
         setCurrentLocation(result.location);
+        onCurrentLocationChange(result.location);
 
         mapRef.current?.animateToRegion(
           {
@@ -135,7 +140,13 @@ export default function GoogleMap({
     return () => {
       isActive = false;
     };
-  }, [isTracking, onRouteStatusChange, t]);
+  }, [isTracking, onCurrentLocationChange, onRouteStatusChange, t]);
+
+  useEffect(() => {
+    if (!currentLocation) {
+      onCurrentLocationChange(null);
+    }
+  }, [currentLocation, onCurrentLocationChange]);
 
   useEffect(() => {
     let isActive = true;
@@ -219,6 +230,11 @@ export default function GoogleMap({
         }
 
         const data = (await response.json()) as ComputeRouteResponse;
+
+        if (__DEV__) {
+          console.error('Routes API response', data);
+        }
+
         const routes = data.routes ?? [];
         const preferredRoute =
           routes.find((route) => route.routeLabels?.includes('SHORTER_DISTANCE')) ?? routes[0];

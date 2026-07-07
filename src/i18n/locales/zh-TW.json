@@ -27,6 +27,10 @@
     "searchPlaceholder": "搜尋地點、咖啡廳...",
     "searchResultHint": "點擊查看詳情",
     "currentLocation": "目前位置",
+    "startErrorTitle": "無法開始",
+    "startErrorNoPlace": "請先選擇一個地點。",
+    "startErrorNoCurrentLocation": "目前定位尚未準備好。請先按定位按鈕或檢查定位權限。",
+    "startErrorTooClose": "開始前距離必須至少 100 公尺。",
     "configSheet": {
       "distance": "距離：{{distance}}",
       "adjust": "調整通知範圍",

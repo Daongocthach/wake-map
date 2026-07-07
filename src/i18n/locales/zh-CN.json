@@ -27,6 +27,10 @@
     "searchPlaceholder": "搜索地点、咖啡馆...",
     "searchResultHint": "轻触查看详情",
     "currentLocation": "当前位置",
+    "startErrorTitle": "无法开始",
+    "startErrorNoPlace": "请先选择一个地点。",
+    "startErrorNoCurrentLocation": "当前定位还未准备好。请先点击定位按钮或检查定位权限。",
+    "startErrorTooClose": "开始前距离必须至少 100 米。",
     "configSheet": {
       "distance": "距离：{{distance}}",
       "adjust": "调整通知范围",

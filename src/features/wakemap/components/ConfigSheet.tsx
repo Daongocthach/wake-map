@@ -137,7 +137,7 @@ function ConfigSheetContent({
 
         <Slider
           value={radius}
-          minimumValue={10}
+          minimumValue={100}
           maximumValue={2000}
           step={10}
           minimumTrackTintColor={theme.colors.brand.primary}
@@ -149,7 +149,7 @@ function ConfigSheetContent({
         <View style={styles.scaleRow}>
           <Text variant="caption" style={styles.scaleText}>
             {formatRadiusLabel(
-              10,
+              100,
               t('wakemap.configSheet.meterUnit'),
               t('wakemap.configSheet.kilometerUnit')
             )}
