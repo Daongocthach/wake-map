@@ -99,7 +99,7 @@ function ConfigSheetContent({
   }, [place.coordinate.latitude, place.coordinate.longitude]);
 
   return (
-    <View style={[styles.sheet, { paddingBottom: theme.metrics.spacingV.p16 + bottom }]}>
+    <View style={[styles.sheet, { paddingBottom: bottom }]}>
       <View style={styles.handle} />
 
       <View style={styles.header}>
