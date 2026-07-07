@@ -53,6 +53,12 @@ interface GooglePlaceDataWithGeometry extends GooglePlaceData {
   };
 }
 
+interface PlaceDetailsResponse {
+  status: string;
+  result?: GooglePlaceDetail;
+  error_message?: string;
+}
+
 function hasGeometry(data: GooglePlaceData): data is GooglePlaceDataWithGeometry {
   if (!('geometry' in data)) {
     return false;
@@ -132,6 +138,38 @@ function createWakeMapPlace(
     subtitle,
     coordinate,
   };
+}
+
+async function fetchWakeMapPlaceDetails(placeId: string): Promise<GooglePlaceDetail | null> {
+  if (!env.googleMapApiKey) {
+    return null;
+  }
+
+  try {
+    const response = await fetch(
+      `https://maps.googleapis.com/maps/api/place/details/json?placeid=${encodeURIComponent(placeId)}&key=${encodeURIComponent(env.googleMapApiKey)}&language=vi`
+    );
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const payload = (await response.json()) as PlaceDetailsResponse;
+
+    if (payload.status !== 'OK' || !payload.result) {
+      if (__DEV__ && payload.error_message) {
+        console.warn('Google place details error:', payload.error_message);
+      }
+      return null;
+    }
+
+    return payload.result;
+  } catch (error) {
+    if (__DEV__) {
+      console.warn('Failed to fetch place details:', error);
+    }
+    return null;
+  }
 }
 
 export default function SearchHeader({
@@ -231,7 +269,6 @@ export default function SearchHeader({
     );
   };
 
-  // Build predefined places dynamically
   const predefinedPlaces: CustomPlaceData[] = [];
 
   if (savedPlaces && savedPlaces.length > 0) {
@@ -304,7 +341,7 @@ export default function SearchHeader({
         placeholder={t('wakemap.searchPlaceholder')}
         minLength={shouldShowSearchResults ? 2 : Number.MAX_SAFE_INTEGER}
         debounce={250}
-        fetchDetails
+        fetchDetails={false}
         predefinedPlaces={shouldShowSearchResults ? predefinedPlaces : []}
         listViewDisplayed={shouldShowSearchResults}
         query={{
@@ -312,18 +349,20 @@ export default function SearchHeader({
           language: 'vi',
           components: 'country:vn',
         }}
-        onPress={(data, detail) => {
+        onPress={async (data) => {
           const customData = data as unknown as CustomPlaceData;
+
           if (customData.isHeader) {
-            // Keep focused and do not trigger select for header rows
             return;
           }
 
-          const place = createWakeMapPlace(data, detail, savedPlaces, recentPlaces);
+          let place = createWakeMapPlace(data, null, savedPlaces, recentPlaces);
 
-          // Blur BEFORE calling onPlaceSelect to prevent the component from
-          // re-mounting mid-interaction. onPlaceSelect triggers addRecent which
-          // changes recentPlaces → predefinedPlacesKey → key prop → unmount/remount loop.
+          if (!place && 'place_id' in data && data.place_id) {
+            const detail = await fetchWakeMapPlaceDetails(data.place_id);
+            place = createWakeMapPlace(data, detail, savedPlaces, recentPlaces);
+          }
+
           setSearchText('');
           ref.current?.blur();
           Keyboard.dismiss();
