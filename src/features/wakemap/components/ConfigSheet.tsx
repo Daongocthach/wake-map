@@ -171,7 +171,7 @@ function ConfigSheetContent({
         </View>
       </View>
 
-      {isTracking ? (
+      {isTracking && routeStatus !== 'ready' ? (
         <View style={styles.routeStatusCard}>
           <Text variant="body" weight="medium" style={styles.routeStatusTitle}>
             {getRouteStatusLabel(routeStatus, t)}

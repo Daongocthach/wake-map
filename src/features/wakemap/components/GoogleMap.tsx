@@ -86,8 +86,6 @@ export default function GoogleMap({
   useEffect(() => {
     if (!isTracking) {
       setRouteCoordinates([]);
-      setCurrentLocation(null);
-      onCurrentLocationChange(null);
       onRouteStatusChange?.('idle');
       return;
     }
@@ -145,9 +143,7 @@ export default function GoogleMap({
   }, [isTracking, onCurrentLocationChange, onRouteStatusChange, requestPermission, t]);
 
   useEffect(() => {
-    if (!currentLocation) {
-      onCurrentLocationChange(null);
-    }
+    onCurrentLocationChange(currentLocation);
   }, [currentLocation, onCurrentLocationChange]);
 
   useEffect(() => {
@@ -234,7 +230,7 @@ export default function GoogleMap({
         const data = (await response.json()) as ComputeRouteResponse;
 
         if (__DEV__) {
-          console.error('Routes API response', data);
+          console.warn('Routes API response', data);
         }
 
         const routes = data.routes ?? [];
@@ -316,6 +312,7 @@ export default function GoogleMap({
       }
 
       setCurrentLocation(nextCurrentLocation.location);
+      onCurrentLocationChange(nextCurrentLocation.location);
 
       mapRef.current?.animateToRegion(
         {
