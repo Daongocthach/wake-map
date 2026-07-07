@@ -4,6 +4,7 @@ import { View } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 import { ScreenContainer } from '@/common/components/ScreenContainer';
 import { SearchHeader, ConfigSheet, GoogleMap } from '@/features/wakemap/components';
+import { useSavedPlaces, useRecentPlaces } from '@/features/wakemap/hooks';
 import type { WakeMapCoordinate, WakeMapPlace } from '@/features/wakemap/types';
 import { useAppAlert } from '@/providers';
 
@@ -19,6 +20,23 @@ export default function WakeMapScreen() {
   const [routeStatus, setRouteStatus] = useState<RouteStatus>('idle');
   const [routeErrorMessage, setRouteErrorMessage] = useState<string | null>(null);
   const [isConfigSheetVisible, setIsConfigSheetVisible] = useState(false);
+
+  const { savedPlaces, isSaved, toggleSave } = useSavedPlaces();
+  const { recentPlaces, addRecent, removeRecent } = useRecentPlaces();
+
+  const handlePlaceSelect = useCallback(
+    (place: WakeMapPlace) => {
+      setSelectedPlace(place);
+      addRecent(place);
+    },
+    [addRecent]
+  );
+
+  const handleToggleSave = useCallback(() => {
+    if (selectedPlace) {
+      toggleSave(selectedPlace);
+    }
+  }, [selectedPlace, toggleSave]);
 
   const handleToggleTracking = useCallback(() => {
     if (isTracking) {
@@ -77,19 +95,29 @@ export default function WakeMapScreen() {
           ]}
         >
           <GoogleMap
+            savedPlaces={savedPlaces}
             selectedPlace={selectedPlace}
             isTracking={isTracking}
             radius={radius}
-            onPlaceSelect={setSelectedPlace}
+            currentLocation={currentLocation}
+            onPlaceSelect={handlePlaceSelect}
             onCurrentLocationChange={setCurrentLocation}
             onRouteStatusChange={handleRouteStatusChange}
           />
         </View>
 
         <View style={styles.overlay} pointerEvents="box-none">
-          <SearchHeader onPlaceSelect={setSelectedPlace} />
+          <SearchHeader
+            onPlaceSelect={handlePlaceSelect}
+            savedPlaces={savedPlaces}
+            recentPlaces={recentPlaces}
+            onRemoveSaved={toggleSave}
+            onRemoveRecent={removeRecent}
+          />
           <ConfigSheet
             selectedPlace={selectedPlace}
+            isSaved={selectedPlace ? isSaved(selectedPlace.id) : false}
+            onToggleSave={handleToggleSave}
             isTracking={isTracking}
             radius={radius}
             onRadiusChange={setRadius}

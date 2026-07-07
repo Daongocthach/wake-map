@@ -19,6 +19,7 @@ export const STORAGE_KEYS = {
   },
   wakemap: {
     savedPlaces: 'wakemap_saved_places',
+    recentPlaces: 'wakemap_recent_places',
     lastCoordinates: 'wakemap_last_coordinates',
     activeTracking: 'wakemap_active_tracking',
   },

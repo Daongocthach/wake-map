@@ -14,6 +14,8 @@ import { Text } from '@/common/components/Text';
 
 interface ConfigSheetProps {
   selectedPlace: WakeMapPlace | null;
+  isSaved: boolean;
+  onToggleSave: () => void;
   isTracking: boolean;
   radius: number;
   onRadiusChange: (radius: number) => void;
@@ -26,6 +28,8 @@ interface ConfigSheetProps {
 
 export default function ConfigSheet({
   selectedPlace,
+  isSaved,
+  onToggleSave,
   isTracking,
   radius,
   onRadiusChange,
@@ -50,6 +54,8 @@ export default function ConfigSheet({
       <View style={[styles.panel, { paddingBottom: bottom }]} pointerEvents="auto">
         <ConfigSheetContent
           place={selectedPlace}
+          isSaved={isSaved}
+          onToggleSave={onToggleSave}
           isTracking={isTracking}
           radius={radius}
           onRadiusChange={onRadiusChange}
@@ -67,6 +73,8 @@ export default function ConfigSheet({
 
 function ConfigSheetContent({
   place,
+  isSaved,
+  onToggleSave,
   isTracking,
   radius,
   onRadiusChange,
@@ -76,6 +84,8 @@ function ConfigSheetContent({
   onClose,
 }: {
   place: WakeMapPlace;
+  isSaved: boolean;
+  onToggleSave: () => void;
   isTracking: boolean;
   radius: number;
   onRadiusChange: (radius: number) => void;
@@ -205,12 +215,18 @@ function ConfigSheetContent({
           }}
         />
         <Button
-          title={t('wakemap.configSheet.save')}
-          leftIcon={<Heart />}
-          variant="outline"
+          title={isSaved ? t('wakemap.configSheet.saved') : t('wakemap.configSheet.save')}
+          leftIcon={
+            <Heart
+              fill={isSaved ? theme.colors.state.error : 'none'}
+              color={isSaved ? theme.colors.state.error : undefined}
+            />
+          }
+          variant={isSaved ? 'secondary' : 'outline'}
           size="md"
           fullWidth
           style={styles.saveButton}
+          onPress={onToggleSave}
         />
       </View>
     </View>

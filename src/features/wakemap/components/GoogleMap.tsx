@@ -5,16 +5,18 @@ import { useTranslation } from 'react-i18next';
 import { Platform, View } from 'react-native';
 import MapView, { Circle, Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
 import { StyleSheet, useUnistyles } from 'react-native-unistyles';
-import { DEFAULT_REGION, SAVED_PLACES } from '../constants';
+import { DEFAULT_REGION } from '../constants';
 import type { WakeMapCoordinate, WakeMapPlace } from '../types';
 import { IconButton } from '@/common/components/IconButton';
 import { env } from '@/config/env';
 import { useLocationPermission } from '@/hooks';
 
 interface GoogleMapProps {
+  savedPlaces: WakeMapPlace[];
   selectedPlace?: WakeMapPlace | null;
   isTracking: boolean;
   radius: number;
+  currentLocation?: WakeMapCoordinate | null;
   onPlaceSelect: (place: WakeMapPlace) => void;
   onCurrentLocationChange: (location: WakeMapCoordinate | null) => void;
   onRouteStatusChange?: (status: RouteStatus, errorMessage?: string | null) => void;
@@ -32,9 +34,11 @@ interface ComputeRouteResponse {
 }
 
 export default function GoogleMap({
+  savedPlaces,
   selectedPlace,
   isTracking,
   radius,
+  currentLocation: propCurrentLocation,
   onPlaceSelect,
   onCurrentLocationChange,
   onRouteStatusChange,
@@ -46,10 +50,12 @@ export default function GoogleMap({
   const [isLocating, setIsLocating] = useState(false);
   const isLocatingRef = useRef(false);
   const hasLoadedInitialLocationRef = useRef(false);
-  const [currentLocation, setCurrentLocation] = useState<WakeMapCoordinate | null>(null);
+  const [currentLocation, setCurrentLocation] = useState<WakeMapCoordinate | null>(
+    propCurrentLocation ?? null
+  );
   const [routeCoordinates, setRouteCoordinates] = useState<WakeMapCoordinate[]>([]);
   const isSavedPlace = selectedPlace
-    ? SAVED_PLACES.some((place) => place.title === selectedPlace.title)
+    ? savedPlaces.some((place) => place.title === selectedPlace.title)
     : false;
 
   const handlePlaceMarkerPress = (place: WakeMapPlace) => {
@@ -137,13 +143,20 @@ export default function GoogleMap({
   );
 
   useEffect(() => {
-    if (hasLoadedInitialLocationRef.current) {
+    if (propCurrentLocation) {
+      setCurrentLocation(propCurrentLocation);
+    }
+  }, [propCurrentLocation]);
+
+  useEffect(() => {
+    if (hasLoadedInitialLocationRef.current || propCurrentLocation || currentLocation) {
+      hasLoadedInitialLocationRef.current = true;
       return;
     }
 
     hasLoadedInitialLocationRef.current = true;
     void updateCurrentLocation();
-  }, [updateCurrentLocation]);
+  }, [currentLocation, propCurrentLocation, updateCurrentLocation]);
 
   useEffect(() => {
     onCurrentLocationChange(currentLocation);
@@ -329,7 +342,7 @@ export default function GoogleMap({
           />
         ) : null}
 
-        {SAVED_PLACES.map((place) => (
+        {savedPlaces.map((place) => (
           <Marker
             key={place.id}
             coordinate={place.coordinate}

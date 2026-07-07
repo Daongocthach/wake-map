@@ -4,13 +4,16 @@
     "search": "Search",
     "clear": "Clear",
     "close": "Close",
-    "ok": "OK"
+    "ok": "OK",
+    "back": "Back"
   },
   "wakemap": {
     "title": "Wake Map",
     "searchPlaceholder": "Search for places, cafes...",
     "searchResultHint": "Tap to see details",
     "currentLocation": "Current location",
+    "savedPlaces": "Saved places",
+    "recentPlaces": "Recent places",
     "startErrorTitle": "Can't start",
     "startErrorNoPlace": "Please choose a place first.",
     "startErrorNoCurrentLocation": "Current location is not ready. Try the locate button or check location permission.",
@@ -28,6 +31,8 @@
       "start": "START",
       "stop": "STOP",
       "save": "Save place",
+      "saved": "Saved",
+      "unsave": "Unsave",
       "routeIdle": "Ready to calculate route",
       "routeLocating": "Getting your location...",
       "routeLoading": "Getting route...",

@@ -1,7 +1,7 @@
-import { ArrowUpRight, History, MapPin, Search, X } from 'lucide-react-native';
+import { ArrowLeft, ArrowUpRight, History, List, MapPin, Search, X } from 'lucide-react-native';
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Platform, View } from 'react-native';
+import { Keyboard, Platform, View } from 'react-native';
 import {
   GooglePlacesAutocomplete,
   type GooglePlaceData,
@@ -9,8 +9,7 @@ import {
   type GooglePlacesAutocompleteRef,
 } from 'react-native-google-places-autocomplete';
 import { StyleSheet, useUnistyles } from 'react-native-unistyles';
-import { SAVED_PLACES } from '../constants';
-import type { WakeMapPlace } from '../types';
+import type { RecentPlace, WakeMapPlace } from '../types';
 import { Icon } from '@/common/components/Icon';
 import { IconButton } from '@/common/components/IconButton';
 import { Text } from '@/common/components/Text';
@@ -19,6 +18,26 @@ import { vs } from '@/theme/metrics';
 
 interface SearchHeaderProps {
   onPlaceSelect?: (place: WakeMapPlace) => void;
+  savedPlaces: WakeMapPlace[];
+  recentPlaces: RecentPlace[];
+  onRemoveSaved: (place: WakeMapPlace) => void;
+  onRemoveRecent: (placeId: string) => void;
+}
+
+interface CustomPlaceData {
+  description: string;
+  geometry: {
+    location: {
+      lat: number;
+      lng: number;
+      latitude: number;
+      longitude: number;
+    };
+  };
+  isHeader?: boolean;
+  isSavedPlace?: boolean;
+  isRecentPlace?: boolean;
+  placeObj?: WakeMapPlace;
 }
 
 interface GeometryLocation {
@@ -79,10 +98,19 @@ function normalizeCoordinate(location: {
 
 function createWakeMapPlace(
   data: GooglePlaceData,
-  detail: GooglePlaceDetail | null
+  detail: GooglePlaceDetail | null,
+  savedPlaces: WakeMapPlace[],
+  recentPlaces: RecentPlace[]
 ): WakeMapPlace | null {
+  const customData = data as unknown as CustomPlaceData;
+  if (customData.placeObj) {
+    return customData.placeObj;
+  }
+
   const title = data.description || data.structured_formatting?.main_text || '';
-  const savedPlace = SAVED_PLACES.find((place) => place.title === title);
+  const savedPlace =
+    savedPlaces.find((place) => place.title === title) ||
+    recentPlaces.find((place) => place.title === title);
   const subtitle = data.structured_formatting?.secondary_text || savedPlace?.subtitle || '';
   const detailLocation = detail?.geometry.location;
   const dataLocation = hasGeometry(data) ? data.geometry.location : null;
@@ -106,14 +134,22 @@ function createWakeMapPlace(
   };
 }
 
-export default function SearchHeader({ onPlaceSelect }: SearchHeaderProps) {
+export default function SearchHeader({
+  onPlaceSelect,
+  savedPlaces,
+  recentPlaces,
+  onRemoveSaved,
+  onRemoveRecent,
+}: SearchHeaderProps) {
   const { theme } = useUnistyles();
   const { t } = useTranslation();
   const ref = useRef<GooglePlacesAutocompleteRef | null>(null);
   const [searchText, setSearchText] = useState('');
+  const [isFocused, setIsFocused] = useState(false);
 
   const handleBack = () => {
     ref.current?.blur();
+    Keyboard.dismiss();
   };
 
   const handleClear = () => {
@@ -122,15 +158,51 @@ export default function SearchHeader({ onPlaceSelect }: SearchHeaderProps) {
   };
 
   const renderCustomRow = (rowData: GooglePlaceData) => {
+    const customData = rowData as unknown as CustomPlaceData;
+
+    if (customData.isHeader) {
+      const isRecent = customData.description === '__HEADER__:recent';
+      return (
+        <View style={styles.headerRowInner}>
+          <Text variant="caption" weight="bold" style={styles.headerRowText}>
+            {isRecent ? t('wakemap.recentPlaces') : t('wakemap.savedPlaces')}
+          </Text>
+        </View>
+      );
+    }
+
     const title = rowData.description || rowData.structured_formatting?.main_text || '';
-    const subtitle = rowData.structured_formatting?.secondary_text || t('wakemap.searchResultHint');
-    const isSavedPlace = SAVED_PLACES.some((place) => place.title === title);
-    const rightIcon = isSavedPlace ? History : ArrowUpRight;
+    const subtitle =
+      rowData.structured_formatting?.secondary_text ||
+      customData.placeObj?.subtitle ||
+      t('wakemap.searchResultHint');
+
+    let leftIcon = MapPin;
+    let leftIconColor = theme.colors.brand.primary;
+    const isSavedOrRecent = customData.isSavedPlace || customData.isRecentPlace;
+
+    if (customData.isSavedPlace) {
+      leftIcon = List;
+      leftIconColor = theme.colors.state.success;
+    } else if (customData.isRecentPlace) {
+      leftIcon = History;
+      leftIconColor = theme.colors.text.muted;
+    }
+
+    const handleDelete = () => {
+      if (customData.placeObj) {
+        if (customData.isSavedPlace) {
+          onRemoveSaved(customData.placeObj);
+        } else if (customData.isRecentPlace) {
+          onRemoveRecent(customData.placeObj.id);
+        }
+      }
+    };
 
     return (
       <View style={styles.rowContainer}>
         <View style={styles.iconCircle}>
-          <Icon icon={MapPin} size={16} color={theme.colors.brand.primary} />
+          <Icon icon={leftIcon} size={16} color={leftIconColor} />
         </View>
 
         <View style={styles.textContainer}>
@@ -142,30 +214,97 @@ export default function SearchHeader({ onPlaceSelect }: SearchHeaderProps) {
           </Text>
         </View>
 
-        <Icon icon={rightIcon} size={18} variant="muted" style={styles.rightArrow} />
+        {isSavedOrRecent ? (
+          <IconButton
+            icon={X}
+            size="sm"
+            variant="ghost"
+            accessibilityLabel={t('common.clear')}
+            onPress={handleDelete}
+            style={styles.deleteItemButton}
+          />
+        ) : (
+          <Icon icon={ArrowUpRight} size={18} variant="muted" style={styles.rightArrow} />
+        )}
       </View>
     );
   };
+
+  // Build predefined places dynamically
+  const predefinedPlaces: CustomPlaceData[] = [];
+
+  if (savedPlaces && savedPlaces.length > 0) {
+    predefinedPlaces.push({
+      description: '__HEADER__:saved',
+      isHeader: true,
+      geometry: {
+        location: {
+          lat: 0,
+          lng: 0,
+          latitude: 0,
+          longitude: 0,
+        },
+      },
+    });
+    savedPlaces.forEach((place) => {
+      predefinedPlaces.push({
+        description: place.title,
+        isSavedPlace: true,
+        placeObj: place,
+        geometry: {
+          location: {
+            lat: place.coordinate.latitude,
+            lng: place.coordinate.longitude,
+            latitude: place.coordinate.latitude,
+            longitude: place.coordinate.longitude,
+          },
+        },
+      });
+    });
+  }
+
+  if (recentPlaces && recentPlaces.length > 0) {
+    predefinedPlaces.push({
+      description: '__HEADER__:recent',
+      isHeader: true,
+      geometry: {
+        location: {
+          lat: 0,
+          lng: 0,
+          latitude: 0,
+          longitude: 0,
+        },
+      },
+    });
+    recentPlaces.forEach((place) => {
+      predefinedPlaces.push({
+        description: place.title,
+        isRecentPlace: true,
+        placeObj: place,
+        geometry: {
+          location: {
+            lat: place.coordinate.latitude,
+            lng: place.coordinate.longitude,
+            latitude: place.coordinate.latitude,
+            longitude: place.coordinate.longitude,
+          },
+        },
+      });
+    });
+  }
+
+  const predefinedPlacesKey = `${(savedPlaces || []).map((p) => p.id).join(',')}_${(recentPlaces || []).map((p) => p.id).join(',')}`;
+
   return (
     <View style={styles.wrapper} pointerEvents="box-none">
       <GooglePlacesAutocomplete
+        key={predefinedPlacesKey}
         ref={ref}
         placeholder={t('wakemap.searchPlaceholder')}
         minLength={2}
         debounce={250}
         fetchDetails
-        predefinedPlaces={SAVED_PLACES.map((place) => ({
-          description: place.title,
-          geometry: {
-            location: {
-              lat: place.coordinate.latitude,
-              lng: place.coordinate.longitude,
-              latitude: place.coordinate.latitude,
-              longitude: place.coordinate.longitude,
-            },
-          },
-        }))}
-        keepResultsAfterBlur
+        predefinedPlaces={predefinedPlaces}
         listViewDisplayed
         query={{
           key: env.googleMapApiKey,
@@ -173,7 +312,13 @@ export default function SearchHeader({ onPlaceSelect }: SearchHeaderProps) {
           components: 'country:vn',
         }}
         onPress={(data, detail) => {
-          const place = createWakeMapPlace(data, detail);
+          const customData = data as unknown as CustomPlaceData;
+          if (customData.isHeader) {
+            // Keep focused and do not trigger select for header rows
+            return;
+          }
+
+          const place = createWakeMapPlace(data, detail, savedPlaces, recentPlaces);
 
           if (place) {
             onPlaceSelect?.(place);
@@ -188,16 +333,21 @@ export default function SearchHeader({ onPlaceSelect }: SearchHeaderProps) {
           returnKeyType: 'search',
           clearButtonMode: 'while-editing',
           onChangeText: setSearchText,
+          onFocus: () => setIsFocused(true),
+          onBlur: () => setIsFocused(false),
         }}
-        renderLeftButton={() => (
-          <IconButton
-            icon={Search}
-            size="sm"
-            accessibilityLabel={t('common.search')}
-            onPress={handleBack}
-            style={styles.backButton}
-          />
-        )}
+        renderLeftButton={() => {
+          const leftIcon = isFocused ? ArrowLeft : Search;
+          return (
+            <IconButton
+              icon={leftIcon}
+              size="sm"
+              accessibilityLabel={isFocused ? t('common.back') : t('common.search')}
+              onPress={handleBack}
+              style={styles.backButton}
+            />
+          );
+        }}
         renderRightButton={() =>
           Platform.OS === 'android' && searchText.length > 0 ? (
             <IconButton
@@ -334,5 +484,20 @@ const styles = StyleSheet.create((theme) => ({
   rightArrow: {
     marginLeft: theme.metrics.spacing.p8,
     alignSelf: 'center',
+  },
+  deleteItemButton: {
+    alignSelf: 'center',
+    marginLeft: theme.metrics.spacing.p8,
+  },
+  headerRowInner: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingVertical: theme.metrics.spacingV.p4,
+  },
+  headerRowText: {
+    color: theme.colors.text.muted,
+    textTransform: 'uppercase',
+    fontSize: theme.metrics.fontSize.xs,
+    letterSpacing: 0.5,
   },
 }));

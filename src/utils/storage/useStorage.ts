@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { getItem, setItem, removeItem, addListener } from './storage';
 import type { StorageKey, StorageValue } from './types';
 
@@ -26,33 +26,38 @@ export function useStorage<T extends StorageValue = StorageValue>(
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
+  // Sync defaultValue to a ref to avoid callback/effect invalidations when unstable references (like array/object literals) are passed.
+  const defaultValueRef = useRef(defaultValue);
+  defaultValueRef.current = defaultValue;
+
   const loadValue = useCallback(() => {
     setLoading(true);
     setError(null);
 
     const result = getItem<T>(key);
+    const currentDefaultValue = defaultValueRef.current;
 
     if (!result.success) {
       setError(result.error || new Error('Failed to get item'));
-      setStateValue(defaultValue ?? null);
+      setStateValue(currentDefaultValue ?? null);
       setLoading(false);
       return;
     }
 
-    if (result.data === null && defaultValue !== undefined && initializeWithDefault) {
-      const setResult = setItem(key, defaultValue);
+    if (result.data === null && currentDefaultValue !== undefined && initializeWithDefault) {
+      const setResult = setItem(key, currentDefaultValue);
       if (setResult.success) {
-        setStateValue(defaultValue);
+        setStateValue(currentDefaultValue);
       } else {
         setError(setResult.error || new Error('Failed to set default value'));
-        setStateValue(defaultValue);
+        setStateValue(currentDefaultValue);
       }
     } else {
-      setStateValue(result.data ?? defaultValue ?? null);
+      setStateValue(result.data ?? currentDefaultValue ?? null);
     }
 
     setLoading(false);
-  }, [key, defaultValue, initializeWithDefault]);
+  }, [key, initializeWithDefault]);
 
   useEffect(() => {
     loadValue();
@@ -60,11 +65,11 @@ export function useStorage<T extends StorageValue = StorageValue>(
 
   useEffect(() => {
     const unsubscribe = addListener<T>(key, (newValue) => {
-      setStateValue(newValue ?? defaultValue ?? null);
+      setStateValue(newValue ?? defaultValueRef.current ?? null);
     });
 
     return unsubscribe;
-  }, [key, defaultValue]);
+  }, [key]);
 
   const setValue = useCallback(
     (newValue: T | null) => {
@@ -73,10 +78,10 @@ export function useStorage<T extends StorageValue = StorageValue>(
         setError(result.error || new Error('Failed to set item'));
       } else {
         setError(null);
-        setStateValue(newValue ?? defaultValue ?? null);
+        setStateValue(newValue ?? defaultValueRef.current ?? null);
       }
     },
-    [key, defaultValue]
+    [key]
   );
 
   const removeValue = useCallback(() => {
@@ -85,9 +90,9 @@ export function useStorage<T extends StorageValue = StorageValue>(
       setError(result.error || new Error('Failed to remove item'));
     } else {
       setError(null);
-      setStateValue(defaultValue ?? null);
+      setStateValue(defaultValueRef.current ?? null);
     }
-  }, [key, defaultValue]);
+  }, [key]);
 
   const refresh = useCallback(() => {
     loadValue();
