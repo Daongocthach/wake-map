@@ -38,7 +38,7 @@ export async function startProximityTracking(
     // 4. Start Location Updates Task in Background
     await Location.startLocationUpdatesAsync(BACKGROUND_LOCATION_TASK_NAME, {
       accuracy: Location.Accuracy.High,
-      timeInterval: 20000, // Update location every 20 seconds
+      timeInterval: 30000, // Update location every 30 seconds
       distanceInterval: 50, // Or every 50 meters
       showsBackgroundLocationIndicator: true, // Show blue bar on iOS
       pausesUpdatesAutomatically: false, // Don't stop when idle

@@ -50,6 +50,7 @@ export default function GoogleMap({
   const [isLocating, setIsLocating] = useState(false);
   const isLocatingRef = useRef(false);
   const hasLoadedInitialLocationRef = useRef(false);
+  const lastRouteFetchPlaceIdRef = useRef<string | null>(null);
   const [currentLocation, setCurrentLocation] = useState<WakeMapCoordinate | null>(
     propCurrentLocation ?? null
   );
@@ -76,7 +77,18 @@ export default function GoogleMap({
   };
 
   useEffect(() => {
+    if (!isTracking) {
+      lastRouteFetchPlaceIdRef.current = null;
+      setRouteCoordinates([]);
+      onRouteStatusChange?.('idle');
+    }
+  }, [isTracking, onRouteStatusChange]);
+
+  useEffect(() => {
     if (!selectedPlace) {
+      lastRouteFetchPlaceIdRef.current = null;
+      setRouteCoordinates([]);
+      onRouteStatusChange?.('idle');
       return;
     }
 
@@ -89,7 +101,7 @@ export default function GoogleMap({
       },
       350
     );
-  }, [selectedPlace]);
+  }, [onRouteStatusChange, selectedPlace]);
 
   const updateCurrentLocation = useCallback(
     async (showStatus = false) => {
@@ -165,14 +177,8 @@ export default function GoogleMap({
   useEffect(() => {
     let isActive = true;
 
-    async function loadRoute() {
-      if (!isTracking) {
-        return;
-      }
-
+    async function loadRouteOnce() {
       if (!selectedPlace) {
-        setRouteCoordinates([]);
-        onRouteStatusChange?.('failed', t('wakemap.configSheet.routeErrorNoPlace'));
         return;
       }
 
@@ -181,11 +187,17 @@ export default function GoogleMap({
         return;
       }
 
+      if (lastRouteFetchPlaceIdRef.current === selectedPlace.id) {
+        return;
+      }
+
       if (!env.googleMapApiKey) {
         setRouteCoordinates([]);
         onRouteStatusChange?.('failed', t('wakemap.configSheet.routeErrorMissingApiKey'));
         return;
       }
+
+      lastRouteFetchPlaceIdRef.current = selectedPlace.id;
 
       try {
         onRouteStatusChange?.('loading');
@@ -304,11 +316,11 @@ export default function GoogleMap({
       }
     }
 
-    void loadRoute();
+    void loadRouteOnce();
     return () => {
       isActive = false;
     };
-  }, [currentLocation, isTracking, onRouteStatusChange, selectedPlace, t]);
+  }, [currentLocation, onRouteStatusChange, selectedPlace, t]);
 
   const handleLocateCurrentPosition = async () => {
     await updateCurrentLocation(true);
