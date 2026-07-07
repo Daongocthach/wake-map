@@ -3,7 +3,7 @@ import { LocateFixed } from 'lucide-react-native';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Platform, View } from 'react-native';
-import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { Circle, Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
 import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 import { DEFAULT_REGION, SAVED_PLACES } from '../constants';
 import type { WakeMapCoordinate, WakeMapPlace } from '../types';
@@ -13,6 +13,7 @@ import { env } from '@/config/env';
 interface GoogleMapProps {
   selectedPlace?: WakeMapPlace | null;
   isTracking: boolean;
+  radius: number;
   onPlaceSelect: (place: WakeMapPlace) => void;
   onRouteStatusChange?: (status: RouteStatus, errorMessage?: string | null) => void;
 }
@@ -31,6 +32,7 @@ interface ComputeRouteResponse {
 export default function GoogleMap({
   selectedPlace,
   isTracking,
+  radius,
   onPlaceSelect,
   onRouteStatusChange,
 }: GoogleMapProps) {
@@ -85,6 +87,7 @@ export default function GoogleMap({
     }
 
     let isActive = true;
+    setCurrentLocation(null);
 
     const run = async () => {
       setIsLocating(true);
@@ -276,6 +279,7 @@ export default function GoogleMap({
 
     setIsLocating(true);
     onRouteStatusChange?.('locating');
+    setCurrentLocation(null);
 
     try {
       const nextCurrentLocation = await requestCurrentLocation();
@@ -324,6 +328,15 @@ export default function GoogleMap({
             coordinates={routeCoordinates}
             strokeColor={theme.colors.brand.primary}
             strokeWidth={4}
+          />
+        ) : null}
+
+        {selectedPlace ? (
+          <Circle
+            center={selectedPlace.coordinate}
+            radius={radius}
+            strokeColor={theme.colors.state.error}
+            fillColor={theme.colors.state.errorBg}
           />
         ) : null}
 
@@ -413,21 +426,9 @@ async function requestCurrentLocation(): Promise<CurrentLocationResult> {
     };
   }
 
-  const lastKnownPosition = await Location.getLastKnownPositionAsync();
-
-  if (lastKnownPosition) {
-    return {
-      location: {
-        latitude: lastKnownPosition.coords.latitude,
-        longitude: lastKnownPosition.coords.longitude,
-      },
-      error: null,
-    };
-  }
-
   try {
     const currentPosition = await Location.getCurrentPositionAsync({
-      accuracy: Location.Accuracy.Balanced,
+      accuracy: Location.Accuracy.High,
     });
 
     return {
@@ -440,6 +441,18 @@ async function requestCurrentLocation(): Promise<CurrentLocationResult> {
   } catch (error) {
     if (__DEV__) {
       console.error('Failed to get current location', error);
+    }
+
+    const lastKnownPosition = await Location.getLastKnownPositionAsync();
+
+    if (lastKnownPosition) {
+      return {
+        location: {
+          latitude: lastKnownPosition.coords.latitude,
+          longitude: lastKnownPosition.coords.longitude,
+        },
+        error: null,
+      };
     }
 
     return {

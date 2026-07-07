@@ -1,9 +1,10 @@
 import Slider from '@react-native-community/slider';
 import type { TFunction } from 'i18next';
 import { CircleStop, Heart, Navigation2, X } from 'lucide-react-native';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 import { DEFAULT_REGION } from '../constants';
 import type { WakeMapPlace } from '../types';
@@ -14,6 +15,8 @@ import { Text } from '@/common/components/Text';
 interface ConfigSheetProps {
   selectedPlace: WakeMapPlace | null;
   isTracking: boolean;
+  radius: number;
+  onRadiusChange: (radius: number) => void;
   routeStatus: 'idle' | 'locating' | 'loading' | 'ready' | 'failed';
   routeErrorMessage: string | null;
   onToggleTracking: () => void;
@@ -23,6 +26,8 @@ interface ConfigSheetProps {
 export default function ConfigSheet({
   selectedPlace,
   isTracking,
+  radius,
+  onRadiusChange,
   routeStatus,
   routeErrorMessage,
   onToggleTracking,
@@ -38,6 +43,8 @@ export default function ConfigSheet({
         <ConfigSheetContent
           place={selectedPlace}
           isTracking={isTracking}
+          radius={radius}
+          onRadiusChange={onRadiusChange}
           routeStatus={routeStatus}
           routeErrorMessage={routeErrorMessage}
           onToggleTracking={onToggleTracking}
@@ -53,6 +60,8 @@ export default function ConfigSheet({
 function ConfigSheetContent({
   place,
   isTracking,
+  radius,
+  onRadiusChange,
   routeStatus,
   routeErrorMessage,
   onToggleTracking,
@@ -60,6 +69,8 @@ function ConfigSheetContent({
 }: {
   place: WakeMapPlace;
   isTracking: boolean;
+  radius: number;
+  onRadiusChange: (radius: number) => void;
   routeStatus: 'idle' | 'locating' | 'loading' | 'ready' | 'failed';
   routeErrorMessage: string | null;
   onToggleTracking: () => void;
@@ -67,8 +78,7 @@ function ConfigSheetContent({
 }) {
   const { theme } = useUnistyles();
   const { t } = useTranslation();
-  const [radius, setRadius] = useState(100);
-
+  const { bottom } = useSafeAreaInsets();
   const distanceKm = useMemo(() => {
     const meters = haversineMeters(
       DEFAULT_REGION.latitude,
@@ -81,7 +91,7 @@ function ConfigSheetContent({
   }, [place.coordinate.latitude, place.coordinate.longitude]);
 
   return (
-    <View style={styles.sheet}>
+    <View style={[styles.sheet, { paddingBottom: theme.metrics.spacingV.p16 + bottom }]}>
       <View style={styles.handle} />
 
       <View style={styles.header}>
@@ -89,11 +99,13 @@ function ConfigSheetContent({
           <Text variant="h2" weight="bold" numberOfLines={1}>
             {place.title}
           </Text>
-          <Text variant="body" style={styles.distanceText}>
-            {t('wakemap.configSheet.distance', {
-              distance: formatDistance(distanceKm),
-            })}
-          </Text>
+          {isTracking ? (
+            <Text variant="body" style={styles.distanceText}>
+              {t('wakemap.configSheet.distance', {
+                distance: formatDistance(distanceKm),
+              })}
+            </Text>
+          ) : null}
         </View>
 
         <View style={styles.headerActions}>
@@ -126,12 +138,12 @@ function ConfigSheetContent({
         <Slider
           value={radius}
           minimumValue={10}
-          maximumValue={20000}
+          maximumValue={2000}
           step={10}
           minimumTrackTintColor={theme.colors.brand.primary}
           maximumTrackTintColor={theme.colors.border.subtle}
           thumbTintColor={theme.colors.brand.primary}
-          onValueChange={setRadius}
+          onValueChange={onRadiusChange}
         />
 
         <View style={styles.scaleRow}>
@@ -151,7 +163,7 @@ function ConfigSheetContent({
           </Text>
           <Text variant="caption" style={styles.scaleText}>
             {formatRadiusLabel(
-              20000,
+              2000,
               t('wakemap.configSheet.meterUnit'),
               t('wakemap.configSheet.kilometerUnit')
             )}

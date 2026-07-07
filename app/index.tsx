@@ -10,6 +10,7 @@ type RouteStatus = 'idle' | 'locating' | 'loading' | 'ready' | 'failed';
 export default function WakeMapScreen() {
   const [selectedPlace, setSelectedPlace] = useState<WakeMapPlace | null>(null);
   const [isTracking, setIsTracking] = useState(false);
+  const [radius, setRadius] = useState(100);
   const [routeStatus, setRouteStatus] = useState<RouteStatus>('idle');
   const [routeErrorMessage, setRouteErrorMessage] = useState<string | null>(null);
 
@@ -27,6 +28,7 @@ export default function WakeMapScreen() {
 
   const handleClearPlace = useCallback(() => {
     setIsTracking(false);
+    setRadius(100);
     setRouteStatus('idle');
     setRouteErrorMessage(null);
     setSelectedPlace(null);
@@ -39,6 +41,7 @@ export default function WakeMapScreen() {
           <GoogleMap
             selectedPlace={selectedPlace}
             isTracking={isTracking}
+            radius={radius}
             onPlaceSelect={setSelectedPlace}
             onRouteStatusChange={handleRouteStatusChange}
           />
@@ -49,6 +52,8 @@ export default function WakeMapScreen() {
           <ConfigSheet
             selectedPlace={selectedPlace}
             isTracking={isTracking}
+            radius={radius}
+            onRadiusChange={setRadius}
             routeStatus={routeStatus}
             routeErrorMessage={routeErrorMessage}
             onToggleTracking={handleToggleTracking}
