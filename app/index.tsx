@@ -33,9 +33,11 @@ export default function WakeMapScreen() {
   const radius = useTrackingStore((s) => s.radius);
   const currentLocation = useTrackingStore((s) => s.currentLocation);
   const isAlarming = useTrackingStore((s) => s.isAlarming);
+  const notificationMode = useTrackingStore((s) => s.notificationMode);
   const setRadius = useTrackingStore((s) => s.setRadius);
   const setSelectedPlace = useTrackingStore((s) => s.setSelectedPlace);
   const setCurrentLocation = useTrackingStore((s) => s.setCurrentLocation);
+  const cycleNotificationMode = useTrackingStore((s) => s.cycleNotificationMode);
 
   // Local UI States
   const [routeStatus, setRouteStatus] = useState<RouteStatus>('idle');
@@ -167,12 +169,14 @@ export default function WakeMapScreen() {
             isSaved={selectedPlace ? isSaved(selectedPlace.id) : false}
             onToggleSave={handleToggleSave}
             isTracking={isTracking}
+            notificationMode={notificationMode}
             radius={radius}
             onRadiusChange={setRadius}
             routeStatus={routeStatus}
             routeErrorMessage={routeErrorMessage}
             onToggleTracking={handleToggleTracking}
             onClearPlace={handleClearPlace}
+            onToggleNotificationMode={cycleNotificationMode}
             onVisibilityChange={setIsConfigSheetVisible}
           />
         </View>

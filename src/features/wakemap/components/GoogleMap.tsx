@@ -79,10 +79,8 @@ export default function GoogleMap({
   useEffect(() => {
     if (!isTracking) {
       lastRouteFetchPlaceIdRef.current = null;
-      setRouteCoordinates([]);
-      onRouteStatusChange?.('idle');
     }
-  }, [isTracking, onRouteStatusChange]);
+  }, [isTracking]);
 
   useEffect(() => {
     if (!selectedPlace) {

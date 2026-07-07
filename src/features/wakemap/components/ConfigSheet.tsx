@@ -1,12 +1,13 @@
 import Slider from '@react-native-community/slider';
 import type { TFunction } from 'i18next';
-import { CircleStop, Heart, Navigation2, X } from 'lucide-react-native';
+import { BellOff, BellRing, CircleStop, Heart, Navigation2, Volume2, X } from 'lucide-react-native';
 import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 import { DEFAULT_REGION } from '../constants';
+import type { TrackingNotificationMode } from '../stores/trackingStore';
 import type { WakeMapPlace } from '../types';
 import { Button } from '@/common/components/Button';
 import { IconButton } from '@/common/components/IconButton';
@@ -17,12 +18,14 @@ interface ConfigSheetProps {
   isSaved: boolean;
   onToggleSave: () => void;
   isTracking: boolean;
+  notificationMode: TrackingNotificationMode;
   radius: number;
   onRadiusChange: (radius: number) => void;
   routeStatus: 'idle' | 'locating' | 'loading' | 'ready' | 'failed';
   routeErrorMessage: string | null;
   onToggleTracking: () => void;
   onClearPlace: () => void;
+  onToggleNotificationMode: () => void;
   onVisibilityChange?: (isVisible: boolean) => void;
 }
 
@@ -31,12 +34,14 @@ export default function ConfigSheet({
   isSaved,
   onToggleSave,
   isTracking,
+  notificationMode,
   radius,
   onRadiusChange,
   routeStatus,
   routeErrorMessage,
   onToggleTracking,
   onClearPlace,
+  onToggleNotificationMode,
   onVisibilityChange,
 }: ConfigSheetProps) {
   const { bottom } = useSafeAreaInsets();
@@ -57,6 +62,7 @@ export default function ConfigSheet({
           isSaved={isSaved}
           onToggleSave={onToggleSave}
           isTracking={isTracking}
+          notificationMode={notificationMode}
           radius={radius}
           onRadiusChange={onRadiusChange}
           routeStatus={routeStatus}
@@ -65,6 +71,7 @@ export default function ConfigSheet({
           onClose={() => {
             onClearPlace();
           }}
+          onToggleNotificationMode={onToggleNotificationMode}
         />
       </View>
     </View>
@@ -76,23 +83,27 @@ function ConfigSheetContent({
   isSaved,
   onToggleSave,
   isTracking,
+  notificationMode,
   radius,
   onRadiusChange,
   routeStatus,
   routeErrorMessage,
   onToggleTracking,
   onClose,
+  onToggleNotificationMode,
 }: {
   place: WakeMapPlace;
   isSaved: boolean;
   onToggleSave: () => void;
   isTracking: boolean;
+  notificationMode: TrackingNotificationMode;
   radius: number;
   onRadiusChange: (radius: number) => void;
   routeStatus: 'idle' | 'locating' | 'loading' | 'ready' | 'failed';
   routeErrorMessage: string | null;
   onToggleTracking: () => void;
   onClose: () => void;
+  onToggleNotificationMode: () => void;
 }) {
   const { theme } = useUnistyles();
   const { t } = useTranslation();
@@ -189,7 +200,7 @@ function ConfigSheetContent({
         </View>
       </View>
 
-      {isTracking && routeStatus !== 'ready' ? (
+      {routeStatus !== 'ready' ? (
         <View style={styles.routeStatusCard}>
           <Text variant="body" weight="medium" style={styles.routeStatusTitle}>
             {getRouteStatusLabel(routeStatus, t)}
@@ -214,23 +225,59 @@ function ConfigSheetContent({
             onToggleTracking();
           }}
         />
-        <Button
-          title={isSaved ? t('wakemap.configSheet.saved') : t('wakemap.configSheet.save')}
-          leftIcon={
-            <Heart
-              fill={isSaved ? theme.colors.state.error : 'none'}
-              color={isSaved ? theme.colors.state.error : undefined}
-            />
-          }
-          variant={isSaved ? 'secondary' : 'outline'}
-          size="md"
-          fullWidth
-          style={styles.saveButton}
-          onPress={onToggleSave}
-        />
+        {isTracking ? (
+          <Button
+            title={getNotificationModeLabel(notificationMode, t)}
+            leftIcon={getNotificationModeIcon(notificationMode)}
+            variant="outline"
+            size="md"
+            fullWidth
+            style={styles.saveButton}
+            onPress={onToggleNotificationMode}
+          />
+        ) : (
+          <Button
+            title={isSaved ? t('wakemap.configSheet.saved') : t('wakemap.configSheet.save')}
+            leftIcon={
+              <Heart
+                fill={isSaved ? theme.colors.state.error : 'none'}
+                color={isSaved ? theme.colors.state.error : undefined}
+              />
+            }
+            variant={isSaved ? 'secondary' : 'outline'}
+            size="md"
+            fullWidth
+            style={styles.saveButton}
+            onPress={onToggleSave}
+          />
+        )}
       </View>
     </View>
   );
+}
+
+function getNotificationModeLabel(mode: TrackingNotificationMode, t: TFunction): string {
+  switch (mode) {
+    case 'silent':
+      return t('wakemap.configSheet.silent');
+    case 'sound':
+      return t('wakemap.configSheet.sound');
+    case 'ring':
+    default:
+      return t('wakemap.configSheet.ring');
+  }
+}
+
+function getNotificationModeIcon(mode: TrackingNotificationMode) {
+  switch (mode) {
+    case 'silent':
+      return <BellOff />;
+    case 'sound':
+      return <Volume2 />;
+    case 'ring':
+    default:
+      return <BellRing />;
+  }
 }
 
 function formatDistance(distanceKm: number): string {

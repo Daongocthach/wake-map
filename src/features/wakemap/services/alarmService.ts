@@ -14,7 +14,7 @@ let audioPlayer: AudioPlayer | null = null;
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
-    shouldPlaySound: true,
+    shouldPlaySound: useTrackingStore.getState().notificationMode !== 'silent',
     shouldSetBadge: false,
     shouldShowBanner: true,
     shouldShowList: true,
@@ -26,6 +26,7 @@ Notifications.setNotificationHandler({
  */
 export async function triggerProximityAlarm(placeName: string, radius: number): Promise<void> {
   const store = useTrackingStore.getState();
+  const { notificationMode } = store;
 
   // Prevent duplicate alarms
   if (store.isAlarming) {
@@ -36,25 +37,27 @@ export async function triggerProximityAlarm(placeName: string, radius: number): 
   store.triggerAlarm();
 
   try {
-    // 1. Trigger Vibration (1s shake, 0.5s pause, repeat)
-    Vibration.vibrate([1000, 500, 1000, 500], true);
-
-    // 2. Trigger Local Notification
+    // 1. Trigger Local Notification
     await Notifications.scheduleNotificationAsync({
       content: {
         title: 'ĐÃ ĐẾN NƠI! / ARRIVED!',
         body: `Bạn đã đi vào bán kính ${radius}m của ${placeName}`,
-        sound: true,
+        sound: notificationMode !== 'silent',
         priority: Notifications.AndroidNotificationPriority.HIGH,
       },
       trigger: null, // Send immediately
     });
 
-    // 3. Play Sound in Background
-    if (!audioPlayer) {
-      audioPlayer = createAudioPlayer(ALARM_SOUND_URL);
-      audioPlayer.loop = true;
-      audioPlayer.play();
+    if (notificationMode === 'ring') {
+      // 2. Trigger Vibration (1s shake, 0.5s pause, repeat)
+      Vibration.vibrate([1000, 500, 1000, 500], true);
+
+      // 3. Play Sound in Background
+      if (!audioPlayer) {
+        audioPlayer = createAudioPlayer(ALARM_SOUND_URL);
+        audioPlayer.loop = true;
+        audioPlayer.play();
+      }
     }
   } catch (error) {
     if (__DEV__) {

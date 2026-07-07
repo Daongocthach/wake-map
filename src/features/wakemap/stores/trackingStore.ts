@@ -1,12 +1,15 @@
 import { create } from 'zustand';
 import type { WakeMapCoordinate, WakeMapPlace } from '../types';
 
+export type TrackingNotificationMode = 'silent' | 'sound' | 'ring';
+
 export interface TrackingState {
   isTracking: boolean;
   selectedPlace: WakeMapPlace | null;
   radius: number;
   currentLocation: WakeMapCoordinate | null;
   isAlarming: boolean;
+  notificationMode: TrackingNotificationMode;
 
   // Actions
   startTracking: (place: WakeMapPlace, radius: number) => void;
@@ -17,6 +20,8 @@ export interface TrackingState {
   setRadius: (radius: number) => void;
   setSelectedPlace: (place: WakeMapPlace | null) => void;
   setCurrentLocation: (location: WakeMapCoordinate | null) => void;
+  setNotificationMode: (mode: TrackingNotificationMode) => void;
+  cycleNotificationMode: () => void;
 }
 
 export const useTrackingStore = create<TrackingState>((set) => ({
@@ -25,6 +30,7 @@ export const useTrackingStore = create<TrackingState>((set) => ({
   radius: 100,
   currentLocation: null,
   isAlarming: false,
+  notificationMode: 'ring',
 
   startTracking: (place, radius) =>
     set({
@@ -70,4 +76,26 @@ export const useTrackingStore = create<TrackingState>((set) => ({
     set({
       currentLocation: location,
     }),
+
+  setNotificationMode: (mode) =>
+    set({
+      notificationMode: mode,
+    }),
+
+  cycleNotificationMode: () =>
+    set((state) => ({
+      notificationMode: nextNotificationMode(state.notificationMode),
+    })),
 }));
+
+function nextNotificationMode(mode: TrackingNotificationMode): TrackingNotificationMode {
+  switch (mode) {
+    case 'silent':
+      return 'sound';
+    case 'sound':
+      return 'ring';
+    case 'ring':
+    default:
+      return 'silent';
+  }
+}
