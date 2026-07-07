@@ -1,5 +1,5 @@
 import * as Location from 'expo-location';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 interface LocationPermissionState {
   status: Location.PermissionStatus | null;
@@ -8,6 +8,20 @@ interface LocationPermissionState {
   isLoading: boolean;
 }
 
+interface UseLocationPermissionOptions {
+  checkOnMount?: boolean;
+}
+
+interface LocationPermissionResult {
+  status: Location.PermissionStatus | null;
+  canAskAgain: boolean;
+  granted: boolean;
+}
+
+type PermissionStateUpdater =
+  | LocationPermissionState
+  | ((currentPermission: LocationPermissionState) => LocationPermissionState);
+
 const INITIAL_STATE: LocationPermissionState = {
   status: null,
   canAskAgain: false,
@@ -15,55 +29,94 @@ const INITIAL_STATE: LocationPermissionState = {
   isLoading: true,
 };
 
-export function useLocationPermission() {
+function toPermissionResult(
+  response: Location.LocationPermissionResponse
+): LocationPermissionResult {
+  return {
+    status: response.status,
+    canAskAgain: response.canAskAgain,
+    granted: response.granted,
+  };
+}
+
+export function useLocationPermission(options: UseLocationPermissionOptions = {}) {
   const [permission, setPermission] = useState<LocationPermissionState>(INITIAL_STATE);
+  const isMountedRef = useRef(true);
 
-  useEffect(() => {
-    let isActive = true;
+  const setPermissionState = useCallback((nextPermission: PermissionStateUpdater) => {
+    if (isMountedRef.current) {
+      setPermission(nextPermission);
+    }
+  }, []);
 
-    async function checkLocationPermission() {
-      setPermission((currentPermission) => ({
+  const syncPermission = useCallback(
+    async (fetchPermission: () => Promise<Location.LocationPermissionResponse>) => {
+      setPermissionState((currentPermission) => ({
         ...currentPermission,
         isLoading: true,
       }));
 
       try {
-        const response = await Location.getForegroundPermissionsAsync();
+        const response = await fetchPermission();
+        const nextPermission = toPermissionResult(response);
 
-        if (!isActive) {
-          return;
-        }
-
-        setPermission({
-          status: response.status,
-          canAskAgain: response.canAskAgain,
-          granted: response.granted,
+        setPermissionState({
+          ...nextPermission,
           isLoading: false,
         });
+
+        return nextPermission;
       } catch (error) {
         if (__DEV__) {
-          console.error('Failed to check location permission', error);
+          console.error('Failed to sync location permission', error);
         }
 
-        if (!isActive) {
-          return;
-        }
-
-        setPermission({
+        const fallbackPermission = {
           status: null,
           canAskAgain: false,
           granted: false,
+        };
+
+        setPermissionState({
+          ...fallbackPermission,
           isLoading: false,
         });
+
+        return fallbackPermission;
       }
-    }
+    },
+    [setPermissionState]
+  );
 
-    void checkLocationPermission();
+  const checkPermission = useCallback(() => {
+    return syncPermission(() => Location.getForegroundPermissionsAsync());
+  }, [syncPermission]);
 
+  const requestPermission = useCallback(() => {
+    return syncPermission(() => Location.requestForegroundPermissionsAsync());
+  }, [syncPermission]);
+
+  useEffect(() => {
     return () => {
-      isActive = false;
+      isMountedRef.current = false;
     };
   }, []);
 
-  return permission;
+  useEffect(() => {
+    if (options.checkOnMount === false) {
+      setPermissionState((currentPermission) => ({
+        ...currentPermission,
+        isLoading: false,
+      }));
+      return;
+    }
+
+    void checkPermission();
+  }, [checkPermission, options.checkOnMount, setPermissionState]);
+
+  return {
+    ...permission,
+    checkPermission,
+    requestPermission,
+  };
 }

@@ -9,6 +9,7 @@ import { DEFAULT_REGION, SAVED_PLACES } from '../constants';
 import type { WakeMapCoordinate, WakeMapPlace } from '../types';
 import { IconButton } from '@/common/components/IconButton';
 import { env } from '@/config/env';
+import { useLocationPermission } from '@/hooks';
 
 interface GoogleMapProps {
   selectedPlace?: WakeMapPlace | null;
@@ -40,6 +41,7 @@ export default function GoogleMap({
 }: GoogleMapProps) {
   const { t } = useTranslation();
   const { theme } = useUnistyles();
+  const { requestPermission } = useLocationPermission({ checkOnMount: false });
   const mapRef = useRef<MapView | null>(null);
   const [isLocating, setIsLocating] = useState(false);
   const [currentLocation, setCurrentLocation] = useState<WakeMapCoordinate | null>(null);
@@ -98,7 +100,7 @@ export default function GoogleMap({
       onRouteStatusChange?.('locating');
 
       try {
-        const result = await requestCurrentLocation();
+        const result = await requestCurrentLocation(requestPermission);
 
         if (!isActive) {
           return;
@@ -140,7 +142,7 @@ export default function GoogleMap({
     return () => {
       isActive = false;
     };
-  }, [isTracking, onCurrentLocationChange, onRouteStatusChange, t]);
+  }, [isTracking, onCurrentLocationChange, onRouteStatusChange, requestPermission, t]);
 
   useEffect(() => {
     if (!currentLocation) {
@@ -298,7 +300,7 @@ export default function GoogleMap({
     setCurrentLocation(null);
 
     try {
-      const nextCurrentLocation = await requestCurrentLocation();
+      const nextCurrentLocation = await requestCurrentLocation(requestPermission);
 
       if (!nextCurrentLocation.location) {
         let errorMessage = t('wakemap.configSheet.routeErrorUnknown');
@@ -423,8 +425,14 @@ type CurrentLocationResult =
       error: 'permissionDenied' | 'servicesDisabled' | 'unavailable';
     };
 
-async function requestCurrentLocation(): Promise<CurrentLocationResult> {
-  const { status } = await Location.requestForegroundPermissionsAsync();
+async function requestCurrentLocation(
+  requestPermission: () => Promise<{
+    status: Location.PermissionStatus | null;
+    canAskAgain: boolean;
+    granted: boolean;
+  }>
+): Promise<CurrentLocationResult> {
+  const { status } = await requestPermission();
 
   if (status !== 'granted') {
     return {
