@@ -3,3 +3,4 @@ export { useNetworkStatus } from './useNetworkStatus';
 export { useScreenDimensions } from './useScreenDimensions';
 export { useAnimatedPress } from './useAnimatedPress';
 export { useDebouncedValue } from './useDebouncedValue';
+export { useLocationPermission } from './useLocationPermission';
