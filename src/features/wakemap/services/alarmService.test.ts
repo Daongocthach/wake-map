@@ -10,6 +10,32 @@ import {
   triggerProximityAlarm,
 } from './alarmService';
 
+interface MockAudioPlayerType {
+  loop: boolean;
+  volume: number;
+  play: jest.Mock;
+  pause: jest.Mock;
+  seekTo: jest.Mock;
+  release: jest.Mock;
+}
+
+let mockPlayerRef: MockAudioPlayerType;
+
+jest.mock('expo-audio', () => {
+  const mockPlayerInstance = {
+    loop: false,
+    volume: 1.0,
+    play: jest.fn(),
+    pause: jest.fn(),
+    seekTo: jest.fn(),
+    release: jest.fn(),
+  };
+  mockPlayerRef = mockPlayerInstance;
+  return {
+    createAudioPlayer: jest.fn(() => mockPlayerInstance),
+  };
+});
+
 jest.mock('expo-haptics', () => ({
   NotificationFeedbackType: {
     Warning: 'warning',
@@ -77,7 +103,7 @@ describe('alarmService', () => {
     await triggerProximityAlarm('Test Place', 500);
 
     expect(Notifications.setNotificationChannelAsync).toHaveBeenCalledWith(
-      'wake-map-alarm-v3',
+      'wake-map-alarm-v4',
       expect.objectContaining({
         enableVibrate: true,
         importance: Notifications.AndroidImportance.MAX,
@@ -95,11 +121,16 @@ describe('alarmService', () => {
     expect(Haptics.notificationAsync).toHaveBeenCalledWith(
       Haptics.NotificationFeedbackType.Warning
     );
+    expect(mockPlayerRef.play).toHaveBeenCalled();
+    expect(mockPlayerRef.loop).toBe(true);
+    expect(mockPlayerRef.volume).toBe(1.0);
     expect(Vibration.vibrate).toHaveBeenCalledWith([0, 1000, 500, 1000], true);
     expect(useTrackingStore.getState().isAlarming).toBe(true);
 
     await dismissProximityAlarm();
 
+    expect(mockPlayerRef.pause).toHaveBeenCalled();
+    expect(mockPlayerRef.seekTo).toHaveBeenCalledWith(0);
     expect(Vibration.cancel).toHaveBeenCalled();
     expect(Notifications.dismissAllNotificationsAsync).toHaveBeenCalled();
     expect(useTrackingStore.getState().isAlarming).toBe(false);

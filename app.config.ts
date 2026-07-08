@@ -49,6 +49,8 @@ const config: ExpoConfig = {
       'ACCESS_BACKGROUND_LOCATION',
       'FOREGROUND_SERVICE',
       'FOREGROUND_SERVICE_LOCATION',
+      'FOREGROUND_SERVICE_MEDIA_PLAYBACK',
+      'WAKE_LOCK',
     ],
   },
   extra: {
@@ -102,6 +104,12 @@ const config: ExpoConfig = {
         isIosBackgroundLocationEnabled: true,
         isAndroidBackgroundLocationEnabled: true,
         isAndroidForegroundServiceEnabled: true,
+      },
+    ],
+    [
+      'expo-audio',
+      {
+        enableBackgroundPlayback: true,
       },
     ],
     [

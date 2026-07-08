@@ -1,17 +1,22 @@
+import { createAudioPlayer } from 'expo-audio';
 import * as Haptics from 'expo-haptics';
 import * as Notifications from 'expo-notifications';
 import { Platform, Vibration } from 'react-native';
+import alarmBeep from '../../../../assets/sounds/alarm-beep.mp3';
 import { useTrackingStore } from '../stores/trackingStore';
 
 export const ALARM_NOTIFICATION_CATEGORY_ID = 'alarm-loop';
 export const ALARM_DISMISS_ACTION_ID = 'DISMISS_ALARM';
 // Bump the channel ID whenever vibration/sound defaults change so Android
 // picks up the new configuration instead of reusing a stale channel.
-const ALARM_CHANNEL_ID = 'wake-map-alarm-v3';
+const ALARM_CHANNEL_ID = 'wake-map-alarm-v4';
 const ALARM_VIBRATION_PATTERN = [0, 1000, 500, 1000];
 const ALARM_VIBRATION_REPEAT_MS = 2500;
 
 let alarmVibrationTimer: ReturnType<typeof setInterval> | null = null;
+
+// Persistent audio player for background/foreground alarm play
+const alarmPlayer = createAudioPlayer(alarmBeep);
 
 /**
  * Configure notifications behaviour when app is in foreground
@@ -64,6 +69,12 @@ export async function triggerProximityAlarm(placeName: string, radius: number): 
 
     if (shouldRing) {
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+
+      // Start looping alarm sound via expo-audio
+      alarmPlayer.loop = true;
+      alarmPlayer.volume = 1.0;
+      alarmPlayer.play();
+
       startAlarmVibrationLoop();
     }
   } catch (error) {
@@ -96,6 +107,10 @@ export async function dismissProximityAlarm(): Promise<void> {
 
   try {
     stopAlarmVibrationLoop();
+
+    // Stop and reset audio player
+    alarmPlayer.pause();
+    alarmPlayer.seekTo(0);
 
     // 1. Cancel Vibration
     Vibration.cancel();
