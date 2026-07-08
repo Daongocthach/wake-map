@@ -9,8 +9,14 @@ export const ALARM_NOTIFICATION_CATEGORY_ID = 'alarm-loop';
 export const ALARM_DISMISS_ACTION_ID = 'DISMISS_ALARM';
 // Bump the channel ID whenever vibration/sound defaults change so Android
 // picks up the new configuration instead of reusing a stale channel.
-const ALARM_CHANNEL_ID = 'wake-map-alarm-v4';
-const ALARM_VIBRATION_PATTERN = [0, 1000, 500, 1000];
+const ALARM_CHANNEL_ID = 'wake-map-alarm-v5';
+// Generate a 48-second vibration pattern (1s vibrate, 0.5s pause, repeated 32 times)
+export const ALARM_VIBRATION_PATTERN = [
+  0, 1000, 500, 1000, 500, 1000, 500, 1000, 500, 1000, 500, 1000, 500, 1000, 500, 1000, 500, 1000,
+  500, 1000, 500, 1000, 500, 1000, 500, 1000, 500, 1000, 500, 1000, 500, 1000, 500, 1000, 500, 1000,
+  500, 1000, 500, 1000, 500, 1000, 500, 1000, 500, 1000, 500, 1000, 500, 1000, 500, 1000, 500, 1000,
+  500, 1000, 500, 1000, 500, 1000, 500, 1000, 500, 1000,
+];
 const ALARM_VIBRATION_REPEAT_MS = 2500;
 
 let alarmVibrationTimer: ReturnType<typeof setInterval> | null = null;

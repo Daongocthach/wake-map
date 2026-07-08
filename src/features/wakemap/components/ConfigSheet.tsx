@@ -3,7 +3,7 @@ import type { TFunction } from 'i18next';
 import { BellOff, BellRing, CircleStop, Heart, Navigation2, X } from 'lucide-react-native';
 import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 import { DEFAULT_REGION } from '../constants';
@@ -152,53 +152,55 @@ function ConfigSheetContent({
         </View>
       </View>
 
-      <View style={styles.radiusCard}>
-        <View style={styles.radiusRow}>
-          <View style={styles.radiusLabelRow}>
-            <Text variant="body" weight="medium">
-              {t('wakemap.configSheet.radiusLabel')}
+      {isTracking ? null : (
+        <View style={styles.radiusCard}>
+          <View style={styles.radiusRow}>
+            <View style={styles.radiusLabelRow}>
+              <Text variant="body" weight="medium">
+                {t('wakemap.configSheet.radiusLabel')}
+              </Text>
+              <Text variant="body" weight="bold" style={styles.radiusValue}>
+                {formatMeterLabel(radius, t('wakemap.configSheet.meterUnit'))}
+              </Text>
+            </View>
+          </View>
+
+          <Slider
+            value={radius}
+            minimumValue={100}
+            maximumValue={2000}
+            step={10}
+            minimumTrackTintColor={theme.colors.brand.primary}
+            maximumTrackTintColor={theme.colors.border.subtle}
+            thumbTintColor={theme.colors.brand.primary}
+            onValueChange={onRadiusChange}
+          />
+
+          <View style={styles.scaleRow}>
+            <Text variant="caption" style={styles.scaleText}>
+              {formatRadiusLabel(
+                100,
+                t('wakemap.configSheet.meterUnit'),
+                t('wakemap.configSheet.kilometerUnit')
+              )}
             </Text>
-            <Text variant="body" weight="bold" style={styles.radiusValue}>
-              {formatMeterLabel(radius, t('wakemap.configSheet.meterUnit'))}
+            <Text variant="caption" style={styles.scaleText}>
+              {formatRadiusLabel(
+                1000,
+                t('wakemap.configSheet.meterUnit'),
+                t('wakemap.configSheet.kilometerUnit')
+              )}
+            </Text>
+            <Text variant="caption" style={styles.scaleText}>
+              {formatRadiusLabel(
+                2000,
+                t('wakemap.configSheet.meterUnit'),
+                t('wakemap.configSheet.kilometerUnit')
+              )}
             </Text>
           </View>
         </View>
-
-        <Slider
-          value={radius}
-          minimumValue={100}
-          maximumValue={2000}
-          step={10}
-          minimumTrackTintColor={theme.colors.brand.primary}
-          maximumTrackTintColor={theme.colors.border.subtle}
-          thumbTintColor={theme.colors.brand.primary}
-          onValueChange={onRadiusChange}
-        />
-
-        <View style={styles.scaleRow}>
-          <Text variant="caption" style={styles.scaleText}>
-            {formatRadiusLabel(
-              100,
-              t('wakemap.configSheet.meterUnit'),
-              t('wakemap.configSheet.kilometerUnit')
-            )}
-          </Text>
-          <Text variant="caption" style={styles.scaleText}>
-            {formatRadiusLabel(
-              1000,
-              t('wakemap.configSheet.meterUnit'),
-              t('wakemap.configSheet.kilometerUnit')
-            )}
-          </Text>
-          <Text variant="caption" style={styles.scaleText}>
-            {formatRadiusLabel(
-              2000,
-              t('wakemap.configSheet.meterUnit'),
-              t('wakemap.configSheet.kilometerUnit')
-            )}
-          </Text>
-        </View>
-      </View>
+      )}
 
       {routeStatus !== 'ready' ? (
         <View style={styles.routeStatusCard}>
@@ -213,45 +215,43 @@ function ConfigSheetContent({
         </View>
       ) : null}
 
-      <View style={styles.actionRow}>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.actionScroll}
+      >
         <Button
           title={isTracking ? t('wakemap.configSheet.stop') : t('wakemap.configSheet.start')}
           leftIcon={isTracking ? <CircleStop /> : <Navigation2 />}
           variant={isTracking ? 'secondary' : 'primary'}
           size="md"
-          fullWidth
-          style={styles.startButton}
+          style={styles.actionButton}
           onPress={() => {
             onToggleTracking();
           }}
         />
-        {isTracking ? (
-          <Button
-            title={getNotificationModeLabel(notificationMode, t)}
-            leftIcon={getNotificationModeIcon(notificationMode)}
-            variant="outline"
-            size="md"
-            fullWidth
-            style={styles.saveButton}
-            onPress={onToggleNotificationMode}
-          />
-        ) : (
-          <Button
-            title={isSaved ? t('wakemap.configSheet.saved') : t('wakemap.configSheet.save')}
-            leftIcon={
-              <Heart
-                fill={isSaved ? theme.colors.state.error : 'none'}
-                color={isSaved ? theme.colors.state.error : undefined}
-              />
-            }
-            variant={isSaved ? 'secondary' : 'outline'}
-            size="md"
-            fullWidth
-            style={styles.saveButton}
-            onPress={onToggleSave}
-          />
-        )}
-      </View>
+        <Button
+          title={isSaved ? t('wakemap.configSheet.saved') : t('wakemap.configSheet.save')}
+          leftIcon={
+            <Heart
+              fill={isSaved ? theme.colors.state.error : 'none'}
+              color={isSaved ? theme.colors.state.error : undefined}
+            />
+          }
+          variant={isSaved ? 'secondary' : 'outline'}
+          size="md"
+          style={styles.actionButton}
+          onPress={onToggleSave}
+        />
+        <Button
+          title={getNotificationModeLabel(notificationMode === 'ring' ? 'silent' : 'ring', t)}
+          leftIcon={getNotificationModeIcon(notificationMode === 'ring' ? 'silent' : 'ring')}
+          variant="outline"
+          size="md"
+          style={styles.actionButton}
+          onPress={onToggleNotificationMode}
+        />
+      </ScrollView>
     </View>
   );
 }
@@ -442,17 +442,14 @@ const styles = StyleSheet.create((theme) => ({
     shadowOffset: { width: 0, height: 4 },
     elevation: 3,
   },
-  actionRow: {
+  actionScroll: {
     flexDirection: 'row',
     gap: theme.metrics.spacing.p12,
     paddingTop: theme.metrics.spacingV.p4,
+    paddingBottom: theme.metrics.spacingV.p4,
   },
-  startButton: {
-    flex: 1.15,
+  actionButton: {
     borderRadius: theme.metrics.borderRadius.full,
-  },
-  saveButton: {
-    flex: 1,
-    borderRadius: theme.metrics.borderRadius.full,
+    minWidth: 125,
   },
 }));

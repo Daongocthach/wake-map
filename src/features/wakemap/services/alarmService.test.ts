@@ -5,6 +5,7 @@ import { Vibration } from 'react-native';
 import { useTrackingStore } from '../stores/trackingStore';
 import {
   ALARM_NOTIFICATION_CATEGORY_ID,
+  ALARM_VIBRATION_PATTERN,
   dismissProximityAlarm,
   registerAlarmNotificationCategory,
   triggerProximityAlarm,
@@ -103,17 +104,17 @@ describe('alarmService', () => {
     await triggerProximityAlarm('Test Place', 500);
 
     expect(Notifications.setNotificationChannelAsync).toHaveBeenCalledWith(
-      'wake-map-alarm-v4',
+      'wake-map-alarm-v5',
       expect.objectContaining({
         enableVibrate: true,
         importance: Notifications.AndroidImportance.MAX,
-        vibrationPattern: [0, 1000, 500, 1000],
+        vibrationPattern: ALARM_VIBRATION_PATTERN,
       })
     );
     expect(Notifications.scheduleNotificationAsync).toHaveBeenCalledWith(
       expect.objectContaining({
         content: expect.objectContaining({
-          vibrate: [0, 1000, 500, 1000],
+          vibrate: ALARM_VIBRATION_PATTERN,
           categoryIdentifier: ALARM_NOTIFICATION_CATEGORY_ID,
         }),
       })
@@ -124,7 +125,7 @@ describe('alarmService', () => {
     expect(mockPlayerRef.play).toHaveBeenCalled();
     expect(mockPlayerRef.loop).toBe(true);
     expect(mockPlayerRef.volume).toBe(1.0);
-    expect(Vibration.vibrate).toHaveBeenCalledWith([0, 1000, 500, 1000], true);
+    expect(Vibration.vibrate).toHaveBeenCalledWith(ALARM_VIBRATION_PATTERN, true);
     expect(useTrackingStore.getState().isAlarming).toBe(true);
 
     await dismissProximityAlarm();
