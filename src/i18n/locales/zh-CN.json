@@ -42,7 +42,6 @@
       "meterUnit": "米",
       "kilometerUnit": "公里",
       "silent": "静音",
-      "sound": "有声",
       "ring": "铃声",
       "start": "开始",
       "stop": "停止",
@@ -78,7 +77,6 @@
     "arrived": "已到达！",
     "arrivedSubtitle": "您已进入 {{name}} 的警报半径",
     "modes": {
-      "sound": "声音 🔊",
       "vibrate": "震动 📳",
       "flash": "闪光灯 🔦"
     },

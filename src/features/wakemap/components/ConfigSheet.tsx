@@ -1,6 +1,6 @@
 import Slider from '@react-native-community/slider';
 import type { TFunction } from 'i18next';
-import { BellOff, BellRing, CircleStop, Heart, Navigation2, Volume2, X } from 'lucide-react-native';
+import { BellOff, BellRing, CircleStop, Heart, Navigation2, X } from 'lucide-react-native';
 import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
@@ -260,8 +260,6 @@ function getNotificationModeLabel(mode: TrackingNotificationMode, t: TFunction):
   switch (mode) {
     case 'silent':
       return t('wakemap.configSheet.silent');
-    case 'sound':
-      return t('wakemap.configSheet.sound');
     case 'ring':
     default:
       return t('wakemap.configSheet.ring');
@@ -272,8 +270,6 @@ function getNotificationModeIcon(mode: TrackingNotificationMode) {
   switch (mode) {
     case 'silent':
       return <BellOff />;
-    case 'sound':
-      return <Volume2 />;
     case 'ring':
     default:
       return <BellRing />;

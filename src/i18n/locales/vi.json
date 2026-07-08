@@ -42,7 +42,6 @@
       "meterUnit": "m",
       "kilometerUnit": "km",
       "silent": "Tắt tiếng",
-      "sound": "Bật tiếng",
       "ring": "Chi chuông",
       "start": "BẮT ĐẦU",
       "stop": "DỪNG",
@@ -78,7 +77,6 @@
     "arrived": "ĐÃ ĐẾN NƠI!",
     "arrivedSubtitle": "Bạn đã đi vào bán kính báo thức của {{name}}",
     "modes": {
-      "sound": "Âm thanh 🔊",
       "vibrate": "Rung 📳",
       "flash": "Flash 🔦"
     },

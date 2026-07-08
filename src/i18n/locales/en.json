@@ -26,7 +26,6 @@
       "meterUnit": "m",
       "kilometerUnit": "km",
       "silent": "Silent",
-      "sound": "Sound",
       "ring": "Ring",
       "start": "START",
       "stop": "STOP",
@@ -62,7 +61,6 @@
     "arrived": "ARRIVED!",
     "arrivedSubtitle": "You entered the alarm radius of {{name}}",
     "modes": {
-      "sound": "Sound 🔊",
       "vibrate": "Vibrate 📳",
       "flash": "Flash 🔦"
     },

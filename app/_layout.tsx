@@ -1,4 +1,5 @@
 import { useFonts } from 'expo-font';
+import * as Notifications from 'expo-notifications';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import '@/features/wakemap/services/backgroundLocationTask';
@@ -14,6 +15,11 @@ import InterMedium from '../assets/fonts/Inter-Medium.ttf';
 import InterRegular from '../assets/fonts/Inter-Regular.ttf';
 import InterSemiBold from '../assets/fonts/Inter-SemiBold.ttf';
 import { ErrorBoundary } from '@/common/components/ErrorBoundary';
+import {
+  ALARM_DISMISS_ACTION_ID,
+  registerAlarmNotificationCategory,
+  dismissProximityAlarm,
+} from '@/features/wakemap/services/alarmService';
 import { useLocationPermission } from '@/hooks';
 import { AppAlertProvider, AppBottomSheetProvider } from '@/providers';
 
@@ -36,6 +42,22 @@ function RootNavigator() {
 
 function AppContent() {
   useLocationPermission();
+
+  useEffect(() => {
+    void registerAlarmNotificationCategory();
+
+    const responseSubscription = Notifications.addNotificationResponseReceivedListener(
+      (response) => {
+        if (response.actionIdentifier === ALARM_DISMISS_ACTION_ID) {
+          void dismissProximityAlarm();
+        }
+      }
+    );
+
+    return () => {
+      responseSubscription.remove();
+    };
+  }, []);
 
   return (
     <View style={styles.appContainer}>

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import type { WakeMapCoordinate, WakeMapPlace } from '../types';
 
-export type TrackingNotificationMode = 'silent' | 'sound' | 'ring';
+export type TrackingNotificationMode = 'silent' | 'ring';
 
 export interface TrackingState {
   isTracking: boolean;
@@ -90,12 +90,10 @@ export const useTrackingStore = create<TrackingState>((set) => ({
 
 function nextNotificationMode(mode: TrackingNotificationMode): TrackingNotificationMode {
   switch (mode) {
-    case 'silent':
-      return 'sound';
-    case 'sound':
-      return 'ring';
     case 'ring':
-    default:
       return 'silent';
+    case 'silent':
+    default:
+      return 'ring';
   }
 }

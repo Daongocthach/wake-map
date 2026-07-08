@@ -3,7 +3,11 @@ import * as Notifications from 'expo-notifications';
 import { Platform, Vibration } from 'react-native';
 import { useTrackingStore } from '../stores/trackingStore';
 
-const ALARM_CHANNEL_ID = 'wake-map-alarm';
+export const ALARM_NOTIFICATION_CATEGORY_ID = 'alarm-loop';
+export const ALARM_DISMISS_ACTION_ID = 'DISMISS_ALARM';
+// Bump the channel ID whenever vibration/sound defaults change so Android
+// picks up the new configuration instead of reusing a stale channel.
+const ALARM_CHANNEL_ID = 'wake-map-alarm-v3';
 const ALARM_VIBRATION_PATTERN = [0, 1000, 500, 1000];
 const ALARM_VIBRATION_REPEAT_MS = 2500;
 
@@ -47,9 +51,13 @@ export async function triggerProximityAlarm(placeName: string, radius: number): 
       content: {
         title: 'ĐÃ ĐẾN NƠI! / ARRIVED!',
         body: `Bạn đã đi vào bán kính ${radius}m của ${placeName}`,
-        sound: shouldPlayFeedback ? 'default' : undefined,
+        // Android Expo notifications treat "default" as a custom sound name
+        // unless it is bundled in the native app. We do not bundle a custom
+        // alarm sound here, so keep Android silent and rely on vibration.
+        sound: Platform.OS === 'ios' && shouldPlayFeedback ? 'default' : undefined,
         vibrate: shouldPlayFeedback ? ALARM_VIBRATION_PATTERN : undefined,
-        priority: Notifications.AndroidNotificationPriority.HIGH,
+        priority: Notifications.AndroidNotificationPriority.MAX,
+        categoryIdentifier: ALARM_NOTIFICATION_CATEGORY_ID,
       },
       trigger: Platform.OS === 'android' ? { channelId: ALARM_CHANNEL_ID } : null,
     });
@@ -63,6 +71,18 @@ export async function triggerProximityAlarm(placeName: string, radius: number): 
       console.error('Failed to trigger proximity alarm:', error);
     }
   }
+}
+
+export async function registerAlarmNotificationCategory(): Promise<void> {
+  await Notifications.setNotificationCategoryAsync(ALARM_NOTIFICATION_CATEGORY_ID, [
+    {
+      identifier: ALARM_DISMISS_ACTION_ID,
+      buttonTitle: '🛑 Tắt Báo thức',
+      options: {
+        opensAppToForeground: false,
+      },
+    },
+  ]);
 }
 
 /**
@@ -96,16 +116,25 @@ async function ensureAlarmNotificationChannel(): Promise<void> {
 
   await Notifications.setNotificationChannelAsync(ALARM_CHANNEL_ID, {
     name: 'WakeMap alarms',
-    importance: Notifications.AndroidImportance.HIGH,
+    importance: Notifications.AndroidImportance.MAX,
+    bypassDnd: true,
     enableVibrate: true,
     vibrationPattern: ALARM_VIBRATION_PATTERN,
-    sound: 'default',
+    sound: undefined,
   });
 }
 
 function startAlarmVibrationLoop(): void {
   stopAlarmVibrationLoop();
 
+  if (Platform.OS === 'android') {
+    // Android supports repeating vibration patterns natively, so keep it
+    // running until the user explicitly dismisses the alarm.
+    Vibration.vibrate(ALARM_VIBRATION_PATTERN, true);
+    return;
+  }
+
+  // Fallback for platforms that do not support repeating vibration patterns.
   const pulse = () => {
     const { isAlarming, notificationMode } = useTrackingStore.getState();
 
