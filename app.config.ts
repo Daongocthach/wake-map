@@ -17,7 +17,7 @@ const config: ExpoConfig = {
   },
   ios: {
     supportsTablet: true,
-    bundleIdentifier: 'com.fineproautomation.wakemap',
+    bundleIdentifier: 'com.ngocthach.wakemap',
     icon: {
       light: './assets/ios-icon.png',
     },
@@ -42,7 +42,7 @@ const config: ExpoConfig = {
       foregroundImage: './assets/adaptive-icon.png',
       backgroundColor: '#FFFFFF',
     },
-    package: 'com.fineproautomation.wakemap',
+    package: 'com.ngocthach.wakemap',
     permissions: [
       'ACCESS_COARSE_LOCATION',
       'ACCESS_FINE_LOCATION',
